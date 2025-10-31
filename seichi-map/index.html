@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>四国 聖地巡礼マップ（統合版）</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#7ac27a" />
+
+  <style>
+    :root{ --green:#7ac27a; --green-dark:#66a866; --bg:#eef5ec; --card:#ffffff; --muted:#888; }
+    *{box-sizing:border-box}
+    body{ margin:0; font-family: "Hiragino Sans", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color:#222; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden; }
+    header{ background:var(--green); color:#fff; padding:14px 16px; text-align:center; font-weight:700; font-size:1.15rem; box-shadow:0 2px 10px rgba(0,0,0,0.12); position:sticky; top:0; z-index:1200; }
+    #searchWrapper{ width:95%; max-width:840px; margin:10px auto; }
+    #searchBox{ background:#fff; border-radius:999px; box-shadow:0 2px 10px rgba(0,0,0,0.08); display:flex; align-items:center; padding:6px 12px; z-index:1000; }
+    #searchInput{ border:0; outline:0; padding:8px; font-size:1rem; width:100%; border-radius:999px; }
+    #searchInput::placeholder{ color:#9aaea0; }
+    .card { width:95%; max-width:980px; margin: 12px auto; background:var(--card); border-radius:14px; box-shadow:0 6px 18px rgba(0,0,0,0.06); padding:12px; }
+    #mapCard{ padding:8px; }
+    #map{ height: calc(100vh - 240px); border-radius:10px; }
+    #timeline{ display:flex; flex-direction:column; gap:10px; }
+    .timeline-item{ position:relative; background:#fff; padding:12px 14px; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.06); transition: transform 0.28s ease, opacity 0.28s ease; touch-action: pan-y; user-select: none; }
+    .timeline-item .meta{ color:var(--muted); font-size:0.9rem; margin-bottom:6px; }
+    .timeline-item.swipe-delete{ transform:translateX(-100%); opacity:0; }
+    .delete-btn{ position:absolute; top:8px; right:8px; background:transparent; border:0; color:var(--muted); font-size:18px; cursor:pointer; padding:6px; border-radius:8px; }
+    .delete-btn:hover{ color:#e04b4b; }
+    label{ display:block; margin:8px 0; font-weight:700; font-size:0.95rem; }
+    input[type="text"], textarea, select{ width:100%; padding:10px; border-radius:8px; border:1px solid #e6ece2; font-size:1rem; background:#fbfdfb; }
+    textarea{ min-height:100px; resize:vertical; }
+    button.primary{ background:var(--green); color:white; border:0; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
+    button.primary:active{ transform:translateY(1px); }
+    #fab{ position:fixed; right:18px; bottom:18px; z-index:1400; }
+    .fab-btn{ width:62px;height:62px;border-radius:50%;border:0;background:var(--green); color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center; box-shadow:0 8px 20px rgba(0,0,0,0.18);cursor:pointer; }
+    .fab-menu{ position:absolute; right:0; bottom:74px; display:flex;flex-direction:column;gap:10px; align-items:flex-end; transition:all .18s ease; transform-origin:bottom right; }
+    .fab-action{ background:white;color:var(--green);border:1px solid var(--green); padding:8px 14px;border-radius:999px;font-weight:700; cursor:pointer; box-shadow:0 6px 14px rgba(0,0,0,0.08); }
+    .fab-action:hover{ background:var(--green); color:white; }
+    @media(max-width:640px){ #map{ height: calc(100vh - 220px); } .card{ width:96%; margin:10px auto; } }
+  </style>
+</head>
+<body>
+  <header>四国 聖地巡礼マップ</header>
+
+  <div id="searchWrapper">
+    <div id="searchBox" class="card" style="padding:8px 12px;">
+      <input id="searchInput" type="text" placeholder="作品名や場所で検索（タイムライン上部）..." />
+    </div>
+  </div>
+
+  <div id="mapCard" class="card" style="padding:10px;">
+    <div id="map"></div>
+  </div>
+
+  <div id="timelineCard" class="card" style="display:none;">
+    <h3 style="margin:0 0 8px 0;">作品タイムライン</h3>
+    <div style="margin-bottom:8px;">
+      <select id="workSelect" style="width:100%; padding:8px; border-radius:8px;"></select>
+    </div>
+    <div id="timeline"></div>
+  </div>
+
+  <div id="formCard" class="card" style="display:none;">
+    <h3 style="margin:0 0 8px 0;">新しい投稿</h3>
+    <form id="postForm">
+      <label>場所名<input id="inputTitle" type="text" required></label>
+      <label>作品名<input id="inputWork" type="text" required></label>
+      <label>都道府県
+        <select id="inputPref">
+          <option>香川県</option>
+          <option>徳島県</option>
+          <option>愛媛県</option>
+          <option>高知県</option>
+        </select>
+      </label>
+      <label>コメント<textarea id="inputComment"></textarea></label>
+      <label>緯度<input id="inputLat" type="text" readonly placeholder="未取得"></label>
+      <label>経度<input id="inputLng" type="text" readonly placeholder="未取得"></label>
+      <button type="button" class="primary" id="getLocationBtn" style="margin-bottom:8px;">📍 現在地を取得</button>
+      <div style="margin-top:10px"><button type="submit" class="primary">投稿する</button></div>
+    </form>
+  </div>
+
+  <div id="fab">
+    <div class="fab-menu" id="fabMenu" style="display:none;">
+      <button class="fab-action" data-action="map">🗺 地図</button>
+      <button class="fab-action" data-action="timeline">📜 タイムライン</button>
+      <button class="fab-action" data-action="form">➕ 投稿</button>
+    </div>
+    <button class="fab-btn" id="mainFab">＋</button>
+  </div>
+
+  <script>
+    const map = L.map('map').setView([33.6,133.6],8);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ attribution:'© OpenStreetMap contributors' }).addTo(map);
+
+    let posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+    const markersLayer = L.layerGroup().addTo(map);
+
+    function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); }); }
+
+    function renderMap(filteredPosts){
+      markersLayer.clearLayers();
+      const list = filteredPosts || posts;
+      list.forEach(p => {
+        L.marker([p.lat, p.lng]).addTo(markersLayer)
+          .bindPopup(`<b>${escapeHtml(p.title)}</b><br><i>${escapeHtml(p.work)}</i><br>${escapeHtml(p.comment)}`);
+      });
+      if(list.length>0){
+        try{
+          const group = L.featureGroup(list.map(p=>L.marker([p.lat,p.lng])));
+          map.fitBounds(group.getBounds(), {padding:[40,40]});
+        }catch(e){}
+      }
+    }
+
+    function removePostByObject(obj){
+      const key = obj.timestamp || null;
+      let idx = -1;
+      if(key){
+        idx = posts.findIndex(x => x.timestamp === key && x.title === obj.title && x.work === obj.work);
+      }
+      if(idx === -1){
+        idx = posts.findIndex(x => x.title === obj.title && x.work === obj.work && x.comment === obj.comment);
+      }
+      if(idx !== -1) posts.splice(idx,1);
+    }
+
+    function persistAndRerender(){
+      localStorage.setItem('posts', JSON.stringify(posts));
+      const keyword = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      if(keyword){
+        const filteredPosts = posts.filter(p => {
+          return p.title.toLowerCase().includes(keyword) ||
+                 p.work.toLowerCase().includes(keyword) ||
+                 p.comment.toLowerCase().includes(keyword) ||
+                 p.pref.toLowerCase().includes(keyword);
+        });
+        renderTimeline(filteredPosts);
+        renderMap(filteredPosts);
+      }else{
+        renderTimeline();
+        renderMap();
+      }
+      updateWorkSelect();
+    }
+
+    function renderTimeline(filteredPosts){
+      const container = document.getElementById('timeline');
+      container.innerHTML = '';
+      const list = filteredPosts || posts;
+      list.forEach((p, idx) => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+        item.dataset.index = idx;
+        item.innerHTML = `
+          <div class="meta">${escapeHtml(p.pref)} ・ ${new Date(p.timestamp || 0).toLocaleString()}</div>
+          <div class="title" style="font-weight:800">${escapeHtml(p.title)}</div>
+          <div class="work" style="color:var(--muted)">${escapeHtml(p.work)}</div>
+          <div class="comment" style="margin-top:8px">${escapeHtml(p.comment)}</div>
+          <button class="delete-btn" title="削除">🗑</button>
+        `;
+        const delBtn = item.querySelector('.delete-btn');
+        delBtn.addEventListener('click', ev=>{
+          ev.stopPropagation();
+          if(confirm('この投稿を削除しますか？')){
+            removePostByObject(p);
+            persistAndRerender();
+          }
+        });
+        let startX=0;
+        item.addEventListener('touchstart', e=> startX = e.touches[0].clientX, {passive:true});
+        item.addEventListener('touchend', e=>{
+          const endX = e.changedTouches[0].clientX;
+          if(startX - endX > 90){
+            item.classList.add('swipe-delete');
+            setTimeout(()=>{ removePostByObject(p); persistAndRerender(); },260);
+          }
+        });
+        let mouseDownX=0;
+        item.addEventListener('mousedown', e=> mouseDownX = e.clientX);
+        item.addEventListener('mouseup', e=>{
+          if(mouseDownX - e.clientX > 100){
+            item.classList.add('swipe-delete');
+            setTimeout(()=>{ removePostByObject(p); persistAndRerender(); },260);
+          }
+        });
+        item.addEventListener('click', ()=> {
+          map.setView([p.lat, p.lng], 14);
+        });
+        container.appendChild(item);
+      });
+    }
+
+    (function normalizeTimestamps(){
+      let changed=false;
+      posts.forEach(p=>{ if(!p.timestamp){ p.timestamp = Date.now() + Math.floor(Math.random()*100000); changed=true; } });
+      if(changed) localStorage.setItem('posts', JSON.stringify(posts));
+    })();
+
+    const postForm = document.getElementById('postForm');
+    postForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const title = document.getElementById('inputTitle').value.trim();
+      const work = document.getElementById('inputWork').value.trim();
+      const pref = document.getElementById('inputPref').value;
+      const comment = document.getElementById('inputComment').value.trim();
+      if(!title || !work){ alert('場所名・作品名は必須です'); return; }
+      const latVal = document.getElementById('inputLat').value;
+      const lngVal = document.getElementById('inputLng').value;
+      function pushPost(lat,lng){
+        const newPost = { title, work, pref, comment, lat, lng, timestamp: Date.now() };
+        posts.push(newPost);
+        persistAndRerender();
+        alert('投稿しました！');
+        postForm.reset();
+        showCard('map');
+      }
+      if(latVal && lngVal){
+        pushPost(parseFloat(latVal), parseFloat(lngVal));
+        return;
+      }
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(pos=>{
+          pushPost(pos.coords.latitude, pos.coords.longitude);
+        }, err=>{
+          alert('位置情報が取得できませんでした。手動で「現在地を取得」ボタンを押すか、位置情報を許可してください。');
+        }, {timeout:10000});
+      } else {
+        alert('このブラウザでは位置情報が利用できません。');
+      }
+    });
+
+    document.getElementById('getLocationBtn').addEventListener('click', ()=>{
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(pos=>{
+          document.getElementById('inputLat').value = pos.coords.latitude.toFixed(6);
+          document.getElementById('inputLng').value = pos.coords.longitude.toFixed(6);
+          alert('位置情報を取得しました。');
+        }, ()=> alert('位置情報の取得に失敗しました。'));
+      } else alert('位置情報を利用できません。');
+    });
+
+    document.getElementById('searchInput').addEventListener('input', ()=> persistAndRerender());
+
+    function updateWorkSelect(){
+      const sel = document.getElementById('workSelect');
+      const works = Array.from(new Set(posts.map(p=>p.work))).sort();
+      sel.innerHTML = '<option value="all">全作品を表示</option>';
+      works.forEach(w=>{
+        const o = document.createElement('option'); o.value = w; o.textContent = w; sel.appendChild(o);
+      });
+      sel.value = sel.value || 'all';
+    }
+    document.getElementById('workSelect').addEventListener('change', ()=>{
+      const v = document.getElementById('workSelect').value;
+      if(v === 'all') persistAndRerender();
+      else {
+        const filtered = posts.filter(p=>p.work === v);
+        renderTimeline(filtered);
+        renderMap(filtered);
+      }
+    });
+
+    document.getElementById('mainFab').addEventListener('click', ()=>{
+      const fm = document.getElementById('fabMenu');
+      fm.style.display = fm.style.display === 'flex' ? 'none' : 'flex';
+    });
+    document.querySelectorAll('.fab-action').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        const action = e.currentTarget.dataset.action;
+        showCard(action);
+        document.getElementById('fabMenu').style.display = 'none';
+      });
+    });
+
+    function showCard(name){
+      document.getElementById('mapCard').style.display = 'none';
+      document.getElementById('timelineCard').style.display = 'none';
+      document.getElementById('formCard').style.display = 'none';
+      if(name === 'map') { document.getElementById('mapCard').style.display = 'block'; setTimeout(()=>map.invalidateSize(),200); }
+      if(name === 'timeline') { document.getElementById('timelineCard').style.display = 'block'; }
+      if(name === 'form') { document.getElementById('formCard').style.display = 'block'; }
+    }
+
+    renderMap();
+    renderTimeline();
+    updateWorkSelect();
+
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+    }
+    window.addEventListener('resize', ()=> setTimeout(()=>map.invalidateSize(),300));
+  </script>
+</body>
+</html>
