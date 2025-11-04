@@ -1,1 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>四国 聖地巡礼マップ</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #f5f8f5; }
+    header { background: #4CAF50; color: white; padding: 1em; text-align: center; border-radius: 0 0 20px 20px; }
+    #map { height: 60vh; width: 95%; border-radius: 20px; margin: 10px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    h2 { margin-left: 10px; color: #333; }
+    .tab-content { padding: 1em; }
+    .timeline-item { background: white; padding: 10px; border-radius: 10px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .comment-section { background: #f2fff2; border-radius: 10px; padding: 10px; margin-top: 10px; }
+    .comment { border-bottom: 1px solid #ccc; padding: 5px 0; }
+    .reply { margin-left: 1em; color: #444; }
+    input, textarea, button { width: 100%; padding: 0.4em; margin-top: 0.3em; border-radius: 5px; border: 1px solid #ccc; font-size: 0.9em; }
+    button { background: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background: #45a049; }
+  </style>
+</head>
+<body>
+  <header><h1>四国 聖地巡礼マップ</h1></header>
+
+  <div id="map"></div>
+
+  <section id="timelineTab" class="tab-content">
+    <h2>作品タイムライン</h2>
+    <div id="timeline"></div>
+  </section>
+
+  <script src="comments.js"></script>
+
+  <script>
+    // --- デモ用データ（初回のみ挿入） ---
+    if (!localStorage.getItem("posts")) {
+      const demoPosts = [
+        {
+          title: "観音寺駅前",
+          work: "結城友奈は勇者である",
+          pref: "香川県",
+          lat: 34.1261,
+          lng: 133.6612,
+          comment: "友奈たちの通学ルート。聖地巡礼の定番！",
+          comments: [
+            { user: { name: "ゆうな推し" }, text: "ここ行った！桜の季節が最高です🌸", replies: [] }
+          ]
+        },
+        {
+          title: "道後温泉",
+          work: "千と千尋の神隠し",
+          pref: "愛媛県",
+          lat: 33.8417,
+          lng: 132.7657,
+          comment: "油屋のモデルとして有名な温泉街。",
+          comments: [
+            { user: { name: "温泉好き" }, text: "夜のライトアップが綺麗！", replies: [] }
+          ]
+        },
+        {
+          title: "桂浜",
+          work: "竜とそばかすの姫",
+          pref: "高知県",
+          lat: 33.5066,
+          lng: 133.5736,
+          comment: "ベルが歌うシーンのロケ地に似てる場所。",
+          comments: []
+        }
+      ];
+      localStorage.setItem("posts", JSON.stringify(demoPosts));
+    }
+
+    // --- 投稿データ読み込み ---
+    let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+    // --- 地図設定 ---
+    const map = L.map("map").setView([33.6, 133.6], 8);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors"
+    }).addTo(map);
+
+    // --- マーカー描画 ---
+    const markersLayer = L.layerGroup().addTo(map);
+    function renderMap() {
+      markersLayer.clearLayers();
+      posts.forEach(post => {
+        L.marker([post.lat, post.lng])
+          .addTo(markersLayer)
+          .bindPopup(`<b>${post.title}</b><br><i>${post.work}</i><br>${post.comment}`);
+      });
+    }
+
+    // --- タイムライン描画 ---
+    function renderTimeline() {
+      const container = document.getElementById("timeline");
+      container.innerHTML = "";
+      posts.forEach((post, idx) => {
+        const div = document.createElement("div");
+        div.className = "timeline-item";
+        div.innerHTML = `
+          <b>${post.title}</b> (${post.work})<br>${post.comment}
+          <div id="comments-${idx}" class="comment-section"></div>
+        `;
+        container.appendChild(div);
+        renderComments(idx);
+      });
+    }
+
+    // --- コメント表示呼び出し ---
+    function renderComments(index) {
+      const post = posts[index];
+      renderCommentSection(`comments-${index}`, post, index);
+    }
+
+    // --- 初期描画 ---
+    renderMap();
+    renderTimeline();
+  </script>
+</body>
+</html>
 
