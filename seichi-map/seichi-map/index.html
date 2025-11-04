@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四国 聖地巡礼マップ</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+body { margin: 0; font-family: sans-serif; background: #f4f8f4; }
+header { background: #4CAF50; color: white; text-align: center; padding: 1em; border-radius: 0 0 20px 20px; }
+#map { height: 75vh; width: 100%; border-radius: 10px; }
+#addButton { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white;
+  border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 32px; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+.search-bar { margin: 1em; display: flex; justify-content: center; }
+.search-bar input { width: 90%; padding: 0.7em; border-radius: 8px; border: 1px solid #ccc; }
+.timeline-item { background: white; margin: 1em; padding: 1em; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+</style>
+</head>
+<body>
+<header><h1>四国 聖地巡礼マップ</h1></header>
+<div class="search-bar">
+<input type="text" id="searchInput" placeholder="作品名・場所で検索">
+</div>
+<div id="map"></div>
+<div id="timeline"></div>
+<button id="addButton" onclick="openForm()">＋</button>
+
+<script>
+let posts = [];
+const map = L.map('map').setView([33.6,133.6],8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
+let markersLayer = L.layerGroup().addTo(map);
+
+fetch('posts.json').then(r=>r.json()).then(data=>{ posts=data; render(); });
+
+function render(){
+  markersLayer.clearLayers();
+  document.getElementById('timeline').innerHTML='';
+  posts.forEach((p,i)=>{
+    const m=L.marker([p.lat,p.lng]).addTo(markersLayer).bindPopup(`<b>${p.title}</b><br>${p.work}<br>${p.comment}<br><a href="comments.html?post=${i}">💬コメントを見る</a>`);
+    const d=document.createElement('div'); d.className='timeline-item';
+    d.innerHTML=`<b>${p.title}</b> (${p.work})<br>${p.comment}<br><button onclick="deletePost(${i})">削除</button>`;
+    document.getElementById('timeline').appendChild(d);
+  });
+}
+
+function deletePost(i){
+  if(confirm('削除しますか？')){ posts.splice(i,1); localStorage.setItem('posts',JSON.stringify(posts)); render(); }
+}
+
+function openForm(){ alert('投稿機能はこのデモ版では準備中です'); }
+
+document.getElementById('searchInput').addEventListener('input',e=>{
+  const q=e.target.value.toLowerCase();
+  document.querySelectorAll('.timeline-item').forEach(el=>{
+    el.style.display=el.innerText.toLowerCase().includes(q)?'block':'none';
+  });
+});
+</script>
+</body></html>
