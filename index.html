@@ -1,129 +1,69 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>四国 聖地巡礼マップ</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>四国聖地巡礼マップ</title>
 
   <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#87c38f">
+  <!-- Style -->
+  <link rel="stylesheet" href="style.css" />
 
-  <style>
-    :root {
-      --green: #87c38f;
-      --bg: #eef6ef;
-      --card: #fff;
-      --shadow: rgba(0, 0, 0, 0.1);
-    }
-
-    body {
-      font-family: "Hiragino Sans", "Helvetica Neue", Arial, sans-serif;
-      margin: 0;
-      background: var(--bg);
-    }
-
-    header {
-      background: var(--green);
-      color: #fff;
-      padding: 14px;
-      font-weight: 600;
-      text-align: center;
-    }
-
-    #map {
-      width: 100%;
-      height: 75vh;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px var(--shadow);
-      margin: 10px auto;
-    }
-
-    /* ログインモーダル */
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      visibility: hidden;
-    }
-
-    .modal.active {
-      visibility: visible;
-    }
-
-    .modal-content {
-      background: var(--card);
-      padding: 2em;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 4px 20px var(--shadow);
-    }
-
-    .modal-content input {
-      padding: 10px;
-      width: 80%;
-      margin: 10px 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .modal-content button {
-      background: var(--green);
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    /* マップ右下の＋ボタン */
-    #fab {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      background: var(--green);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 56px;
-      height: 56px;
-      font-size: 28px;
-      box-shadow: 0 4px 10px var(--shadow);
-      cursor: pointer;
-    }
-  </style>
+  <!-- Manifest & theme -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#87c38f" />
 </head>
 <body>
 
-  <!-- ログイン画面 -->
+  <!-- ログイン -->
   <div id="loginScreen" class="modal active">
     <div class="modal-content">
       <h2>ようこそ！</h2>
       <p>ユーザー名を入力してはじめよう</p>
-      <input type="text" id="usernameInput" placeholder="ユーザー名">
+      <input type="text" id="usernameInput" placeholder="ユーザー名" />
       <button id="loginBtn">はじめる</button>
     </div>
   </div>
 
   <!-- ヘッダー -->
-  <header id="mainHeader">四国 聖地巡礼マップ</header>
+  <header id="mainHeader">
+    <h1>四国聖地巡礼マップ</h1>
+    <div id="userInfo"></div>
+  </header>
 
   <!-- 地図 -->
   <div id="map"></div>
 
-  <!-- 右下の＋ボタン -->
-  <button id="fab">＋</button>
+  <!-- タイムライン（投稿一覧） -->
+  <div id="timelinePanel" class="side-panel">
+    <h2>みんなの投稿</h2>
+    <div id="postsContainer"></div>
+  </div>
+
+  <!-- 投稿フォーム（モーダル） -->
+  <div id="postModal" class="modal">
+    <div class="modal-content">
+      <h2>新しい投稿</h2>
+      <input type="text" id="postTitle" placeholder="タイトル" />
+      <textarea id="postContent" placeholder="思い出や感想を入力"></textarea>
+      <button id="submitPost">投稿</button>
+      <button id="closePostModal">閉じる</button>
+    </div>
+  </div>
+
+  <!-- フローティングボタン -->
+  <div id="fabMenu" class="fab-menu">
+    <button id="mapBtn" class="fab small">🗺️<br>地図</button>
+    <button id="timelineBtn" class="fab small">📜<br>タイムライン</button>
+    <button id="postBtn" class="fab small">➕<br>投稿</button>
+    <button id="fab" class="fab main">＋</button>
+  </div>
 
   <!-- JS -->
-  <script src="script.js"></script>
   <script src="comments.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
