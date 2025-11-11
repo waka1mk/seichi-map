@@ -1,0 +1,257 @@
+/* ===========================
+   全体テーマカラー
+=========================== */
+:root {
+  --green: #a8d5ba;
+  --green-dark: #87c38f;
+  --card: #ffffff;
+  --bg: #f4f9f4;
+  --text: #333;
+  --shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  --accent: #6bbf59;
+}
+
+/* ===========================
+   ベース
+=========================== */
+body {
+  margin: 0;
+  font-family: "Hiragino Sans", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ===========================
+   ヘッダー
+=========================== */
+header {
+  background: var(--green-dark);
+  color: #fff;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+header h1 {
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+#userMenu button {
+  margin-left: 8px;
+  border: none;
+  background: #fff;
+  color: var(--green-dark);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+#userMenu button:hover {
+  background: var(--green);
+}
+
+/* ===========================
+   地図
+=========================== */
+#map {
+  height: 80vh;
+  margin: 10px auto;
+  width: 95%;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+/* ===========================
+   モーダル共通
+=========================== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+}
+
+.modal-content button {
+  background: var(--green-dark);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.modal-content button:hover {
+  background: var(--accent);
+}
+
+/* ===========================
+   マイページ
+=========================== */
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profile img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--green-dark);
+  margin-bottom: 10px;
+}
+
+/* ===========================
+   FABメニュー
+=========================== */
+#fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
+#fabMain {
+  background: var(--green-dark);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: 0.2s;
+}
+#fabMain:hover {
+  background: var(--accent);
+}
+
+#fabMenu {
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 8px;
+}
+
+#fabMenu button {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: 0.2s;
+}
+#fabMenu button:hover {
+  background: var(--green);
+}
+
+#fab.open #fabMenu {
+  display: flex;
+}
+
+/* ===========================
+   コメントパネル
+=========================== */
+.sidepanel {
+  position: fixed;
+  right: -400px;
+  top: 0;
+  width: 350px;
+  height: 100%;
+  background: var(--card);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease;
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 1500;
+}
+
+.sidepanel.open {
+  right: 0;
+}
+
+#closeComments {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--green-dark);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+#commentsContainer {
+  margin-top: 40px;
+}
+
+.comment {
+  background: #f8fff8;
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin: 8px 0;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.comment .like {
+  color: var(--green-dark);
+  font-size: 1rem;
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+  cursor: pointer;
+}
+
+/* ===========================
+   レスポンシブ
+=========================== */
+@media (max-width: 768px) {
+  #map {
+    height: 70vh;
+  }
+  .sidepanel {
+    width: 100%;
+  }
+}
