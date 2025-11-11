@@ -1,81 +1,126 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>四国 聖地巡礼マップ</title>
 
   <!-- Leaflet -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Style -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#87c38f">
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#87c38f" />
+  <style>
+    :root {
+      --green: #87c38f;
+      --bg: #eef6ef;
+      --card: #fff;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: "Hiragino Sans", "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      background: var(--bg);
+    }
+
+    header {
+      background: var(--green);
+      color: #fff;
+      padding: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    #map {
+      width: 100%;
+      height: 75vh;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px var(--shadow);
+      margin: 10px auto;
+    }
+
+    /* ログインモーダル */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      visibility: hidden;
+    }
+
+    .modal.active {
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: var(--card);
+      padding: 2em;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+
+    .modal-content input {
+      padding: 10px;
+      width: 80%;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .modal-content button {
+      background: var(--green);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* マップ右下の＋ボタン */
+    #fab {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      font-size: 28px;
+      box-shadow: 0 4px 10px var(--shadow);
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
+
   <!-- ログイン画面 -->
   <div id="loginScreen" class="modal active">
     <div class="modal-content">
       <h2>ようこそ！</h2>
       <p>ユーザー名を入力してはじめよう</p>
-      <input type="text" id="usernameInput" placeholder="ユーザー名" />
-      <button id="startButton">はじめる</button>
+      <input type="text" id="usernameInput" placeholder="ユーザー名">
+      <button id="loginBtn">はじめる</button>
     </div>
   </div>
 
   <!-- ヘッダー -->
-  <header>
-    <h1>四国 聖地巡礼マップ</h1>
-    <div id="userMenu">
-      <span id="currentUser"></span>
-      <button id="myPageBtn">マイページ</button>
-      <button id="logoutBtn">ログアウト</button>
-    </div>
-  </header>
+  <header id="mainHeader">四国 聖地巡礼マップ</header>
 
   <!-- 地図 -->
   <div id="map"></div>
 
-  <!-- マイページ -->
-  <div id="mypage" class="modal">
-    <div class="modal-content">
-      <h2>マイページ</h2>
-      <div class="profile">
-        <img id="profileImg" src="icons/default-user.png" alt="プロフィール画像" />
-        <input type="file" id="profileUpload" accept="image/*" />
-      </div>
-      <textarea id="bio" placeholder="旅のひとことメモを書いてください..."></textarea>
-      <button id="saveProfile">保存</button>
-      <h3>あなたの投稿一覧</h3>
-      <ul id="myPostsList"></ul>
-      <button id="closeMypage">戻る</button>
-    </div>
-  </div>
-
-  <!-- ショートカットボタン -->
-  <div id="fab">
-    <button id="fabMain">＋</button>
-    <div id="fabMenu">
-      <button id="toTimeline">📜 タイムライン</button>
-      <button id="toPost">🖋 投稿する</button>
-    </div>
-  </div>
-
-  <!-- コメントパネル -->
-  <div id="commentPanel" class="sidepanel">
-    <button id="closeComments">×</button>
-    <h2>コメント</h2>
-    <div id="commentsContainer"></div>
-    <input type="text" id="newComment" placeholder="コメントを入力..." />
-    <button id="addComment">送信</button>
-  </div>
+  <!-- 右下の＋ボタン -->
+  <button id="fab">＋</button>
 
   <!-- JS -->
   <script src="script.js"></script>
