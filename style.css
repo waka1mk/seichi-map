@@ -1,11 +1,11 @@
 /* 最新版 style.css（ログイン画面含む） */
 
-/* 全体 */
+/* 全体（新UIに合わせて調整） */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Noto Sans JP', sans-serif;
-  background-color: #f6fdf7;
+  background-color: #e9f5e9;
   color: #333;
 }
 
@@ -62,7 +62,37 @@ header {
   background: #57a95b;
 }
 
-/* 全画面＋ボタン */
+/* 右下の縦並びボタン（地図／タイムライン／投稿） */
+.float-menu {
+  position: fixed;
+  right: 20px;
+  bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.float-menu button {
+  background: #fff;
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.float-menu button span {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ＋ボタン */
 .fab {
   position: fixed;
   bottom: 20px;
