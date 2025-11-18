@@ -1,205 +1,68 @@
-/* ===========================
-        全体
-=========================== */
-body {
-  margin: 0;
-  font-family: 'Noto Sans JP', sans-serif;
-  background: #e9f5e9;
-}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>四国聖地巡礼マップ</title>
 
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-/* ===========================
-        ヘッダー
-=========================== */
-#mainHeader {
-  background: #a5d6a7;
-  padding: 12px;
-  text-align: center;
-  color: #fff;
-  font-size: 20px;
-  font-weight: bold;
-  position: relative;
-  z-index: 9999;
-}
+  <!-- Style -->
+  <link rel="stylesheet" href="style.css" />
 
+  <meta name="theme-color" content="#87c38f" />
+</head>
+<body>
 
-/* ===========================
-        ログインモーダル
-=========================== */
-#loginScreen {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-}
+  <!-- ログイン -->
+  <div id="loginScreen" class="modal active">
+    <div class="modal-content">
+      <h2>ようこそ！</h2>
+      <p>ユーザー名を入力してはじめよう</p>
+      <input type="text" id="usernameInput" placeholder="ユーザー名" />
+      <button id="loginBtn">はじめる</button>
+    </div>
+  </div>
 
-#loginScreen.active {
-  display: flex;
-}
+  <!-- ヘッダー -->
+  <header id="mainHeader">
+    <h1>四国聖地巡礼マップ</h1>
+    <div id="userInfo"></div>
+  </header>
 
-#loginScreen .modal-content {
-  background: #fff;
-  padding: 24px;
-  border-radius: 16px;
-  width: 85%;
-  max-width: 360px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
+  <!-- 地図 -->
+  <div id="map"></div>
 
+  <!-- タイムライン -->
+  <div id="timelinePanel" class="side-panel">
+    <h2>みんなの投稿</h2>
+    <div id="postsContainer"></div>
+  </div>
 
+  <!-- 投稿フォーム -->
+  <div id="postModal" class="modal">
+    <div class="modal-content">
+      <h2>新しい投稿</h2>
+      <input type="text" id="postTitle" placeholder="タイトル" />
+      <textarea id="postContent" placeholder="思い出や感想を入力"></textarea>
+      <button id="submitPost">投稿</button>
+      <button id="closePostModal">閉じる</button>
+    </div>
+  </div>
 
-/* ===========================
-        地図カード
-=========================== */
-#mapWrapper {
-  margin: 20px auto;
-  width: 92%;
-  max-width: 960px;
-  background: white;
-  border-radius: 22px;
-  padding: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  position: relative;
-  z-index: 1;
-}
+  <!-- フローティングボタン -->
+  <div id="fabMenu" class="fab-menu">
+    <button id="fab" class="fab main">＋</button>
 
-#map {
-  width: 100%;
-  height: 70vh;
-  border-radius: 18px;
-  position: relative;
-  z-index: 1;
-}
+    <!-- 小アイコン -->
+    <button id="mapBtn" class="fab small hidden">🗺️</button>
+    <button id="timelineBtn" class="fab small hidden">📜</button>
+    <button id="postBtn" class="fab small hidden">✏️</button>
+  </div>
 
-
-
-/* ===========================
-        検索バー
-=========================== */
-#searchBar {
-  width: 92%;
-  max-width: 800px;
-  margin: 14px auto;
-  padding: 12px 18px;
-  background: #fff;
-  border-radius: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-  font-size: 16px;
-  color: #666;
-  position: relative;
-  z-index: 9999;
-}
-
-
-
-/* ===========================
-        タイムライン
-=========================== */
-#timelinePanel {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 85%;
-  max-width: 360px;
-  height: 100%;
-  background: #fff;
-  box-shadow: -4px 0 12px rgba(0,0,0,0.15);
-  transition: 0.25s;
-  z-index: 9999;
-  padding: 20px;
-}
-
-#timelinePanel.open {
-  right: 0;
-}
-
-
-
-/* 投稿カード */
-.post {
-  background: #fff;
-  padding: 16px;
-  margin-bottom: 14px;
-  border-radius: 14px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-
-
-
-/* ===========================
-        投稿モーダル
-=========================== */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.45);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  width: 90%;
-  max-width: 420px;
-  border-radius: 16px;
-}
-
-
-
-/* ===========================
-        右の縦メニュー
-=========================== */
-#fabMenu {
-  position: fixed;
-  right: 20px;
-  bottom: 120px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 9999;
-}
-
-.fab.small {
-  background: #fff;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  font-size: 13px;
-  cursor: pointer;
-}
-
-
-
-/* ===========================
-        ＋ボタン
-=========================== */
-.fab.main {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  background: #66bb6a;
-  color: #fff;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  font-size: 32px;
-  border: none;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-  cursor: pointer;
-  z-index: 9999;
-}
+  <!-- JS -->
+  <script src="script.js"></script>
+</body>
+</html>
