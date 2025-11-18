@@ -3,27 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>四国聖地巡礼マップ（統合版）</title>
+  <title>四国聖地巡礼マップ</title>
 
+  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Style -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Manifest & theme -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#87c38f" />
-  <style>
-    .fab-menu {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 9999;
-    }
-    .fab-menu .fab {
-      z-index: 9999;
-      position: relative;
-    }
-  </style>
 </head>
 <body>
+
+  <!-- ログイン -->
   <div id="loginScreen" class="modal active">
     <div class="modal-content">
       <h2>ようこそ！</h2>
@@ -33,31 +28,33 @@
     </div>
   </div>
 
+  <!-- ヘッダー -->
   <header id="mainHeader">
     <h1>四国聖地巡礼マップ</h1>
     <div id="userInfo"></div>
   </header>
 
+  <!-- 地図 -->
   <div id="map"></div>
 
+  <!-- タイムライン（投稿一覧） -->
   <div id="timelinePanel" class="side-panel">
     <h2>みんなの投稿</h2>
     <div id="postsContainer"></div>
   </div>
 
+  <!-- 投稿フォーム（モーダル） -->
   <div id="postModal" class="modal">
     <div class="modal-content">
       <h2>新しい投稿</h2>
       <input type="text" id="postTitle" placeholder="タイトル" />
       <textarea id="postContent" placeholder="思い出や感想を入力"></textarea>
-      <label>写真を追加</label>
-      <input type="file" id="postImage" accept="image/*" />
-      <img id="previewImage" style="width:100%; margin-top:10px; display:none; border-radius:8px;" />
       <button id="submitPost">投稿</button>
       <button id="closePostModal">閉じる</button>
     </div>
   </div>
 
+  <!-- フローティングボタン -->
   <div id="fabMenu" class="fab-menu">
     <button id="mapBtn" class="fab small">🗺️<br>地図</button>
     <button id="timelineBtn" class="fab small">📜<br>タイムライン</button>
@@ -65,6 +62,7 @@
     <button id="fab" class="fab main">＋</button>
   </div>
 
+  <!-- JS -->
   <script src="comments.js"></script>
   <script src="script.js"></script>
 </body>
