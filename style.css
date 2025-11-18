@@ -1,113 +1,172 @@
+/* ============================ 全体 ============================= */
 body {
   margin: 0;
-  font-family: "Noto Sans JP", sans-serif;
-  background: #f0f7f0;
-  overflow: hidden;
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #e9f5e9;
 }
 
-/* 画面を覆うモーダル */
+/* ============================= ヘッダー ============================= */
+#mainHeader {
+  background: #a5d6a7;
+  padding: 12px;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+  z-index: 9999;
+}
+
+/* ============================ ログインモーダル ============================ */
+#loginScreen {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+#loginScreen.active {
+  display: flex;
+}
+#loginScreen .modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  width: 85%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ============================ 地図カード ============================= */
+#mapWrapper {
+  margin: 20px auto;
+  width: 92%;
+  max-width: 960px;
+  background: white;
+  border-radius: 22px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  position: relative;
+  z-index: 1;
+}
+#map {
+  width: 100%;
+  height: 70vh;
+  border-radius: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================== 検索バー ============================ */
+#searchBar {
+  width: 92%;
+  max-width: 800px;
+  margin: 14px auto;
+  padding: 12px 18px;
+  background: #fff;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  font-size: 16px;
+  color: #666;
+  position: relative;
+  z-index: 9999;
+}
+
+/* =========================== タイムライン =========================== */
+#timelinePanel {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 85%;
+  max-width: 360px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.15);
+  transition: right 0.25s;
+  z-index: 9999;
+  padding: 20px;
+}
+#timelinePanel.open {
+  right: 0;
+}
+
+/* 投稿カード */
+.post {
+  background: #fff;
+  padding: 16px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ================================= 投稿モーダル ============================ */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0,0,0,0.45);
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
 }
-
-.modal.active {
-  display: flex;
-}
-
 .modal-content {
-  background: white;
+  background: #fff;
   padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-  width: 80%;
-  max-width: 350px;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 16px;
 }
 
-/* ヘッダー */
-#mainHeader {
-  background: #87c38f;
-  padding: 10px;
-  text-align: center;
-  color: white;
-  font-weight: bold;
-  z-index: 500;
-  position: relative;
-}
-
-/* 地図 */
-#map {
-  height: calc(100vh - 60px);
-  width: 100%;
-  z-index: 1;
-}
-
-/* タイムライン */
-.side-panel {
-  position: fixed;
-  top: 60px;
-  right: -350px;
-  width: 300px;
-  height: calc(100vh - 60px);
-  background: white;
-  border-left: 2px solid #87c38f;
-  transition: right 0.3s;
-  overflow-y: auto;
-  padding: 10px;
-  z-index: 500;
-}
-
-.side-panel.active {
-  right: 0;
-}
-
-/* フローティングメニュー */
-.fab-menu {
+/* =========================== 右の縦メニュー =========================== */
+#fabMenu {
   position: fixed;
   right: 20px;
-  bottom: 20px;
-  z-index: 600;
+  bottom: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
 }
 
-.fab {
+.fab.small {
+  background: #fff;
   width: 60px;
   height: 60px;
   border-radius: 50%;
   border: none;
-  font-size: 22px;
-  background: #87c38f;
-  color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 13px;
   cursor: pointer;
-  margin-top: 10px;
+  display: none;
 }
 
-.fab.small {
-  width: 50px;
-  height: 50px;
-  font-size: 20px;
-  opacity: 1;
-  transition: 0.2s;
+/* 表示切替用 */
+.fab.small.show {
+  display: block;
 }
 
-.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* 投稿アイテム */
-.post-item {
-  background: #f6fff6;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border-left: 4px solid #87c38f;
+/* ============================ ＋ボタン ============================= */
+.fab.main {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #66bb6a;
+  color: #fff;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  font-size: 32px;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 9999;
 }
