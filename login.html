@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン - 聖地マップ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+  <div class="login-container">
+    <h1>ようこそ 🌿</h1>
+    <p>あなたのお名前を入力してください</p>
+
+    <input id="loginName" type="text" placeholder="例：れい" maxlength="20">
+
+    <button id="loginBtn" class="login-btn">はじめる</button>
+  </div>
+
+  <script src="utils.js"></script>
+  <script>
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      const name = document.getElementById("loginName").value.trim();
+
+      if (!name) {
+        alert("名前を入力してください。");
+        return;
+      }
+
+      saveUser(name);
+      location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
