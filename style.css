@@ -230,3 +230,25 @@ header {
   margin-top: 14px;
   cursor: pointer;
 }
+/* === UI が地図に潰される問題の修正（上書きレイヤー）=== */
+#mapWrapper {
+  position: relative !important;
+  z-index: 1 !important;
+}
+#map {
+  position: relative !important;
+  z-index: 1 !important;
+}
+#mainHeader,
+#searchBar,
+#fabMenu,
+#fab,
+#timelinePanel,
+.modal {
+  position: relative !important;
+  z-index: 9999 !important;
+}
+.modal.active {
+  z-index: 10000 !important;
+}
+
