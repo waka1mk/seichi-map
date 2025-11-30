@@ -1,68 +1,39 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>四国聖地巡礼マップ</title>
-
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <meta charset="UTF-8">
+  <title>聖地MAP</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Style -->
-  <link rel="stylesheet" href="style.css" />
-
-  <meta name="theme-color" content="#87c38f" />
 </head>
+
 <body>
 
-  <!-- ログイン -->
-  <div id="loginScreen" class="modal active">
-    <div class="modal-content">
-      <h2>ようこそ！</h2>
-      <p>ユーザー名を入力してはじめよう</p>
-      <input type="text" id="usernameInput" placeholder="ユーザー名" />
-      <button id="loginBtn">はじめる</button>
-    </div>
-  </div>
+<header id="mainHeader">聖地マップ</header>
 
-  <!-- ヘッダー -->
-  <header id="mainHeader">
-    <h1>四国聖地巡礼マップ</h1>
-    <div id="userInfo"></div>
-  </header>
+<input id="searchBar" placeholder="場所名で検索…">
 
-  <!-- 地図 -->
+<div id="mapWrapper">
   <div id="map"></div>
+</div>
 
-  <!-- タイムライン -->
-  <div id="timelinePanel" class="side-panel">
-    <h2>みんなの投稿</h2>
-    <div id="postsContainer"></div>
-  </div>
+<!-- 右下 ＋ボタン -->
+<button class="fab main" id="mainFab">＋</button>
 
-  <!-- 投稿フォーム -->
-  <div id="postModal" class="modal">
-    <div class="modal-content">
-      <h2>新しい投稿</h2>
-      <input type="text" id="postTitle" placeholder="タイトル" />
-      <textarea id="postContent" placeholder="思い出や感想を入力"></textarea>
-      <button id="submitPost">投稿</button>
-      <button id="closePostModal">閉じる</button>
-    </div>
-  </div>
+<!-- 展開メニュー -->
+<div id="fabMenu" class="hidden">
+  <button class="fab small" id="btnMap">地図</button>
+  <button class="fab small" id="btnTimeline">タイムライン</button>
+  <button class="fab small" id="btnPost">投稿</button>
+</div>
 
-  <!-- フローティングボタン -->
-  <div id="fabMenu" class="fab-menu">
-    <button id="fab" class="fab main">＋</button>
+<!-- タイムライン -->
+<div id="timelinePanel">
+  <h2>タイムライン</h2>
+  <div id="timelineList"></div>
+</div>
 
-    <!-- 小アイコン -->
-    <button id="mapBtn" class="fab small hidden">🗺️</button>
-    <button id="timelineBtn" class="fab small hidden">📜</button>
-    <button id="postBtn" class="fab small hidden">✏️</button>
-  </div>
-
-  <!-- JS -->
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
