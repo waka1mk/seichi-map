@@ -1,116 +1,62 @@
-// ===== Leaflet Map =====
-let map;
+document.addEventListener("DOMContentLoaded", () => {
 
-// ===== 起動時 =====
-window.onload = () => {
-  initLogin();
-  initMap();
-  loadPosts();  // ← posts.json を読む
-};
+  /* ---------------- 地図 ---------------- */
+  const map = L.map("map").setView([34.0, 134.0], 7);
 
-// =====================
-// ログイン管理
-// =====================
-function initLogin() {
-  const saved = localStorage.getItem("username");
-
-  if (saved) {
-    document.getElementById("loginScreen").classList.remove("active");
-    document.getElementById("userInfo").innerText = `こんにちは ${saved} さん`;
-  }
-
-  document.getElementById("loginBtn").onclick = () => {
-    const name = document.getElementById("usernameInput").value;
-    if (!name) return;
-
-    localStorage.setItem("username", name);
-    document.getElementById("loginScreen").classList.remove("active");
-    document.getElementById("userInfo").innerText = `こんにちは ${name} さん`;
-  };
-}
-
-// =====================
-// 地図初期化
-// =====================
-function initMap() {
-  map = L.map('map').setView([33.6, 133.5], 8); // 四国中心
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19
   }).addTo(map);
-}
 
-// =====================
-// posts.json 読み込み
-// =====================
-async function loadPosts() {
-  try {
-    const res = await fetch("posts.json");
-    const posts = await res.json();
-
-    const container = document.getElementById("postsContainer");
-    container.innerHTML = "";
-
-    posts.forEach(post => {
-      const div = document.createElement("div");
-      div.className = "post-item";
-      div.innerHTML = `
-        <h3>${post.title}</h3>
-        <p>${post.content}</p>
-      `;
-      container.appendChild(div);
-
-      // ピン追加
-      L.marker([post.lat, post.lng])
-        .addTo(map)
-        .bindPopup(`<b>${post.title}</b><br>${post.content}`);
+  function loadPostsToMap() {
+    let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+    posts.forEach(p => {
+      L.marker([p.lat, p.lng]).addTo(map).bindPopup(`
+        <b>${p.place || "不明な場所"}</b><br>
+        ${p.comment}<br>
+        ${p.image ? `<img src="${p.image}" style="width:100%; border-radius:10px;">` : ""}
+      `);
     });
-
-  } catch (e) {
-    console.error("posts.json が読み込めません", e);
   }
-}
+  loadPostsToMap();
 
-// =====================
-// UI メニュー
-// =====================
-const fab = document.getElementById("fab");
-const mapBtn = document.getElementById("mapBtn");
-const tlBtn = document.getElementById("timelineBtn");
-const postBtn = document.getElementById("postBtn");
-const timelinePanel = document.getElementById("timelinePanel");
-const postModal = document.getElementById("postModal");
+  /* ---------------- タイムライン ---------------- */
+  function loadTimeline() {
+    let box = document.getElementById("timelineList");
+    box.innerHTML = "";
 
-fab.onclick = () => {
-  mapBtn.classList.toggle("hidden");
-  tlBtn.classList.toggle("hidden");
-  postBtn.classList.toggle("hidden");
-};
+    let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+    posts.reverse().forEach(p => {
+      let div = document.createElement("div");
+      div.className = "post";
+      div.innerHTML = `
+        <p>${p.place || "場所なし"}</p>
+        <p>${p.comment}</p>
+        ${p.image ? `<img src="${p.image}">` : ""}
+      `;
+      box.appendChild(div);
+    });
+  }
 
-// 地図
-mapBtn.onclick = () => {
-  timelinePanel.classList.remove("active");
-  postModal.classList.remove("active");
-};
+  /* ---------------- FAB メニュー ---------------- */
+  const mainFab = document.getElementById("mainFab");
+  const fabMenu = document.getElementById("fabMenu");
 
-// タイムライン
-tlBtn.onclick = () => {
-  timelinePanel.classList.toggle("active");
-};
+  mainFab.addEventListener("click", () => {
+    fabMenu.classList.toggle("hidden");
+  });
 
-// 投稿モーダル
-postBtn.onclick = () => {
-  postModal.classList.add("active");
-};
+  document.getElementById("btnMap").onclick = () => {
+    fabMenu.classList.add("hidden");
+    document.getElementById("timelinePanel").classList.remove("open");
+  };
 
-document.getElementById("closePostModal").onclick = () => {
-  postModal.classList.remove("active");
-};
+  document.getElementById("btnTimeline").onclick = () => {
+    loadTimeline();
+    fabMenu.classList.add("hidden");
+    document.getElementById("timelinePanel").classList.add("open");
+  };
 
-// =====================
-// 新規投稿（ローカルのみ）
-// =====================
-document.getElementById("submitPost").onclick = () => {
-  alert("投稿機能は今ローカル保存のみ。Supabase つなぐ時に本実装する！");
-  postModal.classList.remove("active");
-};
+  document.getElementById("btnPost").onclick = () => {
+    window.location.href = "post.html";
+  };
+});
