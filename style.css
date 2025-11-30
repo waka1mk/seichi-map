@@ -1,117 +1,154 @@
+/* 共通 */
+:root{
+  --main-green:#9ed7a8;
+  --accent:#66bb6a;
+  --muted:#e9f5e9;
+}
+*{box-sizing:border-box}
 body {
-  margin: 0;
-  font-family: 'Noto Sans JP', sans-serif;
-  background: #e9f5e9;
+  margin:0;
+  font-family:"Noto Sans JP",system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:var(--muted);
+  color:#222;
+  -webkit-font-smoothing:antialiased;
 }
 
-/* ヘッダー */
-#mainHeader {
-  background: #a5d6a7;
-  padding: 12px;
-  text-align: center;
-  color: #fff;
-  font-size: 20px;
-  font-weight: bold;
-  z-index: 9999;
+/* header */
+#mainHeader{
+  background:var(--main-green);
+  color:#fff;
+  padding:12px 16px;
+  text-align:center;
+  font-weight:700;
+  font-size:18px;
+  position:sticky;
+  top:0;
+  z-index:1200;
 }
 
-/* 地図カード */
-#mapWrapper {
-  margin: 20px auto;
-  width: 92%;
-  max-width: 960px;
-  background: white;
-  border-radius: 22px;
-  padding: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+/* search */
+#searchBarWrap{
+  width:92%;
+  max-width:900px;
+  margin:14px auto;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  z-index:1100;
 }
-#map {
-  width: 100%;
-  height: 70vh;
-  border-radius: 18px;
+#searchBarWrap input{
+  flex:1;
+  padding:10px 14px;
+  border-radius:28px;
+  border:1px solid #ccc;
+  box-shadow:0 3px 10px rgba(0,0,0,0.06);
 }
-
-/* 検索バー */
-#searchBar {
-  width: 92%;
-  max-width: 800px;
-  margin: 14px auto;
-  padding: 12px 18px;
-  background: #fff;
-  border-radius: 30px;
-  display: block;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+#searchBarWrap button{
+  padding:10px 14px;
+  border-radius:10px;
+  border:none;
+  background:var(--accent);
+  color:#fff;
+  cursor:pointer;
 }
 
-/* 投稿カード */
-.postCard {
-  background: #fff;
-  padding: 20px;
-  margin: 20px auto;
-  width: 92%;
-  max-width: 480px;
-  border-radius: 18px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-.postCard input,
-.postCard textarea {
-  width: 100%;
-  margin: 8px 0;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
-.postCard button {
-  width: 100%;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  margin-top: 12px;
-  background: #66bb6a;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
-.backBtn {
-  background: #888;
+/* main area */
+main#mainArea{ width:100%; margin-bottom:80px;}
+
+/* view 切替 */
+.view{ display:none; padding: 12px 0 40px; }
+.view.active{ display:block; }
+
+/* card */
+.card{
+  width:92%;
+  max-width:960px;
+  margin:12px auto;
+  background:#fff;
+  border-radius:18px;
+  padding:12px;
+  box-shadow:0 8px 26px rgba(0,0,0,0.06);
 }
 
-/* ＋ボタン */
-.fab.main {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  background: #66bb6a;
-  color: #fff;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  font-size: 32px;
-  border: none;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-  cursor: pointer;
-  z-index: 9999;
+/* map wrapper */
+#map{
+  height:68vh;
+  border-radius:12px;
+}
+/* timeline */
+#timelinePanel{
+  position:fixed;
+  top:60px;
+  right:-360px;
+  width:340px;
+  height:calc(100vh - 70px);
+  background:#fff;
+  box-shadow:-6px 0 24px rgba(0,0,0,0.08);
+  transition:right .28s ease;
+  padding:12px;
+  z-index:1100;
+}
+#timelinePanel.open{ right:12px; }
+#timelineList .tl-item{
+  padding:10px;
+  border-radius:10px;
+  background:#f7fff7;
+  margin-bottom:10px;
+  border-left:4px solid var(--accent);
+}
+#timelineList img{ width:100%; border-radius:8px; margin-top:6px; }
+
+/* post card specifics */
+.postCard input[type="text"], .postCard input[type="date"],
+.postCard textarea, .postCard input[type="file"]{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+.postCard .inline-row{ display:flex; gap:8px; margin-top:6px; align-items:flex-end; }
+
+/* buttons */
+.btn-primary{
+  margin-top:12px;
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+.btn-secondary{
+  background:#f0f0f0;
+  color:#333;
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
 }
 
-/* メニュー */
-#fabMenu.hidden {
-  display: none;
+/* FAB */
+#fabArea{ position:fixed; right:20px; bottom:20px; z-index:1300; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.fab{ border:none; cursor:pointer; }
+.fab.main{
+  width:64px; height:64px; border-radius:50%;
+  background:var(--accent); color:#fff; font-size:34px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.18);
 }
-#fabMenu {
-  position: fixed;
-  right: 20px;
-  bottom: 90px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 9999;
-}
-.fab.small {
-  background: #fff;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  cursor: pointer;
+.fabMenu{ display:flex; flex-direction:column; gap:8px; align-items:center; margin-bottom:6px; }
+.fab.small{ width:56px; height:56px; border-radius:50%; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.12); font-size:20px; }
+
+/* hidden class */
+.hidden{ display:none !important; pointer-events:none; opacity:0; }
+
+/* image preview */
+#imagePreviewWrap img{ max-width:100%; border-radius:10px; margin-top:8px; }
+
+@media (max-width:640px){
+  #timelinePanel{ width:88%; right:-100%; }
+  #timelinePanel.open{ right:6%; }
+  .card{ width:94%; }
 }
