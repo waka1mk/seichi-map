@@ -1,11 +1,10 @@
-/* ============================ 全体 ============================= */
 body {
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif;
   background: #e9f5e9;
 }
 
-/* ============================= ヘッダー ============================= */
+/* ヘッダー */
 #mainHeader {
   background: #a5d6a7;
   padding: 12px;
@@ -13,37 +12,10 @@ body {
   color: #fff;
   font-size: 20px;
   font-weight: bold;
-  position: relative;
   z-index: 9999;
 }
 
-/* ============================ ログインモーダル ============================ */
-#loginScreen {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-}
-#loginScreen.active {
-  display: flex;
-}
-#loginScreen .modal-content {
-  background: #fff;
-  padding: 24px;
-  border-radius: 16px;
-  width: 85%;
-  max-width: 360px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* ============================ 地図カード ============================= */
+/* 地図カード */
 #mapWrapper {
   margin: 20px auto;
   width: 92%;
@@ -52,18 +24,14 @@ body {
   border-radius: 22px;
   padding: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  position: relative;
-  z-index: 1;
 }
 #map {
   width: 100%;
   height: 70vh;
   border-radius: 18px;
-  position: relative;
-  z-index: 1;
 }
 
-/* =========================== 検索バー ============================ */
+/* 検索バー */
 #searchBar {
   width: 92%;
   max-width: 800px;
@@ -71,90 +39,44 @@ body {
   padding: 12px 18px;
   background: #fff;
   border-radius: 30px;
+  display: block;
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-  font-size: 16px;
-  color: #666;
-  position: relative;
-  z-index: 9999;
-}
-
-/* =========================== タイムライン =========================== */
-#timelinePanel {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 85%;
-  max-width: 360px;
-  height: 100%;
-  background: #fff;
-  box-shadow: -4px 0 12px rgba(0,0,0,0.15);
-  transition: right 0.25s;
-  z-index: 9999;
-  padding: 20px;
-}
-#timelinePanel.open {
-  right: 0;
 }
 
 /* 投稿カード */
-.post {
-  background: #fff;
-  padding: 16px;
-  margin-bottom: 14px;
-  border-radius: 14px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-
-/* ================================= 投稿モーダル ============================ */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.45);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-.modal-content {
+.postCard {
   background: #fff;
   padding: 20px;
-  width: 90%;
-  max-width: 420px;
-  border-radius: 16px;
-}
-
-/* =========================== 右の縦メニュー =========================== */
-#fabMenu {
-  position: fixed;
-  right: 20px;
-  bottom: 120px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 9999;
-}
-
-.fab.small {
-  background: #fff;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
+  margin: 20px auto;
+  width: 92%;
+  max-width: 480px;
+  border-radius: 18px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  font-size: 13px;
+}
+.postCard input,
+.postCard textarea {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+.postCard button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  margin-top: 12px;
+  background: #66bb6a;
+  color: #fff;
+  font-size: 16px;
   cursor: pointer;
-  display: none;
+}
+.backBtn {
+  background: #888;
 }
 
-/* 表示切替用 */
-.fab.small.show {
-  display: block;
-}
-
-/* ============================ ＋ボタン ============================= */
+/* ＋ボタン */
 .fab.main {
   position: fixed;
   right: 20px;
@@ -169,4 +91,27 @@ body {
   box-shadow: 0 4px 14px rgba(0,0,0,0.2);
   cursor: pointer;
   z-index: 9999;
+}
+
+/* メニュー */
+#fabMenu.hidden {
+  display: none;
+}
+#fabMenu {
+  position: fixed;
+  right: 20px;
+  bottom: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
+}
+.fab.small {
+  background: #fff;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  cursor: pointer;
 }
