@@ -1,39 +1,99 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>聖地MAP</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>聖地マップ（SPA）</title>
+
+  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- style -->
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <header id="mainHeader">聖地マップ</header>
 
-<header id="mainHeader">聖地マップ</header>
+  <!-- 検索 -->
+  <div id="searchBarWrap">
+    <input id="searchInput" placeholder="場所名で検索…" />
+    <button id="searchBtn">検索</button>
+  </div>
 
-<input id="searchBar" placeholder="場所名で検索…">
+  <!-- メインコンテナ（地図 or 投稿） -->
+  <main id="mainArea">
+    <!-- 地図ビュー -->
+    <section id="mapView" class="view active">
+      <div id="mapWrapper" class="card">
+        <div id="map" aria-label="地図"></div>
+      </div>
+    </section>
 
-<div id="mapWrapper">
-  <div id="map"></div>
-</div>
+    <!-- 投稿ビュー（同ページ切替） -->
+    <section id="postView" class="view">
+      <div class="card postCard">
+        <button id="backToMap" class="btn-secondary">← 地図に戻る</button>
+        <h2>新規投稿</h2>
 
-<!-- 右下 ＋ボタン -->
-<button class="fab main" id="mainFab">＋</button>
+        <label>タイトル（作品名）</label>
+        <input id="postTitle" type="text" placeholder="作品名を入力" />
 
-<!-- 展開メニュー -->
-<div id="fabMenu" class="hidden">
-  <button class="fab small" id="btnMap">地図</button>
-  <button class="fab small" id="btnTimeline">タイムライン</button>
-  <button class="fab small" id="btnPost">投稿</button>
-</div>
+        <label>コメント</label>
+        <textarea id="postComment" rows="4" placeholder="感想やメモ"></textarea>
 
-<!-- タイムライン -->
-<div id="timelinePanel">
-  <h2>タイムライン</h2>
-  <div id="timelineList"></div>
-</div>
+        <label>場所（テキスト入力：四国以外も可）</label>
+        <input id="postPlace" type="text" placeholder="例：金刀比羅宮 / + 東京スカイツリー">
 
-<script src="script.js"></script>
+        <div class="inline-row">
+          <div style="flex:1">
+            <label>訪問日</label>
+            <input id="visitDate" type="date" />
+          </div>
+          <div style="flex:1; margin-left:10px">
+            <label>タグ（カンマ区切り）</label>
+            <input id="postTags" type="text" placeholder="例：朱印, 参拝, 温泉" />
+          </div>
+        </div>
+
+        <label>写真（任意）</label>
+        <input id="photoInput" type="file" accept="image/*" />
+
+        <div class="inline-row">
+          <div style="flex:1">
+            <label>緯度（自動）</label>
+            <input id="lat" readonly />
+          </div>
+          <div style="flex:1; margin-left:10px">
+            <label>経度（自動）</label>
+            <input id="lng" readonly />
+          </div>
+        </div>
+
+        <div id="imagePreviewWrap"></div>
+
+        <button id="submitPost" class="btn-primary">投稿する</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- タイムライン（スライド右側） -->
+  <aside id="timelinePanel">
+    <h3>タイムライン</h3>
+    <div id="timelineList"></div>
+  </aside>
+
+  <!-- FAB -->
+  <div id="fabArea">
+    <button id="mainFab" class="fab main">＋</button>
+    <div id="fabMenu" class="fabMenu hidden">
+      <button id="fabMap" class="fab small">🗺️</button>
+      <button id="fabTimeline" class="fab small">📜</button>
+      <button id="fabPost" class="fab small">✏️</button>
+    </div>
+  </div>
+
+  <!-- script -->
+  <script src="script.js"></script>
 </body>
 </html>
