@@ -1,78 +1,19 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>投稿ページ</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>投稿ページ（リダイレクト）</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-<header id="mainHeader">新規投稿</header>
-
-<div class="postCard">
-  <h2>投稿フォーム</h2>
-
-  <label>写真</label>
-  <input type="file" id="photoInput" accept="image/*">
-
-  <label>コメント</label>
-  <textarea id="commentInput" placeholder="巡礼コメントを書いてください…"></textarea>
-
-  <label>現在地（自動取得）</label>
-  <input id="lat" readonly>
-  <input id="lng" readonly>
-
-  <label>別の場所を入力（四国以外OK）</label>
-  <input id="placeInput" placeholder="＋ 手入力で場所名を追加">
-
-  <button id="submitPost">投稿する</button>
-  <button id="backToMap" class="backBtn">戻る</button>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  // 位置情報取得
-  navigator.geolocation.getCurrentPosition(pos => {
-    document.getElementById("lat").value = pos.coords.latitude;
-    document.getElementById("lng").value = pos.coords.longitude;
-  });
-
-  // 投稿処理
-  document.getElementById("submitPost").addEventListener("click", async () => {
-    let file = document.getElementById("photoInput").files[0];
-    let base64 = "";
-
-    if (file) {
-      base64 = await new Promise(resolve => {
-        let r = new FileReader();
-        r.onload = () => resolve(r.result);
-        r.readAsDataURL(file);
-      });
+  <script>
+    // post.html を開いたら index.html の投稿ビューを開く（SPAに対応したUX）
+    if (location.pathname.endsWith('post.html')) {
+      location.href = 'index.html#post';
+    } else {
+      location.href = 'index.html';
     }
-
-    let newPost = {
-      image: base64,
-      comment: document.getElementById("commentInput").value,
-      lat: document.getElementById("lat").value,
-      lng: document.getElementById("lng").value,
-      place: document.getElementById("placeInput").value,
-      time: Date.now()
-    };
-
-    let posts = JSON.parse(localStorage.getItem("posts") || "[]");
-    posts.push(newPost);
-    localStorage.setItem("posts", JSON.stringify(posts));
-
-    window.location.href = "index.html";
-  });
-
-  document.getElementById("backToMap").onclick = () => {
-    window.location.href = "index.html";
-  };
-});
-</script>
-
+  </script>
 </body>
 </html>
