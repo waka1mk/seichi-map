@@ -2,25 +2,48 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>聖地巡礼マップ</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script defer src="main.js"></script>
+<title>Seichi Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  #map { height: 100vh; }
+  .add-post-btn {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      background: #4CAF50;
+      border-radius: 50%;
+      font-size: 30px;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+</style>
 </head>
-
 <body>
 
-<header id="mainHeader">聖地巡礼マップ</header>
+<div id="map"></div>
+<button class="add-post-btn" id="openModal">＋</button>
 
-<div id="mapWrapper">
-  <div id="map"></div>
+<!-- 投稿モーダル -->
+<div id="modal" style="display:none; position:fixed; top:0; left:0;
+    width:100%; height:100%; background:rgba(0,0,0,0.5);">
+  <div style="background:#fff; margin:15% auto; padding:20px; width:80%;">
+    <h3>巡礼スポット投稿</h3>
+    <label>作品名：<input type="text" id="title"></label><br><br>
+    <label>説明：<textarea id="desc"></textarea></label><br><br>
+    <button id="getLocation">📍現在地を取得</button><br><br>
+    <button id="submitPost">投稿</button>
+    <button id="closeModal">閉じる</button>
+  </div>
 </div>
 
-<input id="searchBar" placeholder="作品名を検索…">
-
-<!-- 右下の＋ボタン（別ページへ確実に遷移） -->
-<button id="mainFab" class="fab main" onclick="location.href='post.html'">＋</button>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module" src="main.js"></script>
 
 </body>
 </html>
