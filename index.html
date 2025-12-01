@@ -1,101 +1,26 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>聖地マップ（SPA）</title>
-
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<title>聖地巡礼マップ</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script defer src="main.js"></script>
 </head>
+
 <body>
-  <header id="mainHeader">聖地マップ</header>
 
-  <div id="searchBarWrap">
-    <input id="searchInput" placeholder="場所名で検索…" />
-    <button id="searchBtn">検索</button>
-  </div>
+<header id="mainHeader">聖地巡礼マップ</header>
 
-  <main id="mainArea">
-    <!-- 地図ビュー -->
-    <section id="mapView" class="view active">
-      <div id="mapWrapper" class="card">
-        <div id="map" aria-label="地図"></div>
-      </div>
-    </section>
+<div id="mapWrapper">
+  <div id="map"></div>
+</div>
 
-    <!-- 投稿ビュー（同ページ切替） -->
-    <section id="postView" class="view">
-      <div class="card postCard">
-        <button id="backToMap" class="btn-secondary">← 地図に戻る</button>
-        <h2>新規投稿</h2>
+<input id="searchBar" placeholder="作品名を検索…">
 
-        <label>タイトル（作品名）</label>
-        <input id="postTitle" type="text" placeholder="作品名を入力" />
+<!-- 右下の＋ボタン（別ページへ確実に遷移） -->
+<button id="mainFab" class="fab main" onclick="location.href='post.html'">＋</button>
 
-        <label>コメント</label>
-        <textarea id="postComment" rows="4" placeholder="感想やメモ"></textarea>
-
-        <label>場所（都道府県を選択 / 四国以外も可）</label>
-        <select id="postLocation"></select>
-
-        <div class="inline-row">
-          <div style="flex:1">
-            <label>訪問日（自動）</label>
-            <input id="visitDate" type="text" readonly />
-          </div>
-          <div style="flex:1; margin-left:10px">
-            <label>タグ（最大3つ・ジャンル優先）</label>
-            <div id="tagList" class="tag-list"></div>
-            <input id="tagCustom" placeholder="タグを追加（Enterで追加）" />
-          </div>
-        </div>
-
-        <label>写真（任意・自動圧縮）</label>
-        <input id="photoInput" type="file" accept="image/*" />
-
-        <div class="inline-row">
-          <div style="flex:1">
-            <label>緯度（自動 or 手動）</label>
-            <input id="lat" />
-          </div>
-          <div style="flex:1; margin-left:10px">
-            <label>経度（自動 or 手動）</label>
-            <input id="lng" />
-          </div>
-        </div>
-
-        <div style="margin-top:8px;">
-          <button id="locBtn" class="btn-secondary">📍現在地を取得</button>
-        </div>
-
-        <div id="imagePreviewWrap"></div>
-
-        <button id="submitPost" class="btn-primary">投稿する</button>
-      </div>
-    </section>
-  </main>
-
-  <!-- タイムライン -->
-  <aside id="timelinePanel">
-    <h3>タイムライン</h3>
-    <div id="timelineList"></div>
-  </aside>
-
-  <!-- FAB -->
-  <div id="fabArea">
-    <button id="mainFab" class="fab main">＋</button>
-    <div id="fabMenu" class="fabMenu hidden">
-      <button id="fabMap" class="fab small">🗺️</button>
-      <button id="fabTimeline" class="fab small">📜</button>
-      <button id="fabPost" class="fab small">✏️</button>
-    </div>
-  </div>
-
-  <!-- Optional direct post page redirect (post.html opens index#post) -->
-  <script src="main.js"></script>
 </body>
 </html>
