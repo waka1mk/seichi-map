@@ -4,7 +4,7 @@ const SUPABASE_URL = "https://ncqfaerpznsopgbpiiso.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jcWZhZXJwem5zb3BnYnBpaXNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0NDMwMzMsImV4cCI6MjA3OTAxOTAzM30.K3GOyrE3XVqJtF2fNXYgromkU93es8ag660nHO1Db1g";
 
 // =============================
-// ② Supabase 初期化
+// ① Supabase 初期化
 // =============================
 const supabase = window.supabase.createClient(
   SUPABASE_URL,
@@ -12,7 +12,7 @@ const supabase = window.supabase.createClient(
 );
 
 // =============================
-// ③ DOM取得
+// ② DOM取得
 // =============================
 const form = document.getElementById("post-form");
 const imageInput = document.getElementById("image");
@@ -23,7 +23,7 @@ let currentLng = null;
 let uploadedImageUrl = null;
 
 // =============================
-// ④ 現在地取得ボタン
+// ③ 現在地取得ボタン
 // =============================
 locationBtn.addEventListener("click", () => {
   if (!navigator.geolocation) {
@@ -44,7 +44,7 @@ locationBtn.addEventListener("click", () => {
 });
 
 // =============================
-// ⑤ 画像アップロード（Supabase Storage）
+// ④ 画像アップロード（Supabase Storage）
 // =============================
 imageInput.addEventListener("change", async () => {
   const file = imageInput.files[0];
@@ -75,7 +75,7 @@ imageInput.addEventListener("change", async () => {
 });
 
 // =============================
-// ⑥ 投稿送信
+// ⑤ 投稿送信
 // =============================
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
