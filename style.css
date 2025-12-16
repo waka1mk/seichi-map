@@ -43,3 +43,17 @@ textarea{ height:90px; resize:none;}
   background:#ccc; color:#333; padding:10px;
   border:none; border-radius:10px; cursor:pointer;
 }
+/* 地図を確実に表示させる */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#mapWrapper {
+  height: calc(100vh - 60px); /* ヘッダー分を引く */
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
