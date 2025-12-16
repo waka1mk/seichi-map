@@ -1,34 +1,29 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>投稿</title>
-<link rel="stylesheet" href="style.css">
-<script defer src="post.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>投稿</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
-<header id="mainHeader">投稿</header>
-
 <div class="card">
-  <label>作品名</label>
-  <input id="workTitle" placeholder="例：○○ ○○">
+  <h2>新しい投稿</h2>
 
-  <label>場所（任意入力）</label>
-  <input id="locationText" placeholder="例：渋谷 / 高松" />
+  <form id="post-form">
+    <input id="username" placeholder="ユーザー名" required />
+    <input id="title" placeholder="タイトル" required />
+    <input id="place" placeholder="場所（全国OK）" required />
+    <input id="tag" placeholder="タグ" />
+    <input id="image" type="file" accept="image/*" />
 
-  <button id="getLocationBtn" class="btn-primary">📍 現在地を取得</button>
-
-  <label>画像</label>
-  <input type="file" accept="image/*" id="imageInput">
-
-  <label>コメント</label>
-  <textarea id="commentInput" placeholder="感想など"></textarea>
-
-  <button id="submitBtn" class="btn-primary">投稿する</button>
-  <button class="btn-secondary" onclick="location.href='index.html'">← 地図へ戻る</button>
+    <button type="button" id="get-location">📍現在地を取得</button>
+    <button type="submit">投稿</button>
+  </form>
 </div>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="post.js"></script>
 </body>
 </html>
