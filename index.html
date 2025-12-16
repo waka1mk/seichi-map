@@ -2,31 +2,58 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>四国聖地巡礼マップ</title>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    defer
+  ></script>
 
+  <!-- Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <!-- =====================
+       ヘッダー
+  ====================== -->
+  <header>
+    四国聖地巡礼マップ
+  </header>
 
-<header id="mainHeader">四国聖地巡礼マップ</header>
+  <!-- =====================
+       地図
+  ====================== -->
+  <div id="mapWrapper">
+    <div id="map"></div>
+  </div>
 
-<div id="mapWrapper">
-  <div id="map"></div>
-</div>
+  <!-- =====================
+       ＋メニュー
+  ====================== -->
+  <div class="fab-menu" id="fabMenu">
+    <button onclick="location.href='post.html'">📍 新しく投稿</button>
+    <button onclick="filterByPref('徳島')">🟩 徳島の聖地</button>
+    <button onclick="filterByPref('香川')">🟧 香川の聖地</button>
+    <button onclick="filterByPref('愛媛')">🟦 愛媛の聖地</button>
+    <button onclick="filterByPref('高知')">🟪 高知の聖地</button>
+    <button onclick="location.href='comments.html'">💬 交流する</button>
+  </div>
 
-<!-- ＋メニュー -->
-<button id="fabMain" class="fab main">＋</button>
-<div id="fabMenu" class="fab-menu hidden">
-  <button id="goMap" class="fab small">🗺 地図</button>
-  <button id="goTimeline" class="fab small">📜 投稿</button>
-  <button id="goPost" class="fab small">➕ 投稿する</button>
-</div>
+  <!-- ＋ボタン -->
+  <button class="fab" id="fabBtn">＋</button>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="map.js"></script>
+  <!-- =====================
+       JS
+  ====================== -->
+  <script src="main.js"></script>
 </body>
 </html>
