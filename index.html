@@ -18,18 +18,25 @@
 </head>
 <body>
 
+  <!-- 検索 -->
+  <input id="search" placeholder="作品名・場所で検索" />
+
   <!-- 地図 -->
   <div id="map"></div>
+
+  <!-- タイムライン -->
+  <div id="timeline" class="hidden"></div>
 
   <!-- ＋ボタン -->
   <button id="plus-btn">＋</button>
 
-  <!-- メニュー -->
+  <!-- ＋メニュー -->
   <div id="plus-menu" class="hidden">
-    <button id="go-post">投稿する</button>
+    <button id="go-post">投稿</button>
+    <button id="toggle-timeline">タイムライン</button>
     <button id="close-menu">閉じる</button>
   </div>
 
-<script src="main.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
