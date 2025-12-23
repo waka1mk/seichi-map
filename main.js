@@ -42,6 +42,5 @@ async function loadPosts() {
       `);
   });
 }
-L.marker([33.84, 132.77]).addTo(map).bindPopup("テストピン");
 
 loadPosts();
