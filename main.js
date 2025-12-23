@@ -1,69 +1,74 @@
-// ====== 地図表示 ======
-const map = L.map('map').setView([35.6812, 139.7671], 12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+// ===============================
+// 四国聖地巡礼マップ main.js 完成版
+// ===============================
 
-// ====== 投稿ボタン操作 ======
-const modal = document.getElementById('modal');
-document.getElementById('openModal').addEventListener('click', () => {
-  modal.style.display = 'block';
-});
-document.getElementById('closeModal').addEventListener('click', () => {
-  modal.style.display = 'none';
+// -------------------------------
+// ① 地図初期化（四国固定）
+// -------------------------------
+const SHIKOKU_CENTER = [33.7, 133.5]; // 四国中央
+const SHIKOKU_ZOOM = 7;
+
+let map;
+
+document.addEventListener("DOMContentLoaded", () => {
+  initMap();
+  initFabMenu();
 });
 
-// ====== 現在地取得 ======
-let currentLocation = null;
-document.getElementById('getLocation').addEventListener('click', () => {
-  if (!navigator.geolocation) {
-    alert('位置情報が使えません');
-    return;
-  }
-  navigator.geolocation.getCurrentPosition(pos => {
-    currentLocation = {
-      lat: pos.coords.latitude,
-      lng: pos.coords.longitude,
-    };
-    map.setView([currentLocation.lat, currentLocation.lng], 16);
-    L.marker([currentLocation.lat, currentLocation.lng]).addTo(map)
-      .bindPopup("現在地 📍").openPopup();
+// -------------------------------
+// ② 地図生成
+// -------------------------------
+function initMap() {
+  map = L.map("map", {
+    center: SHIKOKU_CENTER,
+    zoom: SHIKOKU_ZOOM,
+    zoomControl: true,
   });
-});
 
-// ====== Supabase 読込＆投稿 ======
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-const supabaseUrl = "YOUR_SUPABASE_URL";
-const supabaseKey = "YOUR_PUBLIC_API_KEY";
-const supabase = createClient(supabaseUrl, supabaseKey);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors",
+  }).addTo(map);
+}
 
-// DBからピンを表示
-async function loadPins() {
-  const { data } = await supabase.from("posts").select("*");
-  data.forEach(p => {
-    L.marker([p.lat, p.lng]).addTo(map)
-      .bindPopup(`<b>${p.title}</b><br>${p.description}`);
+// -------------------------------
+// ③ ＋ボタン & メニュー制御
+// -------------------------------
+function initFabMenu() {
+  const fabMain = document.getElementById("fab-main");
+  const fabMenu = document.getElementById("fab-menu");
+
+  if (!fabMain || !fabMenu) return;
+
+  let isOpen = false;
+
+  fabMain.addEventListener("click", () => {
+    isOpen = !isOpen;
+    fabMenu.style.display = isOpen ? "flex" : "none";
+    fabMain.textContent = isOpen ? "×" : "＋";
   });
 }
-loadPins();
 
-// 新規投稿
-document.getElementById('submitPost').addEventListener('click', async () => {
-  const title = document.getElementById('title').value;
-  const desc = document.getElementById('desc').value;
-  if (!currentLocation) {
-    alert("位置情報を取得してください");
-    return;
+// -------------------------------
+// ④ メニュー遷移
+// -------------------------------
+function goMap() {
+  // 地図は常に表示されているので何もしない
+  closeFab();
+}
+
+function goPost() {
+  window.location.href = "post.html";
+}
+
+function goTimeline() {
+  window.location.href = "comments.html";
+}
+
+function closeFab() {
+  const fabMenu = document.getElementById("fab-menu");
+  const fabMain = document.getElementById("fab-main");
+  if (fabMenu && fabMain) {
+    fabMenu.style.display = "none";
+    fabMain.textContent = "＋";
   }
-
-  await supabase.from("posts").insert({
-    title,
-    description: desc,
-    lat: currentLocation.lat,
-    lng: currentLocation.lng,
-  });
-
-  alert("投稿完了！");
-  modal.style.display = "none";
-  location.reload();
-});
+}
