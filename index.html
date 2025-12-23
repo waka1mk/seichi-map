@@ -2,58 +2,34 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>四国聖地巡礼マップ</title>
+  <title>聖地巡礼マップ</title>
 
   <!-- Leaflet -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    defer
-  ></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Supabase -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <!-- =====================
-       ヘッダー
-  ====================== -->
-  <header>
-    四国聖地巡礼マップ
-  </header>
 
-  <!-- =====================
-       地図
-  ====================== -->
-  <div id="mapWrapper">
-    <div id="map"></div>
-  </div>
-
-  <!-- =====================
-       ＋メニュー
-  ====================== -->
-  <div class="fab-menu" id="fabMenu">
-    <button onclick="location.href='post.html'">📍 新しく投稿</button>
-    <button onclick="filterByPref('徳島')">🟩 徳島の聖地</button>
-    <button onclick="filterByPref('香川')">🟧 香川の聖地</button>
-    <button onclick="filterByPref('愛媛')">🟦 愛媛の聖地</button>
-    <button onclick="filterByPref('高知')">🟪 高知の聖地</button>
-    <button onclick="location.href='comments.html'">💬 交流する</button>
-  </div>
+  <!-- 地図 -->
+  <div id="map"></div>
 
   <!-- ＋ボタン -->
-  <button class="fab" id="fabBtn">＋</button>
+  <button id="plus-btn">＋</button>
 
-  <!-- =====================
-       JS
-  ====================== -->
-  <script src="main.js"></script>
+  <!-- メニュー -->
+  <div id="plus-menu" class="hidden">
+    <button id="go-post">投稿する</button>
+    <button id="close-menu">閉じる</button>
+  </div>
+
+  <script src="index.js"></script>
 </body>
 </html>
