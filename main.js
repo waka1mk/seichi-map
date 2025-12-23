@@ -1,100 +1,46 @@
-// ======================
-// Supabase（※自分の値に）
-// ======================
-const SUPABASE_URL = "https://ncqfaerpznsopgbpiiso.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jcWZhZXJwem5zb3BnYnBpaXNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0NDMwMzMsImV4cCI6MjA3OTAxOTAzM30.K3GOyrE3XVqJtF2fNXYgromkU93es8ag660nHO1Db1g";
+// =====================
+// Supabase（自分の値）
+/* ===================== */
+const SUPABASE_URL = "あなたのURL";
+const SUPABASE_ANON_KEY = "あなたのANON_KEY";
 
-const supabase = window.supabase.createClient(
+const supabaseClient = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
 
-// ======================
-// 地図初期化（四国固定）
-// ======================
-const map = L.map("map").setView([33.7, 133.8], 7);
+// =====================
+// Map（四国固定）
+/* ===================== */
+const map = L.map("map").setView([33.7, 133.5], 7);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap"
+  attribution: "© OpenStreetMap",
 }).addTo(map);
 
-let markers = [];
-
-// 県別色
-function getColor(place) {
-  if (place.includes("香川")) return "red";
-  if (place.includes("徳島")) return "blue";
-  if (place.includes("愛媛")) return "green";
-  if (place.includes("高知")) return "orange";
-  return "gray";
-}
-
-// ======================
+// =====================
 // 投稿読み込み
-// ======================
-async function loadPosts(keyword = "") {
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
-
-  const { data } = await supabase
+/* ===================== */
+async function loadPosts() {
+  const { data, error } = await supabaseClient
     .from("posts")
-    .select("*")
-    .order("created_at", { ascending: false });
+    .select("*");
 
-  const timeline = document.getElementById("timeline");
-  timeline.innerHTML = "";
+  if (error) {
+    console.error("投稿取得エラー", error);
+    return;
+  }
 
-  data
-    .filter(p =>
-      p.title.includes(keyword) || p.place.includes(keyword)
-    )
-    .forEach(post => {
-      const marker = L.circleMarker(
-        [post.latitude, post.longitude],
-        {
-          radius: 8,
-          color: getColor(post.place)
-        }
-      )
-        .addTo(map)
-        .bindPopup(`<b>${post.title}</b><br>${post.place}`);
+  data.forEach(post => {
+    if (!post.latitude || !post.longitude) return;
 
-      markers.push(marker);
-
-      const div = document.createElement("div");
-      div.className = "post";
-      div.textContent = `${post.title}（${post.place}）`;
-      timeline.appendChild(div);
-    });
+    L.marker([post.latitude, post.longitude])
+      .addTo(map)
+      .bindPopup(`
+        <strong>${post.title}</strong><br>
+        ${post.place || ""}
+      `);
+  });
 }
 
 loadPosts();
-
-// ======================
-// 検索
-// ======================
-document.getElementById("search").addEventListener("input", e => {
-  loadPosts(e.target.value);
-});
-
-// ======================
-// ＋メニュー
-// ======================
-const plusBtn = document.getElementById("plus-btn");
-const plusMenu = document.getElementById("plus-menu");
-
-plusBtn.onclick = () => {
-  plusMenu.classList.toggle("hidden");
-};
-
-document.getElementById("close-menu").onclick = () => {
-  plusMenu.classList.add("hidden");
-};
-
-document.getElementById("toggle-timeline").onclick = () => {
-  document.getElementById("timeline").classList.toggle("hidden");
-};
-
-document.getElementById("go-post").onclick = () => {
-  location.href = "post.html";
-};
