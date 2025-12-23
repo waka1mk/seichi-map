@@ -1,8 +1,8 @@
 // ======================
 // Supabase（※自分の値に）
 // ======================
-const SUPABASE_URL = "あなたのURL";
-const SUPABASE_ANON_KEY = "あなたのKEY";
+const SUPABASE_URL = "https://ncqfaerpznsopgbpiiso.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jcWZhZXJwem5zb3BnYnBpaXNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0NDMwMzMsImV4cCI6MjA3OTAxOTAzM30.K3GOyrE3XVqJtF2fNXYgromkU93es8ag660nHO1Db1g";
 
 const supabase = window.supabase.createClient(
   SUPABASE_URL,
