@@ -1,33 +1,7 @@
-/* =========================
-   全体
-========================= */
-* { box-sizing: border-box; }
-
 html, body {
-  height: 100%;
   margin: 0;
-  font-family: "Noto Sans JP", sans-serif;
-  background-color: #eef8ec;
-  color: #2f4f2f;
-}
-
-/* =========================
-   ヘッダー
-========================= */
-header {
-  height: 56px;
-  background: #a8d5a2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-}
-
-/* =========================
-   地図
-========================= */
-#mapWrapper {
-  height: calc(100vh - 56px);
+  padding: 0;
+  height: 100%;
 }
 
 #map {
@@ -35,75 +9,41 @@ header {
   height: 100%;
 }
 
-/* =========================
-   ＋ボタン
-========================= */
-.fab {
+/* ＋ボタン */
+#plus-btn {
   position: fixed;
-  right: 20px;
   bottom: 20px;
+  right: 20px;
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #5fb878;
-  color: #fff;
   font-size: 32px;
   border: none;
-  cursor: pointer;
+  background: #4caf50;
+  color: white;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0,0,0,.25);
-}
-
-/* =========================
-   ＋メニュー
-========================= */
-.fab-menu {
-  position: fixed;
-  right: 20px;
-  bottom: 90px;
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 999;
-}
-
-.fab-menu.show { display: flex; }
-
-.fab-menu button {
-  padding: 10px 14px;
-  border-radius: 20px;
-  border: none;
-  background: #fff;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
-  text-align: left;
 }
 
-.fab-menu button:hover {
-  background: #dff2dc;
-}
-
-/* =========================
-   投稿フォーム
-========================= */
-form {
-  max-width: 480px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #fff;
+/* メニュー */
+#plus-menu {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  background: white;
   border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  padding: 10px;
+  z-index: 1000;
 }
 
-input, textarea, select, button {
+#plus-menu button {
+  display: block;
   width: 100%;
-  margin-bottom: 12px;
+  margin: 5px 0;
   padding: 10px;
 }
 
-/* =========================
-   県別ピン色（B）
-========================= */
-.pin-tokushima { background: #4caf50; }
-.pin-kagawa    { background: #ff9800; }
-.pin-ehime     { background: #2196f3; }
-.pin-kochi     { background: #9c27b0; }
+.hidden {
+  display: none;
+}
