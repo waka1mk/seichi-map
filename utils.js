@@ -1,43 +1,8 @@
-// -------------------------------
-// ユーザー情報の保存
-// -------------------------------
-function saveUser(name) {
-  const id = "user_" + Math.random().toString(36).substring(2, 12);
+// utils.js
+const SUPABASE_URL = "https://ncqfaerpznsopgbpiiso.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jcWZhZXJwem5zb3BnYnBpaXNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0NDMwMzMsImV4cCI6MjA3OTAxOTAzM30.K3GOyrE3XVqJtF2fNXYgromkU93es8ag660nHO1Db1g";
 
-  const userData = {
-    id: id,
-    name: name
-  };
-
-  localStorage.setItem("currentUser", JSON.stringify(userData));
-}
-
-
-// -------------------------------
-// 現在のユーザー取得
-// -------------------------------
-function getUser() {
-  const data = localStorage.getItem("currentUser");
-  if (!data) return null;
-  return JSON.parse(data);
-}
-
-
-// -------------------------------
-// ログインしているかチェック
-// -------------------------------
-function requireLogin() {
-  const user = getUser();
-  if (!user) {
-    location.href = "login.html";
-  }
-}
-
-
-// -------------------------------
-// ログアウト
-// -------------------------------
-function logout() {
-  localStorage.removeItem("currentUser");
-  location.href = "login.html";
-}
+export const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
