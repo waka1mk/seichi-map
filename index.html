@@ -4,39 +4,27 @@
   <meta charset="UTF-8" />
   <title>聖地巡礼マップ</title>
 
-  <!-- Leaflet -->
+  <link rel="stylesheet" href="style.css" />
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Supabase -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- 検索 -->
-  <input id="search" placeholder="作品名・場所で検索" />
+<header class="header">四国 聖地巡礼マップ</header>
 
-  <!-- 地図 -->
-  <div id="map"></div>
+<div id="map"></div>
 
-  <!-- タイムライン -->
-  <div id="timeline" class="hidden"></div>
+<button id="fab">＋</button>
 
-  <!-- ＋ボタン -->
-  <button id="plus-btn">＋</button>
+<div id="fab-menu" class="hidden">
+  <button onclick="location.href='post.html'">投稿</button>
+  <button onclick="location.href='timeline.html'">タイムライン</button>
+</div>
 
-  <!-- ＋メニュー -->
-  <div id="plus-menu" class="hidden">
-    <button id="go-post">投稿</button>
-    <button id="toggle-timeline">タイムライン</button>
-    <button id="close-menu">閉じる</button>
-  </div>
-
-  <script src="main.js"></script>
+<script type="module" src="map.js"></script>
 </body>
 </html>
