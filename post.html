@@ -2,28 +2,26 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>投稿</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-<div class="card">
-  <h2>新しい投稿</h2>
+<header class="header">
+  <button onclick="location.href='index.html'">← 戻る</button>
+  投稿
+</header>
 
-  <form id="post-form">
-    <input id="username" placeholder="ユーザー名" required />
-    <input id="title" placeholder="タイトル" required />
-    <input id="place" placeholder="場所（全国OK）" required />
-    <input id="tag" placeholder="タグ" />
-    <input id="image" type="file" accept="image/*" />
+<form id="postForm">
+  <input name="title" placeholder="作品名" required />
+  <input name="place" placeholder="場所名" required />
+  <input name="prefecture" placeholder="県名（香川など）" required />
+  <input name="lat" placeholder="緯度" required />
+  <input name="lng" placeholder="経度" required />
+  <button type="submit">投稿する</button>
+</form>
 
-    <button type="button" id="get-location">📍現在地を取得</button>
-    <button type="submit">投稿</button>
-  </form>
-</div>
-
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="post.js"></script>
+<script type="module" src="post.js"></script>
 </body>
 </html>
