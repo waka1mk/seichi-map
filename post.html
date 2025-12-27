@@ -4,23 +4,49 @@
   <meta charset="UTF-8" />
   <title>投稿</title>
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Supabase -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-<header class="header">
-  <button onclick="location.href='index.html'">← 戻る</button>
-  投稿
-</header>
+<!-- 投稿モーダル -->
+<div id="postModal" class="modal hidden">
+  <div class="modal-content">
 
-<form id="postForm">
-  <input name="title" placeholder="作品名" required />
-  <input name="place" placeholder="場所名" required />
-  <input name="prefecture" placeholder="県名（香川など）" required />
-  <input name="lat" placeholder="緯度" required />
-  <input name="lng" placeholder="経度" required />
-  <button type="submit">投稿する</button>
-</form>
+    <h2>投稿する</h2>
+
+    <label>
+      作品名
+      <input
+        type="text"
+        id="title"
+        placeholder="作品名を入力"
+      />
+    </label>
+
+    <label>
+      巡礼の感想
+      <textarea
+        id="comment"
+        placeholder="巡礼の感想を書く"
+      ></textarea>
+    </label>
+
+    <!-- ※ 今回は保存しないけどUIとして残す -->
+    <label class="file-input">
+      写真（任意）
+      <input type="file" disabled />
+      <span class="note">※ 写真投稿は後で実装</span>
+    </label>
+
+    <div class="modal-actions">
+      <button id="cancelPost" class="btn cancel">キャンセル</button>
+      <button id="submitPost" class="btn submit">投稿</button>
+    </div>
+
+  </div>
+</div>
 
 <script type="module" src="post.js"></script>
 </body>
