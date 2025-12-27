@@ -1,54 +1,37 @@
+import { supabase } from "./utils.js";
+
 const submitBtn = document.getElementById("submitPost");
+const cancelBtn = document.getElementById("cancelPost");
 
 submitBtn.addEventListener("click", async () => {
-  const title = document.getElementById("workTitle").value;
+  const title = document.getElementById("title").value;
   const comment = document.getElementById("comment").value;
-  const photoFile = document.getElementById("photo").files[0];
 
   if (!title || !comment) {
-    alert("作品名とコメントは必須です");
+    alert("タイトルと感想を入力してください");
     return;
   }
 
-  // 現在地取得
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
+  const { error } = await supabase
+    .from("posts")
+    .insert([
+      {
+        title: title,
+        comment: comment,
+        lat: 35.681236,
+        lng: 139.767125
+      }
+    ]);
 
-    // posts に保存
-    const { data: post, error } = await supabase
-      .from("posts")
-      .insert([{
-        title,
-        comment,
-        lat,
-        lng
-      }])
-      .select()
-      .single();
+  if (error) {
+    console.error(error);
+    alert("保存に失敗しました");
+  } else {
+    alert("投稿を保存しました！");
+    location.href = "index.html";
+  }
+});
 
-    if (error) {
-      alert("投稿に失敗しました");
-      return;
-    }
-
-    // 画像があれば保存
-    if (photoFile) {
-      const filePath = `${post.id}/${photoFile.name}`;
-
-      await supabase.storage
-        .from("post-images")
-        .upload(filePath, photoFile);
-
-      await supabase.from("post_images").insert([{
-        post_id: post.id,
-        storage_path: filePath
-      }]);
-    }
-
-    // モーダル閉じる
-    document.getElementById("postModal").classList.add("hidden");
-
-    alert("投稿完了！");
-  });
+cancelBtn.addEventListener("click", () => {
+  location.href = "index.html";
 });
