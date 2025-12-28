@@ -1,42 +1,48 @@
 import { supabase } from "./utils.js";
 
+const submitBtn = document.getElementById("submit");
 const modal = document.getElementById("postModal");
-const fab = document.getElementById("fab");
-const submit = document.getElementById("submit");
-const cancel = document.getElementById("cancel");
 
-fab.onclick = () => modal.classList.remove("hidden");
-cancel.onclick = () => modal.classList.add("hidden");
+submitBtn.addEventListener("click", async () => {
+  const title = document.getElementById("title").value.trim();
+  const comment = document.getElementById("comment").value.trim();
 
-// 投稿
-submit.onclick = async () => {
-  if (!navigator.geolocation) {
-    alert("位置情報が使えません");
+  if (!title || !comment) {
+    alert("作品名と感想を入力してください");
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
+  // 位置情報取得
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
 
-    const title = document.getElementById("title").value;
-    const comment = document.getElementById("comment").value;
+      const { error } = await supabase
+        .from("posts")
+        .insert([
+          {
+            title,
+            comment,
+            lat,
+            lng
+          }
+        ]);
 
-    const { error } = await supabase.from("posts").insert({
-      title,
-      comment,
-      lat,
-      lng,
-    });
+      if (error) {
+        alert("投稿に失敗しました");
+        console.error(error);
+        return;
+      }
 
-    if (error) {
-      alert("投稿失敗");
-      console.error(error);
-      return;
+      // 成功
+      modal.classList.add("hidden");
+      document.getElementById("title").value = "";
+      document.getElementById("comment").value = "";
+      alert("投稿しました！");
+    },
+    () => {
+      alert("位置情報を取得できませんでした");
     }
-
-    // ★ 即マップ反映
-    window.addPostMarker(lat, lng, title, comment);
-    modal.classList.add("hidden");
-  });
-};
+  );
+});
