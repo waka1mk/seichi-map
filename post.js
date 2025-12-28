@@ -1,48 +1,42 @@
-// post.js
 import { supabase } from "./utils.js";
 
-const submitBtn = document.getElementById("submit");
+const modal = document.getElementById("postModal");
+const fab = document.getElementById("fab");
+const submit = document.getElementById("submit");
+const cancel = document.getElementById("cancel");
 
-let currentLat = null;
-let currentLng = null;
+fab.onclick = () => modal.classList.remove("hidden");
+cancel.onclick = () => modal.classList.add("hidden");
 
-// ① 位置情報取得
-navigator.geolocation.getCurrentPosition(
-  (pos) => {
-    currentLat = pos.coords.latitude;
-    currentLng = pos.coords.longitude;
-    console.log("位置情報OK", currentLat, currentLng);
-  },
-  () => {
-    alert("位置情報が取得できません");
-  }
-);
-
-// ② 投稿処理
-submitBtn.addEventListener("click", async () => {
-  const title = document.getElementById("title").value;
-  const comment = document.getElementById("comment").value;
-
-  if (!title || !comment) {
-    alert("未入力があります");
+// 投稿
+submit.onclick = async () => {
+  if (!navigator.geolocation) {
+    alert("位置情報が使えません");
     return;
   }
 
-  const { error } = await supabase.from("posts").insert([
-    {
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+
+    const title = document.getElementById("title").value;
+    const comment = document.getElementById("comment").value;
+
+    const { error } = await supabase.from("posts").insert({
       title,
       comment,
-      lat: currentLat,
-      lng: currentLng,
-    },
-  ]);
+      lat,
+      lng,
+    });
 
-  if (error) {
-    console.error(error);
-    alert("保存失敗");
-  } else {
-    console.log("保存成功");
-    alert("投稿しました！");
-    document.getElementById("postModal").classList.add("hidden");
-  }
-});
+    if (error) {
+      alert("投稿失敗");
+      console.error(error);
+      return;
+    }
+
+    // ★ 即マップ反映
+    window.addPostMarker(lat, lng, title, comment);
+    modal.classList.add("hidden");
+  });
+};
