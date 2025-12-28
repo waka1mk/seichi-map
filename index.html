@@ -4,34 +4,23 @@
   <meta charset="UTF-8" />
   <title>聖地巡礼マップ</title>
   <link rel="stylesheet" href="style.css" />
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
-
 <body>
+
   <div id="map"></div>
 
-  <!-- ＋ボタン -->
   <button id="fab">＋</button>
 
-  <!-- 投稿モーダル -->
   <div id="postModal" class="modal hidden">
     <div class="modal-content">
-      <h2>投稿する</h2>
-
-      <input id="title" placeholder="作品名" />
-      <textarea id="comment" placeholder="巡礼の感想を書く"></textarea>
-
-      <div class="modal-actions">
-        <button id="cancel">キャンセル</button>
-        <button id="submit">投稿</button>
-      </div>
+      <input id="title" placeholder="作品名">
+      <textarea id="comment" placeholder="感想"></textarea>
+      <button id="submit">投稿</button>
+      <button id="cancel">キャンセル</button>
     </div>
   </div>
 
-  <!-- ★ここ超重要 -->
   <script type="module" src="map.js"></script>
   <script type="module" src="post.js"></script>
 </body>
