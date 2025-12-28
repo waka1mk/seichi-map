@@ -1,37 +1,44 @@
+// post.js
 import { supabase } from "./utils.js";
 
-const submitBtn = document.getElementById("submitPost");
-const cancelBtn = document.getElementById("cancelPost");
+const form = document.getElementById("post-form");
+const locBtn = document.getElementById("get-location");
 
-submitBtn.addEventListener("click", async () => {
-  const title = document.getElementById("title").value;
-  const comment = document.getElementById("comment").value;
+let lat = null;
+let lng = null;
 
-  if (!title || !comment) {
-    alert("タイトルと感想を入力してください");
+locBtn.onclick = () => {
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      lat = pos.coords.latitude;
+      lng = pos.coords.longitude;
+      alert("現在地を取得しました");
+    },
+    () => alert("位置情報取得失敗")
+  );
+};
+
+form.onsubmit = async (e) => {
+  e.preventDefault();
+
+  if (!lat || !lng) {
+    alert("位置情報を取得してください");
     return;
   }
 
-  const { error } = await supabase
-    .from("posts")
-    .insert([
-      {
-        title: title,
-        comment: comment,
-        lat: 35.681236,
-        lng: 139.767125
-      }
-    ]);
+  const title = document.getElementById("title").value;
+  const comment = document.getElementById("comment").value;
+
+  const { error } = await supabase.from("posts").insert([
+    { title, comment, latitude: lat, longitude: lng }
+  ]);
 
   if (error) {
     console.error(error);
-    alert("保存に失敗しました");
-  } else {
-    alert("投稿を保存しました！");
-    location.href = "index.html";
+    alert("保存失敗");
+    return;
   }
-});
 
-cancelBtn.addEventListener("click", () => {
+  alert("投稿完了！");
   location.href = "index.html";
-});
+};
