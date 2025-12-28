@@ -4,15 +4,14 @@
   <meta charset="UTF-8" />
   <title>聖地巡礼マップ</title>
 
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="data:,">
-
   <!-- Leaflet -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -36,7 +35,8 @@
     </div>
   </div>
 
-  <!-- JS -->
+  <!-- JS（順番超重要） -->
+  <script type="module" src="utils.js"></script>
   <script type="module" src="map.js"></script>
   <script type="module" src="post.js"></script>
 </body>
