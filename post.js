@@ -1,40 +1,46 @@
-let lat = null;
-let lng = null;
+import { map, markers } from "./map.js";
 
-// 現在地取得
-document.getElementById("getLocation").onclick = () => {
-  navigator.geolocation.getCurrentPosition(pos => {
-    lat = pos.coords.latitude;
-    lng = pos.coords.longitude;
-    alert("現在地を取得しました");
-  });
-};
+const fab = document.getElementById("fab");
+const modal = document.getElementById("postModal");
+const cancel = document.getElementById("cancel");
+const submit = document.getElementById("submit");
+
+let currentLatLng = null;
+
+// モーダル制御
+fab.onclick = () => modal.classList.remove("hidden");
+cancel.onclick = () => modal.classList.add("hidden");
+
+// 地図クリックで位置取得
+map.on("click", e => {
+  currentLatLng = e.latlng;
+});
 
 // 投稿
-document.getElementById("submitPost").onclick = async () => {
+submit.onclick = () => {
+  if (!currentLatLng) {
+    alert("地図をタップしてください");
+    return;
+  }
+
   const title = document.getElementById("title").value;
   const comment = document.getElementById("comment").value;
+  const imageFile = document.getElementById("image").files[0];
 
-  if (!lat || !lng) {
-    alert("先に現在地を取得してください");
-    return;
+  let imageHTML = "";
+  if (imageFile) {
+    const url = URL.createObjectURL(imageFile);
+    imageHTML = `<br><img src="${url}" width="150">`;
   }
 
-  const { error } = await supabaseClient.from("posts").insert({
-    title,
-    comment,
-    lat,
-    ing: lng, // ← DB列名に合わせる（lngではない）
-  });
+  const marker = L.marker(currentLatLng)
+    .addTo(map)
+    .bindPopup(`<strong>${title}</strong><br>${comment}${imageHTML}`)
+    .openPopup();
 
-  if (error) {
-    console.error(error);
-    alert("投稿に失敗しました");
-    return;
-  }
+  markers.push(marker);
 
-  // 即マップ反映
-  L.marker([lat, lng]).addTo(map).bindPopup(title);
+  map.setView(currentLatLng, 16);
 
-  document.getElementById("postModal").classList.add("hidden");
+  modal.classList.add("hidden");
 };
