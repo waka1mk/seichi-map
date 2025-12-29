@@ -1,32 +1,48 @@
-import { supabase, addPin } from "./utils.js";
-import { map } from "./map.js";
+let lat = null;
+let lng = null;
+let imageUrl = null;
 
-const submit = document.getElementById("submit");
+// 現在地
+document.getElementById("getLocation").onclick = () => {
+  navigator.geolocation.getCurrentPosition(pos => {
+    lat = pos.coords.latitude;
+    lng = pos.coords.longitude;
+    alert("現在地を取得しました");
+  });
+};
 
-submit.addEventListener("click", async () => {
+// 画像アップロード
+document.getElementById("image").onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const name = crypto.randomUUID();
+  await supabaseClient.storage.from("post-images").upload(name, file);
+  imageUrl = supabaseClient.storage.from("post-images")
+    .getPublicUrl(name).data.publicUrl;
+};
+
+// 投稿
+document.getElementById("submitPost").onclick = async () => {
   const title = document.getElementById("title").value;
   const comment = document.getElementById("comment").value;
 
-  // 位置情報取得
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-
-    const { data, error } = await supabase
-      .from("posts")
-      .insert([{ title, comment, lat, lng }])
-      .select()
-      .single();
-
-    if (error) {
-      alert("投稿失敗");
-      console.error(error);
-      return;
-    }
-
-    // 🌟 即マップ反映
-    addPin(map, data);
-
-    document.getElementById("postModal").classList.add("hidden");
+  const { error } = await supabaseClient.from("posts").insert({
+    title,
+    comment,
+    lat,
+    lng,
+    image_url: imageUrl,
   });
-});
+
+  if (error) {
+    alert("投稿失敗");
+    console.error(error);
+    return;
+  }
+
+  // 即ピン追加
+  L.marker([lat, lng]).addTo(map).bindPopup(title);
+
+  document.getElementById("postModal").classList.add("hidden");
+};
