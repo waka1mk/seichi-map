@@ -1,36 +1,26 @@
-import { supabase } from "./utils.js";
-
+const fab = document.getElementById("fab");
+const modal = document.getElementById("postModal");
+const cancelBtn = document.getElementById("cancel");
 const submitBtn = document.getElementById("submit");
 
-submitBtn.addEventListener("click", async () => {
+// モーダル開閉
+fab.addEventListener("click", () => {
+  modal.classList.remove("hidden");
+});
+
+cancelBtn.addEventListener("click", () => {
+  modal.classList.add("hidden");
+});
+
+// 投稿（今はデモ）
+submitBtn.addEventListener("click", () => {
   const title = document.getElementById("title").value;
-  const comment = document.getElementById("comment").value;
 
   if (!title) {
-    alert("作品名を入力してください");
+    alert("作品名を入れてください");
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-
-    const { error } = await supabase.from("posts").insert([
-      {
-        title,
-        comment,
-        lat,
-        lng
-      }
-    ]);
-
-    if (error) {
-      alert("投稿失敗");
-      console.error(error);
-      return;
-    }
-
-    alert("投稿完了！");
-    location.reload();
-  });
+  alert("投稿しました！（※今はデモ）");
+  modal.classList.add("hidden");
 });
