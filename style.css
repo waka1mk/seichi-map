@@ -1,47 +1,24 @@
-html, body {
-  margin: 0;
-  height: 100%;
-}
-
-#map {
-  height: 100vh;
-}
-
 #fab {
   position: fixed;
   right: 20px;
   bottom: 20px;
-  font-size: 28px;
   width: 56px;
   height: 56px;
   border-radius: 50%;
+  font-size: 28px;
   border: none;
-  background: #2ecc71;
+  background: #4CAF50;
   color: white;
+  cursor: pointer;
+
+  /* ★超重要 */
+  z-index: 1000;
 }
 
+/* モーダルも地図より上に */
 .modal {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hidden {
-  display: none;
-}
-
-.modal-content {
-  background: white;
-  padding: 20px;
-  width: 300px;
-  border-radius: 10px;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+  z-index: 1100;
 }
