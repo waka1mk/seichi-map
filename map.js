@@ -1,33 +1,50 @@
-// === 地図初期化（四国固定・見やすい）===
-const map = L.map("map").setView([33.8, 133.5], 7);
+import { supabase, addPin } from "./utils.js";
+
+// 地図初期化（見やすいタイル）
+export const map = L.map("map").setView([35.681236, 139.767125], 13);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap",
-  maxZoom: 18,
-  minZoom: 6,
+  attribution: "© OpenStreetMap"
 }).addTo(map);
 
-// === 仮投稿（デモ用）===
+// 既存投稿を読み込み
+async function loadPosts() {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("title, comment, lat, lng");
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  data.forEach(post => addPin(map, post));
+}
+
+loadPosts();
+
+// 🔹 仮投稿（DB空でも見せる用）
 const demoPosts = [
   {
-    title: "アニメA 第1話の神社",
-    latitude: 34.3401,
-    longitude: 134.0433,
-    place: "香川",
+    title: "〇〇アニメ聖地",
+    comment: "実際に来ると感動しました",
+    lat: 35.681236,
+    lng: 139.767125
   },
   {
-    title: "ゲームB 聖地の橋",
-    latitude: 33.8416,
-    longitude: 132.7657,
-    place: "愛媛",
-  },
+    title: "△△映画ロケ地",
+    comment: "広くて雰囲気が良い場所",
+    lat: 35.6895,
+    lng: 139.6917
+  }
 ];
 
-demoPosts.forEach(post => {
-  L.marker([post.latitude, post.longitude])
-    .addTo(map)
-    .bindPopup(`
-      <strong>${post.title}</strong><br>
-      ${post.place}
-    `);
-});
+demoPosts.forEach(post => addPin(map, post));
+
+// モーダル制御
+const fab = document.getElementById("fab");
+const modal = document.getElementById("postModal");
+const cancel = document.getElementById("cancel");
+
+fab.onclick = () => modal.classList.remove("hidden");
+cancel.onclick = () => modal.classList.add("hidden");
