@@ -9,6 +9,7 @@
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:,">
 </head>
 
 <body>
@@ -20,10 +21,13 @@
   <!-- 投稿モーダル -->
   <div id="postModal" class="modal hidden">
     <div class="modal-content">
-      <h2>投稿する</h2>
-      <input id="title" placeholder="作品名・シーン名" />
-      <textarea id="comment" placeholder="巡礼の感想"></textarea>
+      <h2>投稿</h2>
+      <input id="title" placeholder="作品名" />
+      <textarea id="comment" placeholder="感想"></textarea>
+
+      <button id="getLocation">📍 現在地を取得</button>
       <input type="file" id="image" accept="image/*" />
+
       <div class="modal-actions">
         <button id="cancel">キャンセル</button>
         <button id="submit">投稿</button>
@@ -31,12 +35,7 @@
     </div>
   </div>
 
-  <!-- Leaflet -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- JS -->
-  <script type="module" src="./login.js"></script>
-  <script type="module" src="./dummyData.js"></script>
   <script type="module" src="./map.js"></script>
   <script type="module" src="./post.js"></script>
 </body>
