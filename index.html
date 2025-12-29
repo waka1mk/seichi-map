@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <title>聖地巡礼マップ</title>
 
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Supabase -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -24,21 +21,23 @@
   <div id="postModal" class="modal hidden">
     <div class="modal-content">
       <h2>投稿する</h2>
-      <input id="title" placeholder="作品名" />
-      <textarea id="comment" placeholder="巡礼の感想を書く"></textarea>
-
-      <button id="getLocation">現在地取得</button>
-
+      <input id="title" placeholder="作品名・シーン名" />
+      <textarea id="comment" placeholder="巡礼の感想"></textarea>
+      <input type="file" id="image" accept="image/*" />
       <div class="modal-actions">
         <button id="cancel">キャンセル</button>
-        <button id="submitPost">投稿</button>
+        <button id="submit">投稿</button>
       </div>
     </div>
   </div>
 
+  <!-- Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <!-- JS -->
-  <script src="utils.js"></script>
-  <script src="main.js"></script>
-  <script src="post.js"></script>
+  <script type="module" src="./login.js"></script>
+  <script type="module" src="./dummyData.js"></script>
+  <script type="module" src="./map.js"></script>
+  <script type="module" src="./post.js"></script>
 </body>
 </html>
