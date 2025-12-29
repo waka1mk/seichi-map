@@ -15,6 +15,7 @@
 </head>
 
 <body>
+  <!-- 地図 -->
   <div id="map"></div>
 
   <!-- ＋ボタン -->
@@ -26,7 +27,7 @@
       <h2>投稿する</h2>
 
       <input id="title" placeholder="作品名" />
-      <textarea id="comment" placeholder="巡礼の感想を書く"></textarea>
+      <textarea id="comment" placeholder="巡礼の感想"></textarea>
 
       <div class="modal-actions">
         <button id="cancel">キャンセル</button>
@@ -35,9 +36,8 @@
     </div>
   </div>
 
-  <!-- JS（順番超重要） -->
-  <script type="module" src="utils.js"></script>
-  <script type="module" src="map.js"></script>
-  <script type="module" src="post.js"></script>
+  <!-- JS（module使わない・安定版） -->
+  <script src="map.js"></script>
+  <script src="post.js"></script>
 </body>
 </html>
