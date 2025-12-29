@@ -1,26 +1,31 @@
-const fab = document.getElementById("fab");
-const modal = document.getElementById("postModal");
-const cancelBtn = document.getElementById("cancel");
+import { supabase } from "./utils.js";
+
 const submitBtn = document.getElementById("submit");
 
-// モーダル開閉
-fab.addEventListener("click", () => {
-  modal.classList.remove("hidden");
-});
-
-cancelBtn.addEventListener("click", () => {
-  modal.classList.add("hidden");
-});
-
-// 投稿（今はデモ）
-submitBtn.addEventListener("click", () => {
+submitBtn.addEventListener("click", async () => {
   const title = document.getElementById("title").value;
+  const comment = document.getElementById("comment").value;
 
-  if (!title) {
-    alert("作品名を入れてください");
-    return;
+  // 仮の位置情報（東京駅）
+  const lat = 35.681236;
+  const ing = 139.767125;
+
+  const { error } = await supabase
+    .from("posts")
+    .insert([
+      {
+        title,
+        comment,
+        lat,
+        ing, // ← ここ重要
+      }
+    ]);
+
+  if (error) {
+    console.error("投稿失敗", error);
+    alert("投稿に失敗しました");
+  } else {
+    alert("投稿成功！");
+    document.getElementById("postModal").classList.add("hidden");
   }
-
-  alert("投稿しました！（※今はデモ）");
-  modal.classList.add("hidden");
 });
