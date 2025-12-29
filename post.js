@@ -15,32 +15,46 @@ window.addEventListener("DOMContentLoaded", () => {
   cancel.onclick = () => modal.classList.add("hidden");
 
   getLocation.onclick = () => {
-    navigator.geolocation.getCurrentPosition(pos => {
-      lat = pos.coords.latitude;
-      lng = pos.coords.longitude;
-      alert("現在地を取得しました");
-    });
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        lat = pos.coords.latitude;
+        lng = pos.coords.longitude;
+        alert("現在地を取得しました");
+      },
+      () => {
+        alert("位置情報の取得に失敗しました");
+      }
+    );
   };
 
   submit.onclick = async () => {
-    const title = document.getElementById("title").value;
-    const comment = document.getElementById("comment").value;
+    const title = document.getElementById("title").value.trim();
+    const comment = document.getElementById("comment").value.trim();
 
-    if (!lat || !lng) {
+    if (!title || !comment) {
+      alert("タイトルとコメントを入力してください");
+      return;
+    }
+
+    if (lat === null || lng === null) {
       alert("現在地を取得してください");
       return;
     }
 
-    const { data, error } = await supabase.from("posts").insert([
-      { title, comment, lat, lng }
-    ]).select().single();
+    const { data, error } = await supabase
+      .from("posts")
+      .insert([
+        { title, comment, lat, lng }
+      ])
+      .select();
 
     if (error) {
-      alert("投稿失敗");
+      console.error(error);
+      alert("投稿に失敗しました");
       return;
     }
 
-    // 即ピン追加
+    // 即座にピン反映
     L.marker([lat, lng])
       .addTo(map)
       .bindPopup(`<b>${title}</b><br>${comment}`)
