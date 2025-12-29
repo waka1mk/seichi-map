@@ -1,31 +1,32 @@
-import { supabase } from "./utils.js";
+import { supabase, addPin } from "./utils.js";
+import { map } from "./map.js";
 
-const submitBtn = document.getElementById("submit");
+const submit = document.getElementById("submit");
 
-submitBtn.addEventListener("click", async () => {
+submit.addEventListener("click", async () => {
   const title = document.getElementById("title").value;
   const comment = document.getElementById("comment").value;
 
-  // 仮の位置情報（東京駅）
-  const lat = 35.681236;
-  const ing = 139.767125;
+  // 位置情報取得
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
 
-  const { error } = await supabase
-    .from("posts")
-    .insert([
-      {
-        title,
-        comment,
-        lat,
-        ing, // ← ここ重要
-      }
-    ]);
+    const { data, error } = await supabase
+      .from("posts")
+      .insert([{ title, comment, lat, lng }])
+      .select()
+      .single();
 
-  if (error) {
-    console.error("投稿失敗", error);
-    alert("投稿に失敗しました");
-  } else {
-    alert("投稿成功！");
+    if (error) {
+      alert("投稿失敗");
+      console.error(error);
+      return;
+    }
+
+    // 🌟 即マップ反映
+    addPin(map, data);
+
     document.getElementById("postModal").classList.add("hidden");
-  }
+  });
 });
