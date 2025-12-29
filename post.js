@@ -1,46 +1,51 @@
-import { map, markers } from "./map.js";
+import { supabase } from "./utils.js";
+import { map } from "./map.js";
 
-const fab = document.getElementById("fab");
-const modal = document.getElementById("postModal");
-const cancel = document.getElementById("cancel");
-const submit = document.getElementById("submit");
+let lat = null;
+let lng = null;
 
-let currentLatLng = null;
+window.addEventListener("DOMContentLoaded", () => {
+  const fab = document.getElementById("fab");
+  const modal = document.getElementById("postModal");
+  const cancel = document.getElementById("cancel");
+  const submit = document.getElementById("submit");
+  const getLocation = document.getElementById("getLocation");
 
-// モーダル制御
-fab.onclick = () => modal.classList.remove("hidden");
-cancel.onclick = () => modal.classList.add("hidden");
+  fab.onclick = () => modal.classList.remove("hidden");
+  cancel.onclick = () => modal.classList.add("hidden");
 
-// 地図クリックで位置取得
-map.on("click", e => {
-  currentLatLng = e.latlng;
+  getLocation.onclick = () => {
+    navigator.geolocation.getCurrentPosition(pos => {
+      lat = pos.coords.latitude;
+      lng = pos.coords.longitude;
+      alert("現在地を取得しました");
+    });
+  };
+
+  submit.onclick = async () => {
+    const title = document.getElementById("title").value;
+    const comment = document.getElementById("comment").value;
+
+    if (!lat || !lng) {
+      alert("現在地を取得してください");
+      return;
+    }
+
+    const { data, error } = await supabase.from("posts").insert([
+      { title, comment, lat, lng }
+    ]).select().single();
+
+    if (error) {
+      alert("投稿失敗");
+      return;
+    }
+
+    // 即ピン追加
+    L.marker([lat, lng])
+      .addTo(map)
+      .bindPopup(`<b>${title}</b><br>${comment}`)
+      .openPopup();
+
+    modal.classList.add("hidden");
+  };
 });
-
-// 投稿
-submit.onclick = () => {
-  if (!currentLatLng) {
-    alert("地図をタップしてください");
-    return;
-  }
-
-  const title = document.getElementById("title").value;
-  const comment = document.getElementById("comment").value;
-  const imageFile = document.getElementById("image").files[0];
-
-  let imageHTML = "";
-  if (imageFile) {
-    const url = URL.createObjectURL(imageFile);
-    imageHTML = `<br><img src="${url}" width="150">`;
-  }
-
-  const marker = L.marker(currentLatLng)
-    .addTo(map)
-    .bindPopup(`<strong>${title}</strong><br>${comment}${imageHTML}`)
-    .openPopup();
-
-  markers.push(marker);
-
-  map.setView(currentLatLng, 16);
-
-  modal.classList.add("hidden");
-};
