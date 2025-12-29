@@ -5,48 +5,36 @@
   <title>聖地巡礼マップ</title>
 
   <!-- Leaflet -->
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Style -->
+  <!-- Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <!-- 地図 -->
   <div id="map"></div>
 
   <!-- ＋ボタン -->
   <button id="fab">＋</button>
 
-  <!-- ＋メニュー -->
-  <div id="fabMenu" class="hidden">
-    <button id="openPost">投稿する</button>
-    <button id="openTimeline">タイムライン</button>
-  </div>
-
   <!-- 投稿モーダル -->
   <div id="postModal" class="modal hidden">
     <div class="modal-content">
-      <h2>投稿</h2>
+      <h2>投稿する</h2>
       <input id="title" placeholder="作品名" />
-      <textarea id="comment" placeholder="感想"></textarea>
+      <textarea id="comment" placeholder="巡礼の感想を書く"></textarea>
 
-      <button id="getLocation">📍現在地を取得</button>
-      <input type="file" id="image" accept="image/*" />
+      <button id="getLocation">現在地取得</button>
 
-      <div class="actions">
-        <button id="closePost">キャンセル</button>
+      <div class="modal-actions">
+        <button id="cancel">キャンセル</button>
         <button id="submitPost">投稿</button>
       </div>
     </div>
   </div>
-
-  <!-- Leaflet -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Supabase -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
   <!-- JS -->
   <script src="utils.js"></script>
