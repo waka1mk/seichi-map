@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>タイムライン</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-</head>
 <body>
-
-<header class="header">
-  <button onclick="location.href='index.html'">← マップへ</button>
-  タイムライン
-</header>
-
-<ul id="list"></ul>
-
-<script type="module" src="timeline.js"></script>
+<h2>タイムライン</h2>
+<div id="timeline"></div>
+<script type="module">
+import { supabase } from "./utils.js";
+const { data } = await supabase.from("posts").select("*").order("created_at",{ascending:false});
+data.forEach(p=>{
+  const d=document.createElement("div");
+  d.textContent=p.title+"："+p.comment;
+  timeline.appendChild(d);
+});
+</script>
 </body>
 </html>
