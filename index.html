@@ -1,49 +1,28 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>聖地巡礼マップ</title>
+  <meta charset="UTF-8" />
+  <title>Demo Map</title>
 
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="icon" href="data:,">
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <style>
+    body, html { margin: 0; padding: 0; }
+    #map { height: 100vh; }
+  </style>
 </head>
 <body>
 
-<a href="mypage.html" class="mypage-link">マイページ</a>
+  <div id="map"></div>
 
-<div id="map"></div>
+  <!-- Leaflet JS（最優先で読み込む） -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<button id="fab">＋</button>
-
-<div id="postModal" class="modal hidden">
-  <h3>新しい巡礼記録</h3>
-
-  <input type="file" id="photo" accept="image/*">
-
-  <select id="genre">
-    <option value="emotion">🌸 感動</option>
-    <option value="holy">💙 聖地</option>
-    <option value="walk">💚 散策</option>
-    <option value="lively">💛 にぎやか</option>
-    <option value="future">🖤 未訪問</option>
-  </select>
-
-  <input id="title" placeholder="作品名（必須）">
-  <textarea id="comment" maxlength="50" placeholder="ひとこと（任意）"></textarea>
-
-  <button id="getLocation">現在地取得</button>
-  <button id="submit">記録する</button>
-  <button id="cancel">キャンセル</button>
-</div>
-
-<div id="timeline"></div>
-
-<script type="module" src="map.js"></script>
-<script type="module" src="post.js"></script>
-<script type="module" src="timeline.js"></script>
-
+  <!-- 自作JS -->
+  <script type="module" src="./map.js"></script>
 </body>
 </html>
