@@ -2,50 +2,39 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>聖地マップ デモ</title>
-
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <link rel="stylesheet" href="./style.css" />
+  <title>聖地巡礼マップ</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
 
-  <!-- ヘッダー -->
-  <header>
-    <h1>聖地マップ</h1>
-    <nav>
-      <a href="./timeline.html">📰 タイムライン</a>
-      <a href="./mypage.html">👤 マイページ</a>
-    </nav>
-  </header>
+<header>
+  <h1>聖地巡礼マップ</h1>
+  <button id="mypageBtn">マイページ</button>
+</header>
 
-  <!-- 地図 -->
-  <div id="map"></div>
+<div id="map"></div>
 
-  <!-- ＋ボタン -->
-  <button id="fab">＋</button>
+<!-- ＋ボタン -->
+<button id="plusBtn">＋</button>
 
-  <!-- 投稿モーダル -->
-  <div id="postModal" class="hidden">
-    <div class="modal">
-      <input id="title" placeholder="作品名">
-      <textarea id="comment" placeholder="コメント"></textarea>
-      <select id="genre">
-        <option value="アニメ">アニメ</option>
-        <option value="ゲーム">ゲーム</option>
-        <option value="映画">映画</option>
-      </select>
-      <input type="file" id="image">
-      <button id="getLocation">現在地取得</button>
-      <button id="submit">投稿</button>
-      <button id="cancel">キャンセル</button>
-    </div>
+<!-- 投稿フォーム（前面固定） -->
+<div id="postModal" class="hidden">
+  <div class="modalContent">
+    <h2>投稿</h2>
+    <input id="title" placeholder="作品名" />
+    <textarea id="content" placeholder="コメント"></textarea>
+    <input id="lat" placeholder="緯度" />
+    <input id="lng" placeholder="経度" />
+    <button id="sendPost">投稿</button>
+    <button id="closePost">閉じる</button>
   </div>
+</div>
 
-  <!-- JS -->
-  <script type="module" src="./map.js"></script>
-  <script type="module" src="./post.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script src="supabase.js"></script>
+<script src="map.js"></script>
+<script src="post.js"></script>
 </body>
 </html>
