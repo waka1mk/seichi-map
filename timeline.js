@@ -1,18 +1,10 @@
-import { supabase } from "./utils.js";
-
-const list = document.getElementById("list");
-
-async function load() {
-  const { data } = await supabase
-    .from("posts")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  data.forEach(p => {
-    const li = document.createElement("li");
-    li.textContent = `${p.title}（${p.prefecture}）`;
-    list.appendChild(li);
-  });
+export function addTimelineItem(post) {
+  const tl = document.getElementById("timeline");
+  const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `
+    <b>${post.title}</b> ${post.image_url ? "📸" : ""}
+    <p>${post.comment || ""}</p>
+  `;
+  tl.prepend(div);
 }
-
-load();
