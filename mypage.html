@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>マイページ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<h2>マイページ</h2>
-<div id="myposts"></div>
-<script type="module">
-import { supabase } from "./utils.js";
-const u=localStorage.getItem("username")||"demo";
-const { data }=await supabase.from("posts").select("*").eq("username",u);
-data.forEach(p=>{
-  const d=document.createElement("div");
-  d.textContent=p.title;
-  myposts.appendChild(d);
-});
-</script>
+
+<header>
+  <h1>マイページ</h1>
+  <button onclick="location.href='index.html'">戻る</button>
+</header>
+
+<div id="posts"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script src="supabase.js"></script>
+<script src="mypage.js"></script>
 </body>
 </html>
