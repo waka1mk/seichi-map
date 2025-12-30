@@ -13,11 +13,12 @@ document.getElementById("logout").onclick = () => {
 const { data } = await supabase
   .from("posts")
   .select("*")
-  .eq("username", username);
+  .eq("username", username)
+  .order("created_at", { ascending: false });
 
 data.forEach(p => {
   document.getElementById("myPosts").innerHTML += `
-    <div>
+    <div class="card">
       <b>${p.title}</b> ${p.image_url ? "📸" : ""}
       <p>${p.comment || ""}</p>
     </div>
