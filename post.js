@@ -13,13 +13,15 @@ const PIN_COLORS = {
 let lat = null;
 let lng = null;
 
+const modal = document.getElementById("postModal");
+
 document.getElementById("fab").onclick = () => {
-  document.getElementById("postModal").classList.remove("hidden");
+  modal.classList.remove("hidden");
   saveLog("open_post_modal");
 };
 
 document.getElementById("cancel").onclick = () => {
-  document.getElementById("postModal").classList.add("hidden");
+  modal.classList.add("hidden");
 };
 
 document.getElementById("getLocation").onclick = () => {
@@ -56,13 +58,19 @@ document.getElementById("submit").onclick = async () => {
   addTimelineItem(data);
   saveLog("post_created");
 
-  document.getElementById("postModal").classList.add("hidden");
+  modal.classList.add("hidden");
 };
 
-export function addPin(post) {
+function addPin(post) {
   const size = post.image_url ? 20 : 12;
+
   const icon = L.divIcon({
-    html: `<div style="background:${PIN_COLORS[post.genre]};width:${size}px;height:${size}px;border-radius:50%"></div>`
+    html: `<div style="
+      background:${PIN_COLORS[post.genre]};
+      width:${size}px;
+      height:${size}px;
+      border-radius:50%;
+      border:2px solid white;"></div>`
   });
 
   L.marker([post.lat, post.lng], { icon })
