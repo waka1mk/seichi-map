@@ -1,65 +1,71 @@
-import { supabase } from "./utils.js";
+import { supabase, saveLog } from "./utils.js";
 import { map } from "./map.js";
+import { addTimelineItem } from "./timeline.js";
+
+const PIN_COLORS = {
+  emotion: "pink",
+  holy: "blue",
+  walk: "green",
+  lively: "gold",
+  future: "black"
+};
 
 let lat = null;
 let lng = null;
 
-window.addEventListener("DOMContentLoaded", () => {
-  const fab = document.getElementById("fab");
-  const modal = document.getElementById("postModal");
-  const cancel = document.getElementById("cancel");
-  const submit = document.getElementById("submit");
-  const getLocation = document.getElementById("getLocation");
+document.getElementById("fab").onclick = () => {
+  document.getElementById("postModal").classList.remove("hidden");
+  saveLog("open_post_modal");
+};
 
-  fab.onclick = () => modal.classList.remove("hidden");
-  cancel.onclick = () => modal.classList.add("hidden");
+document.getElementById("cancel").onclick = () => {
+  document.getElementById("postModal").classList.add("hidden");
+};
 
-  getLocation.onclick = () => {
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        lat = pos.coords.latitude;
-        lng = pos.coords.longitude;
-        alert("現在地を取得しました");
-      },
-      () => {
-        alert("位置情報の取得に失敗しました");
-      }
-    );
-  };
+document.getElementById("getLocation").onclick = () => {
+  navigator.geolocation.getCurrentPosition(pos => {
+    lat = pos.coords.latitude;
+    lng = pos.coords.longitude;
+    alert("現在地取得");
+  });
+};
 
-  submit.onclick = async () => {
-    const title = document.getElementById("title").value.trim();
-    const comment = document.getElementById("comment").value.trim();
+async function uploadPhoto(file) {
+  const name = `${Date.now()}_${file.name}`;
+  await supabase.storage.from("post-images").upload(name, file);
+  return supabase.storage.from("post-images").getPublicUrl(name).data.publicUrl;
+}
 
-    if (!title || !comment) {
-      alert("タイトルとコメントを入力してください");
-      return;
-    }
+document.getElementById("submit").onclick = async () => {
+  const title = document.getElementById("title").value;
+  const comment = document.getElementById("comment").value;
+  const genre = document.getElementById("genre").value;
+  const file = document.getElementById("photo").files[0];
+  const username = localStorage.getItem("username");
 
-    if (lat === null || lng === null) {
-      alert("現在地を取得してください");
-      return;
-    }
+  if (!title || !lat || !lng) return alert("必須項目不足");
 
-    const { data, error } = await supabase
-      .from("posts")
-      .insert([
-        { title, comment, lat, lng }
-      ])
-      .select();
+  let image_url = null;
+  if (file) image_url = await uploadPhoto(file);
 
-    if (error) {
-      console.error(error);
-      alert("投稿に失敗しました");
-      return;
-    }
+  const { data } = await supabase.from("posts").insert([{
+    title, comment, lat, lng, genre, image_url, username
+  }]).select().single();
 
-    // 即座にピン反映
-    L.marker([lat, lng])
-      .addTo(map)
-      .bindPopup(`<b>${title}</b><br>${comment}`)
-      .openPopup();
+  addPin(data);
+  addTimelineItem(data);
+  saveLog("post_created");
 
-    modal.classList.add("hidden");
-  };
-});
+  document.getElementById("postModal").classList.add("hidden");
+};
+
+export function addPin(post) {
+  const size = post.image_url ? 20 : 12;
+  const icon = L.divIcon({
+    html: `<div style="background:${PIN_COLORS[post.genre]};width:${size}px;height:${size}px;border-radius:50%"></div>`
+  });
+
+  L.marker([post.lat, post.lng], { icon })
+    .addTo(map)
+    .bindPopup(`<b>${post.title}</b><br>${post.comment || ""}`);
+}
