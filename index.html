@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>巡礼マップ</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-  <style>
-    body { margin: 0; font-family: sans-serif; }
-    #map { height: 100vh; }
-  </style>
-</head>
-<body>
+<!-- Supabase -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-<div id="map"></div>
-
+<!-- Leaflet -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script type="module" src="supabase.js"></script>
-<script type="module" src="map.js"></script>
-<script type="module" src="post.js"></script>
 
-</body>
-</html>
+<!-- 自作JS（順番固定） -->
+<script src="supabase.js"></script>
+<script src="map.js"></script>
