@@ -2,27 +2,50 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>Demo Map</title>
+  <title>聖地マップ デモ</title>
 
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <style>
-    body, html { margin: 0; padding: 0; }
-    #map { height: 100vh; }
-  </style>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
 
+  <!-- ヘッダー -->
+  <header>
+    <h1>聖地マップ</h1>
+    <nav>
+      <a href="./timeline.html">📰 タイムライン</a>
+      <a href="./mypage.html">👤 マイページ</a>
+    </nav>
+  </header>
+
+  <!-- 地図 -->
   <div id="map"></div>
 
-  <!-- Leaflet JS（最優先で読み込む） -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- ＋ボタン -->
+  <button id="fab">＋</button>
 
-  <!-- 自作JS -->
+  <!-- 投稿モーダル -->
+  <div id="postModal" class="hidden">
+    <div class="modal">
+      <input id="title" placeholder="作品名">
+      <textarea id="comment" placeholder="コメント"></textarea>
+      <select id="genre">
+        <option value="アニメ">アニメ</option>
+        <option value="ゲーム">ゲーム</option>
+        <option value="映画">映画</option>
+      </select>
+      <input type="file" id="image">
+      <button id="getLocation">現在地取得</button>
+      <button id="submit">投稿</button>
+      <button id="cancel">キャンセル</button>
+    </div>
+  </div>
+
+  <!-- JS -->
   <script type="module" src="./map.js"></script>
+  <script type="module" src="./post.js"></script>
 </body>
 </html>
