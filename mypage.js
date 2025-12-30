@@ -1,23 +1,18 @@
-import { supabase } from "./utils.js";
+const user = localStorage.getItem("username");
 
-const username = localStorage.getItem("username");
-const container = document.getElementById("myposts");
-
-if (!container) {
-  console.warn("myposts element not found");
-} else {
+async function loadMyPosts() {
   const { data, error } = await supabase
     .from("posts")
     .select("*")
-    .eq("username", username);
+    .eq("user_name", user);
 
-  if (error) {
-    console.error(error);
-  } else if (data) {
-    data.forEach(post => {
-      const div = document.createElement("div");
-      div.textContent = post.title;
-      container.appendChild(div);
-    });
-  }
+  const container = document.getElementById("posts");
+
+  data.forEach(p => {
+    const div = document.createElement("div");
+    div.innerHTML = `<h3>${p.title}</h3><p>${p.content}</p>`;
+    container.appendChild(div);
+  });
 }
+
+loadMyPosts();
