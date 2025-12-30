@@ -1,26 +1,23 @@
 import { supabase } from "./utils.js";
 
 const username = localStorage.getItem("username");
-if (!username) location.href = "login.html";
+const container = document.getElementById("myposts");
 
-document.getElementById("user").textContent = `${username} の投稿`;
+if (!container) {
+  console.warn("myposts element not found");
+} else {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("username", username);
 
-document.getElementById("logout").onclick = () => {
-  localStorage.clear();
-  location.href = "login.html";
-};
-
-const { data } = await supabase
-  .from("posts")
-  .select("*")
-  .eq("username", username)
-  .order("created_at", { ascending: false });
-
-data.forEach(p => {
-  document.getElementById("myPosts").innerHTML += `
-    <div class="card">
-      <b>${p.title}</b> ${p.image_url ? "📸" : ""}
-      <p>${p.comment || ""}</p>
-    </div>
-  `;
-});
+  if (error) {
+    console.error(error);
+  } else if (data) {
+    data.forEach(post => {
+      const div = document.createElement("div");
+      div.textContent = post.title;
+      container.appendChild(div);
+    });
+  }
+}
