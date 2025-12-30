@@ -1,42 +1,45 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <title>聖地巡礼マップ</title>
-
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<title>聖地巡礼マップ</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
-
 <body>
-  <div id="map"></div>
 
-  <!-- ＋ボタン -->
-  <button id="fab">＋</button>
+<a class="mypage-link" href="mypage.html">マイページ</a>
 
-  <!-- 投稿モーダル -->
-  <div id="postModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>投稿</h2>
-      <input id="title" placeholder="作品名" />
-      <textarea id="comment" placeholder="感想"></textarea>
+<div id="map"></div>
 
-      <button id="getLocation">📍 現在地を取得</button>
-      <input type="file" id="image" accept="image/*" />
+<button id="fab">＋</button>
 
-      <div class="modal-actions">
-        <button id="cancel">キャンセル</button>
-        <button id="submit">投稿</button>
-      </div>
-    </div>
-  </div>
+<!-- 投稿モーダル -->
+<div id="postModal" class="modal hidden">
+  <h3>新しい巡礼記録</h3>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script type="module" src="./map.js"></script>
-  <script type="module" src="./post.js"></script>
+  <input type="file" id="photo" accept="image/*">
+
+  <select id="genre">
+    <option value="emotion">🌸 感動</option>
+    <option value="holy">💙 聖地</option>
+    <option value="walk">💚 散策</option>
+    <option value="lively">💛 にぎやか</option>
+    <option value="future">🖤 未訪問</option>
+  </select>
+
+  <input id="title" placeholder="作品名（必須）">
+  <textarea id="comment" placeholder="ひとこと（任意）" maxlength="50"></textarea>
+
+  <button id="getLocation">現在地取得</button>
+  <button id="submit">記録する</button>
+  <button id="cancel">キャンセル</button>
+</div>
+
+<div id="timeline"></div>
+
+<script type="module" src="map.js"></script>
+<script type="module" src="post.js"></script>
+<script type="module" src="timeline.js"></script>
 </body>
 </html>
