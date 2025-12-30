@@ -6,6 +6,6 @@ export const supabase = createClient(
 );
 
 export async function saveLog(action) {
-  const username = localStorage.getItem("username") || "guest";
-  await supabase.from("logs").insert([{ username, action }]);
+  const username = localStorage.getItem("user_name") || "guest";
+  await supabase.from("logs").insert([{ user_name, action }]);
 }
