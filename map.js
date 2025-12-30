@@ -1,17 +1,31 @@
-const map = L.map("map").setView([34.3, 134.0], 7);
+import { supabase } from "./supabase.js";
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap"
-}).addTo(map);
+export const map = L.map("map", {
+  zoomControl: false,
+  attributionControl: false
+}).setView([35.681, 139.767], 13);
 
-async function loadPosts() {
-  const { data } = await supabase.from("posts").select("*");
+// シンプルで目に優しい地図
+L.tileLayer(
+  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  { maxZoom: 18 }
+).addTo(map);
+
+// 投稿読み込み
+export async function loadPosts() {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*");
+
+  if (error) return;
 
   data.forEach(post => {
-    L.marker([post.lat, post.lng])
+    L.circleMarker([post.lat, post.lng], {
+      radius: 8,
+      color: "#4CAF50",
+      fillOpacity: 0.8
+    })
       .addTo(map)
-      .bindPopup(`<b>${post.title}</b><br>${post.content}`);
+      .bindPopup(post.title);
   });
 }
-
-loadPosts();
