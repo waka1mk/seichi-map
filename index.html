@@ -1,40 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <title>聖地巡礼マップ</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <meta charset="UTF-8">
+  <title>巡礼マップ</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+    #map { height: 100vh; }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>聖地巡礼マップ</h1>
-  <button id="mypageBtn">マイページ</button>
-</header>
-
 <div id="map"></div>
 
-<!-- ＋ボタン -->
-<button id="plusBtn">＋</button>
-
-<!-- 投稿フォーム（前面固定） -->
-<div id="postModal" class="hidden">
-  <div class="modalContent">
-    <h2>投稿</h2>
-    <input id="title" placeholder="作品名" />
-    <textarea id="content" placeholder="コメント"></textarea>
-    <input id="lat" placeholder="緯度" />
-    <input id="lng" placeholder="経度" />
-    <button id="sendPost">投稿</button>
-    <button id="closePost">閉じる</button>
-  </div>
-</div>
-
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/@supabase/supabase-js"></script>
-<script src="supabase.js"></script>
-<script src="map.js"></script>
-<script src="post.js"></script>
+<script type="module" src="supabase.js"></script>
+<script type="module" src="map.js"></script>
+<script type="module" src="post.js"></script>
+
 </body>
 </html>
