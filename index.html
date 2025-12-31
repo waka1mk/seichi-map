@@ -3,19 +3,22 @@
 <head>
   <meta charset="utf-8" />
   <title>聖地マップ</title>
+
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
+
   <div id="map"></div>
 
   <div class="fab-container">
     <button class="fab" onclick="location.href='post.html'">＋</button>
     <button class="fab" onclick="location.href='timeline.html'">📰</button>
-    <button class="fab" onclick="location.href='mypage.html'">👤</button>
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="supabase.js"></script>
   <script src="map.js"></script>
 </body>
