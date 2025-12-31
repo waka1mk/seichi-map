@@ -1,17 +1,32 @@
-const user = localStorage.getItem("username");
+import { supabase } from "./supabase.js";
+
+const userName = localStorage.getItem("user_name");
+const box = document.getElementById("my-posts");
+document.getElementById("username").textContent = `ログイン中：${userName}`;
 
 async function loadMyPosts() {
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("posts")
     .select("*")
-    .eq("user_name", user);
+    .eq("user_name", userName)
+    .order("id", { ascending: false });
 
-  const container = document.getElementById("posts");
+  box.innerHTML = "";
+
+  if (data.length === 0) {
+    box.innerHTML = "<p>投稿がありません</p>";
+    return;
+  }
 
   data.forEach(p => {
     const div = document.createElement("div");
-    div.innerHTML = `<h3>${p.title}</h3><p>${p.content}</p>`;
-    container.appendChild(div);
+    div.className = "post";
+    div.innerHTML = `
+      <p>${p.comment}</p>
+      <p>❤️ ${p.likes}</p>
+      <hr>
+    `;
+    box.appendChild(div);
   });
 }
 
