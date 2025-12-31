@@ -1,9 +1,31 @@
-<!-- Supabase -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>聖地マップ</title>
 
-<!-- Leaflet -->
+  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+</head>
+<body>
+
+<div id="map"></div>
+
+<button id="fab">＋</button>
+<button id="toTimeline" onclick="location.href='timeline.html'">📰</button>
+<button id="toMypage" onclick="location.href='mypage.html'">👤</button>
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script type="module" src="map.js"></script>
 
-<!-- 自作JS（順番固定） -->
-<script src="supabase.js"></script>
-<script src="map.js"></script>
+<script>
+  document.getElementById("fab").onclick = () => {
+    location.href = "post.html";
+  };
+</script>
+
+</body>
+</html>
