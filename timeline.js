@@ -2,64 +2,40 @@ import { supabase } from "./supabase.js";
 
 const timeline = document.getElementById("timeline");
 
-// 念のためのガード（要素がないときに落ちない）
-if (!timeline) {
-  console.warn("timeline element not found");
-}
-
-// 投稿を読み込む
 async function loadTimeline() {
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("posts")
     .select("*")
     .order("id", { ascending: false });
 
-  if (error) {
-    console.error("load error", error);
-    return;
-  }
-
   timeline.innerHTML = "";
 
-  data.forEach(post => {
+  data.forEach(p => {
     const div = document.createElement("div");
     div.className = "post";
 
     div.innerHTML = `
-      <p><strong>${post.user_name}</strong></p>
-      <p>${post.comment}</p>
-
-      <button class="like-btn" data-id="${post.id}">
-        ❤️ ${post.likes ?? 0}
-      </button>
+      <p><strong>${p.user_name}</strong></p>
+      <p>${p.comment}</p>
+      <button class="like" data-id="${p.id}">❤️ ${p.likes}</button>
       <hr>
     `;
 
     timeline.appendChild(div);
   });
 
-  setLikeEvents();
-}
-
-// いいね処理
-function setLikeEvents() {
-  document.querySelectorAll(".like-btn").forEach(btn => {
+  document.querySelectorAll(".like").forEach(btn => {
     btn.onclick = async () => {
-      const postId = btn.dataset.id;
+      const id = btn.dataset.id;
+      const newLikes = Number(btn.textContent.replace("❤️", "")) + 1;
 
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("posts")
-        .update({ likes: Number(btn.textContent.replace("❤️", "")) + 1 })
-        .eq("id", postId)
+        .update({ likes: newLikes })
+        .eq("id", id)
         .select()
         .single();
 
-      if (error) {
-        console.error("like error", error);
-        return;
-      }
-
-      // 表示だけ更新
       btn.textContent = `❤️ ${data.likes}`;
     };
   });
