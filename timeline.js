@@ -1,23 +1,41 @@
 const container = document.getElementById("timeline");
 
 async function loadTimeline() {
+  container.innerHTML = "";
   const posts = await supabase.from("posts").select();
-  posts.reverse().forEach(p => {
+
+  posts.reverse().forEach((p) => {
     const div = document.createElement("div");
     div.className = "post";
 
-    const btn = document.createElement("button");
-    btn.textContent = `❤️ ${p.likes}`;
+    const likeBtn = document.createElement("button");
+    likeBtn.textContent = `❤️ ${p.likes || 0}`;
 
-    btn.onclick = async () => {
-      const newLikes = p.likes + 1;
-      await supabase.from("posts").update(p.id, { likes: newLikes });
-      btn.textContent = `❤️ ${newLikes}`;
+    likeBtn.onclick = async () => {
+      const newLikes = (p.likes || 0) + 1;
+
+      await fetch(
+        `${SUPABASE_URL}/rest/v1/posts?id=eq.${p.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ likes: newLikes }),
+        }
+      );
+
+      likeBtn.textContent = `❤️ ${newLikes}`;
       p.likes = newLikes;
     };
 
-    div.innerHTML = `<b>${p.user_name}</b><p>${p.comment}</p>`;
-    div.appendChild(btn);
+    div.innerHTML = `
+      <p><b>${p.user_name}</b></p>
+      <p>${p.comment}</p>
+    `;
+    div.appendChild(likeBtn);
     container.appendChild(div);
   });
 }
