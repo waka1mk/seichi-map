@@ -1,46 +1,37 @@
-// post.js
-document.addEventListener("DOMContentLoaded", () => {
-  const submit = document.getElementById("submit");
-  const getLocation = document.getElementById("getLocation");
+import { supabase } from "./supabase.js";
 
-  // ここで存在チェック（重要）
-  if (!submit || !getLocation) {
-    console.error("post.html に必要な要素がありません");
+let lat = null;
+let lng = null;
+
+document.getElementById("getLocation").onclick = () => {
+  navigator.geolocation.getCurrentPosition(pos => {
+    lat = pos.coords.latitude;
+    lng = pos.coords.longitude;
+    alert("現在地を取得しました");
+  });
+};
+
+document.getElementById("submit").onclick = async () => {
+  const comment = document.getElementById("comment").value;
+  const user_name = localStorage.getItem("user_name");
+
+  if (!comment || lat === null || lng === null) {
+    alert("未入力があります");
     return;
   }
 
-  let lat = null;
-  let lng = null;
+  const { error } = await supabase.from("posts").insert([{
+    user_name,
+    comment,
+    lat,
+    lng,
+    likes: 0
+  }]);
 
-  getLocation.onclick = () => {
-    navigator.geolocation.getCurrentPosition(pos => {
-      lat = pos.coords.latitude;
-      lng = pos.coords.longitude;
-      alert("現在地を取得しました");
-    });
-  };
+  if (error) {
+    alert("投稿失敗");
+    return;
+  }
 
-  submit.onclick = async () => {
-    const title = document.getElementById("title").value;
-    const comment = document.getElementById("comment").value;
-    const user_name = localStorage.getItem("user_name") || "demo";
-
-    if (!lat || !lng) {
-      alert("先に現在地を取得してね");
-      return;
-    }
-
-    const { error } = await supabase
-      .from("posts")
-      .insert([{ title, comment, lat, lng, user_name }]);
-
-    if (error) {
-      alert("投稿に失敗しました");
-      console.error(error);
-      return;
-    }
-
-    alert("投稿できました！");
-    location.href = "index.html";
-  };
-});
+  location.href = "index.html";
+};
