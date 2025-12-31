@@ -2,29 +2,22 @@ const container = document.getElementById("timeline");
 
 async function loadTimeline() {
   const posts = await supabase.from("posts").select();
-  container.innerHTML = "";
-
-  posts.reverse().forEach((p) => {
+  posts.reverse().forEach(p => {
     const div = document.createElement("div");
     div.className = "post";
 
-    const likeBtn = document.createElement("button");
-    likeBtn.textContent = `❤️ ${p.likes || 0}`;
+    const btn = document.createElement("button");
+    btn.textContent = `❤️ ${p.likes}`;
 
-    likeBtn.onclick = async () => {
-      const newLikes = (p.likes || 0) + 1;
+    btn.onclick = async () => {
+      const newLikes = p.likes + 1;
       await supabase.from("posts").update(p.id, { likes: newLikes });
+      btn.textContent = `❤️ ${newLikes}`;
       p.likes = newLikes;
-      likeBtn.textContent = `❤️ ${newLikes}`;
     };
 
-    div.innerHTML = `
-      <p><b>${p.user_name}</b></p>
-      <p>${p.content}</p>
-      ${p.image_url ? `<img src="${p.image_url}" style="width:100%">` : ""}
-    `;
-
-    div.appendChild(likeBtn);
+    div.innerHTML = `<b>${p.user_name}</b><p>${p.comment}</p>`;
+    div.appendChild(btn);
     container.appendChild(div);
   });
 }
