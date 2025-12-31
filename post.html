@@ -4,12 +4,16 @@
   <meta charset="utf-8" />
   <title>投稿</title>
   <link rel="stylesheet" href="style.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-  <h2>投稿</h2>
 
-  <textarea id="content" placeholder="この場所の記憶を書いてください"></textarea>
-  <button id="postBtn">投稿する</button>
+  <div class="post-card">
+    <h2>この場所の記憶</h2>
+    <textarea id="content" placeholder="ここに書いてください"></textarea>
+    <button id="postBtn">投稿する</button>
+  </div>
 
   <div id="toast" class="toast">
     この場所、<span>誰かの記憶</span>になりました
