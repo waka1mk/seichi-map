@@ -9,10 +9,9 @@ async function loadTimeline() {
     div.innerHTML = `
       <p><b>${p.user_name}</b></p>
       <p>${p.content}</p>
-      <button>❤️ ${p.likes || 0}</button>
+      ${p.image_url ? `<img src="${p.image_url}" style="width:100%">` : ""}
     `;
     container.appendChild(div);
   });
 }
-
 loadTimeline();
