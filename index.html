@@ -4,41 +4,16 @@
   <meta charset="utf-8" />
   <title>聖地マップ</title>
   <link rel="stylesheet" href="style.css" />
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
-  <header class="topbar">
-    <h1>聖地マップ</h1>
-    <nav>
-      <button onclick="location.href='timeline.html'">📰</button>
-      <button onclick="location.href='mypage.html'">👤</button>
-    </nav>
-  </header>
+  <div id="map"></div>
 
-  <main class="layout">
-    <div id="map"></div>
-
-    <div class="side-ui">
-      <section class="panel">
-        <h3>最近の投稿</h3>
-        <div id="recent-posts"></div>
-      </section>
-
-      <section class="panel">
-        <h3>作品フィルタ</h3>
-        <select id="workFilter">
-          <option value="">すべて</option>
-        </select>
-      </section>
-
-      <button class="primary" onclick="location.href='post.html'">
-        ＋ 投稿する
-      </button>
-    </div>
-  </main>
+  <div class="fab-container">
+    <button class="fab" onclick="location.href='post.html'">＋</button>
+    <button class="fab" onclick="location.href='timeline.html'">📰</button>
+    <button class="fab" onclick="location.href='mypage.html'">👤</button>
+  </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="supabase.js"></script>
