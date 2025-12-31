@@ -1,58 +1,20 @@
 body {
   margin: 0;
   font-family: sans-serif;
+  height: 100vh;
+  display: flex;
 }
 
+/* 地図エリア */
 #map {
+  flex: 1;
   height: 100vh;
 }
 
-textarea {
-  width: 90%;
-  height: 100px;
-}
-
-.post {
-  border-bottom: 1px solid #ddd;
-  padding: 8px;
-}
-
-.fab-container {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  display: flex;
-  gap: 8px;
-}
-
-.fab {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  border: none;
-  background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
-}
-
-.toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.8);
-  color: white;
-  padding: 10px 16px;
-  border-radius: 8px;
-  opacity: 0;
-  transition: opacity .5s;
-}
-
-.toast.show {
-  opacity: 0.9;
-}
-
-.toast span {
-  text-decoration: underline;
-  letter-spacing: 0.15em;
-  opacity: 0.6;
+/* 右側UI用（将来のside-ui想定） */
+.side-ui {
+  width: 320px;
+  background: #fafafa;
+  border-left: 1px solid #ddd;
+  overflow-y: auto;
 }
