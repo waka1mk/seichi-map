@@ -8,6 +8,18 @@
 <body>
   <h2>投稿</h2>
 
+  <label>作品名</label>
+  <select id="workSelect">
+    <option value="">作品を選択</option>
+  </select>
+
+  <div class="or">または</div>
+
+  <input type="text" id="workInput" placeholder="新しい作品名を入力" />
+
+  <input type="file" id="imageInput" accept="image/*" />
+  <img id="preview" style="width:100%; display:none;" />
+
   <textarea id="content" placeholder="感想を書いてね"></textarea>
   <button id="postBtn">投稿する</button>
 
