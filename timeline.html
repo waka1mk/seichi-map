@@ -1,69 +1,18 @@
-const timeline = document.getElementById("timeline");
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>タイムライン</title>
+  <link rel="stylesheet" href="style.css" />
 
-// ログインユーザー名（なければ匿名）
-const currentUser = localStorage.getItem("username") || "匿名";
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
 
-async function loadTimeline() {
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*")
-    .order("created_at", { ascending: false });
+  <h2>タイムライン</h2>
+  <div id="timeline"></div>
 
-  if (error) {
-    console.error("取得エラー:", error);
-    return;
-  }
-
-  timeline.innerHTML = "";
-
-  data.forEach(post => {
-    const card = document.createElement("div");
-    card.className = "post-card";
-
-    card.innerHTML = `
-      <div class="post-header">
-        <span class="post-user">👤 ${post.username}</span>
-        <button class="like-button" data-id="${post.id}">
-          ❤️ <span>${post.likes || 0}</span>
-        </button>
-      </div>
-
-      <div class="post-location">
-        📍 ${post.place || "場所未設定"}
-      </div>
-
-      <div class="post-content">
-        ${post.content}
-      </div>
-
-      <div class="post-date">
-        ${new Date(post.created_at).toLocaleString()}
-      </div>
-    `;
-
-    timeline.appendChild(card);
-  });
-
-  setupLikeButtons();
-}
-
-function setupLikeButtons() {
-  document.querySelectorAll(".like-button").forEach(btn => {
-    btn.onclick = async () => {
-      const postId = btn.dataset.id;
-      const countSpan = btn.querySelector("span");
-      const newCount = Number(countSpan.textContent) + 1;
-
-      countSpan.textContent = newCount;
-      btn.classList.add("liked");
-      setTimeout(() => btn.classList.remove("liked"), 200);
-
-      await supabase
-        .from("posts")
-        .update({ likes: newCount })
-        .eq("id", postId);
-    };
-  });
-}
-
-loadTimeline();
+  <script src="supabase.js"></script>
+  <script src="timeline.js"></script>
+</body>
+</html>
