@@ -8,16 +8,11 @@
 <body>
   <h2>投稿</h2>
 
-  <textarea id="content" placeholder="感想を書いてね"></textarea>
+  <textarea id="content" placeholder="この場所の記憶を書いてください"></textarea>
   <button id="postBtn">投稿する</button>
 
-  <!-- 投稿完了メッセージ -->
-  <div id="postComplete" class="post-complete">
-    <p>
-      この場所は、
-      <span class="memory">誰かの記憶</span>
-      になりました
-    </p>
+  <div id="toast" class="toast">
+    この場所、<span>誰かの記憶</span>になりました
   </div>
 
   <script src="supabase.js"></script>
