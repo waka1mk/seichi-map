@@ -1,27 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>ログイン</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>ログイン</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="center">
+<body>
 
-<div class="login">
-  <h2>聖地巡礼マップ</h2>
-  <p>見るだけでもOK</p>
-  <input id="username" placeholder="表示名">
-  <button id="loginBtn">はじめる</button>
-</div>
+<h2>ログイン</h2>
+<input id="name" placeholder="ニックネーム">
+<button id="login">入る</button>
 
-<script>
-document.getElementById("loginBtn").onclick = () => {
-  const name = document.getElementById("username").value;
-  if (!name) return alert("名前を入力してください");
-  localStorage.setItem("username", name);
-  location.href = "index.html";
-};
-</script>
-
+<script src="login.js"></script>
 </body>
 </html>
