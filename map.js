@@ -1,20 +1,25 @@
-import { supabase } from "./supabase.js";
+const map = L.map("map").setView([35.681236, 139.767125], 6);
 
-const map = L.map("map").setView([35.681236, 139.767125], 13);
-
+// 🌿 緑系タイル
 L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   { attribution: "© OpenStreetMap" }
 ).addTo(map);
 
 async function loadPosts() {
-  const { data, error } = await supabase.from("posts").select("*");
-  if (error) return;
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*");
 
-  data.forEach(p => {
-    L.marker([p.lat, p.lng])
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  data.forEach(post => {
+    L.marker([post.lat, post.lng])
       .addTo(map)
-      .bindPopup(`<b>${p.user_name}</b><br>${p.comment}`);
+      .bindPopup(`<strong>${post.title}</strong><br>${post.content}`);
   });
 }
 
