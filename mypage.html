@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>マイページ</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <h2>マイ投稿</h2>
+  <div id="myposts"></div>
 
-<h2>マイページ</h2>
-<p id="username"></p>
-<div id="my-posts"></div>
-
-<button onclick="location.href='index.html'">← 地図へ</button>
-
-<script type="module" src="mypage.js"></script>
+  <script src="supabase.js"></script>
+  <script src="mypage.js"></script>
 </body>
 </html>
