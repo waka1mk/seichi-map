@@ -1,18 +1,16 @@
+const box = document.getElementById("myposts");
+const me = localStorage.getItem("user_name");
+
 async function loadMyPosts() {
-  const user = localStorage.getItem("user_name") || "guest";
+  const posts = await supabase.from("posts").select();
 
-  const { data } = await supabase
-    .from("posts")
-    .select("*")
-    .eq("user_name", user);
-
-  const list = document.getElementById("list");
-
-  data.forEach(p => {
-    const div = document.createElement("div");
-    div.textContent = p.title;
-    list.appendChild(div);
-  });
+  posts
+    .filter((p) => p.user_name === me)
+    .forEach((p) => {
+      const div = document.createElement("div");
+      div.textContent = p.content;
+      box.appendChild(div);
+    });
 }
 
 loadMyPosts();
