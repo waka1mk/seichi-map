@@ -1,16 +1,14 @@
-document.getElementById("submit").onclick = async () => {
-  const title = document.getElementById("title").value;
-  const content = document.getElementById("content").value;
-  const user_name = localStorage.getItem("user_name") || "guest";
-
-  navigator.geolocation.getCurrentPosition(async pos => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-
-    const { error } = await supabase.from("posts").insert([
-      { title, content, lat, lng, user_name }
+document.getElementById("postBtn").onclick = () => {
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+    await supabase.from("posts").insert([
+      {
+        user_name: localStorage.getItem("user_name"),
+        content: document.getElementById("content").value,
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      },
     ]);
 
-    if (!error) location.href = "index.html";
+    location.href = "index.html";
   });
 };
