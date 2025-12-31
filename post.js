@@ -1,20 +1,24 @@
-document.getElementById("postBtn").onclick = () => {
-  navigator.geolocation.getCurrentPosition(async (pos) => {
+document.getElementById("postBtn").onclick = async () => {
+  const content = document.getElementById("content").value;
+
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+
     await supabase.from("posts").insert([
-      {
-        user_name: localStorage.getItem("user_name") || "anonymous",
-        comment: document.getElementById("content").value,
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-        likes: 0,
-      },
+      { content, lat, lng }
     ]);
 
     const toast = document.getElementById("toast");
     toast.classList.add("show");
 
     setTimeout(() => {
-      location.href = "index.html";
-    }, 1500);
+      toast.classList.remove("show");
+      document.body.classList.add("page-leave");
+
+      setTimeout(() => {
+        location.href = "index.html";
+      }, 200);
+    }, 1200);
   });
 };
