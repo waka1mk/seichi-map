@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>聖地マップ</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet/dist/leaflet.css"
@@ -14,18 +14,17 @@
 
 <div id="map"></div>
 
-<button id="fab">＋</button>
-<button id="toTimeline" onclick="location.href='timeline.html'">📰</button>
-<button id="toMypage" onclick="location.href='mypage.html'">👤</button>
+<!-- 上部ボタン -->
+<div class="top-buttons">
+  <button onclick="location.href='post.html'">＋</button>
+  <button onclick="location.href='timeline.html'">📝</button>
+  <button onclick="location.href='mypage.html'">👤</button>
+</div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script type="module" src="map.js"></script>
-
-<script>
-  document.getElementById("fab").onclick = () => {
-    location.href = "post.html";
-  };
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="map.js"></script>
 
 </body>
 </html>
