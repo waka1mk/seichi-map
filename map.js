@@ -1,25 +1,16 @@
-const map = L.map("map").setView([35.681236, 139.767125], 6);
+const map = L.map("map").setView([33.6, 133.5], 7);
 
-// 🌿 緑系タイル
-L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  { attribution: "© OpenStreetMap" }
-).addTo(map);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: "© OpenStreetMap",
+}).addTo(map);
 
 async function loadPosts() {
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*");
+  const posts = await supabase.from("posts").select();
 
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  data.forEach(post => {
+  posts.forEach((post) => {
     L.marker([post.lat, post.lng])
       .addTo(map)
-      .bindPopup(`<strong>${post.title}</strong><br>${post.content}`);
+      .bindPopup(`<b>${post.user_name}</b><br>${post.content}`);
   });
 }
 
