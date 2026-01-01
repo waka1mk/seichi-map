@@ -1,85 +1,39 @@
 body {
   margin: 0;
-  font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-  background-color: #e7f3ea;
-  color: #333;
+  font-family: system-ui, sans-serif;
 }
 
 header {
-  background: #ffffff;
-  padding: 10px 16px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: #222;
+  color: white;
+  padding: 12px 16px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+  font-size: 20px;
 }
 
 nav a {
+  color: white;
   margin-right: 12px;
   text-decoration: none;
-  color: #4caf50;
+  font-size: 14px;
 }
 
 #map {
-  height: 300px;
+  width: 100%;
+  height: calc(100vh - 80px);
 }
 
-/* ===== 投稿画面 ===== */
-
-.container {
-  max-width: 800px;
-  margin: 0 auto;
+/* 共通フォーム */
+form {
   padding: 16px;
 }
 
-.post-box {
-  background: #fff;
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-}
-
-.post-form {
-  display: flex;
-  gap: 8px;
-}
-
-.post-form textarea {
-  flex: 1;
-  min-height: 80px;
-  border-radius: 8px;
+input, textarea, button {
+  width: 100%;
+  margin-bottom: 12px;
   padding: 8px;
-  border: 1px solid #ccc;
-}
-
-.post-form button {
-  background: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-.post-form button:active {
-  transform: scale(1.1);
-}
-
-/* ===== タイムライン ===== */
-
-.timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.post-item {
-  background: #fff;
-  padding: 12px;
-  border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-
-.post-item .meta {
-  font-size: 12px;
-  color: #666;
+  font-size: 14px;
 }
