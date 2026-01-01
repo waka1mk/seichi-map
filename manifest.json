@@ -3,6 +3,6 @@
   "short_name": "SeichiMap",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#222222"
+  "background_color": "#e7f3ea",
+  "theme_color": "#4caf50"
 }
