@@ -1,11 +1,3 @@
-const SUPABASE_URL = "あなたのURL";
-const SUPABASE_ANON_KEY = "あなたのANON_KEY";
-
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
 const map = L.map("map").setView([35.681236, 139.767125], 5);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
