@@ -12,15 +12,21 @@
   <h1>投稿</h1>
   <nav>
     <a href="index.html">マップ</a>
-    <a href="mypage.html">マイページ</a>
+    <a href="timeline.html">タイムライン</a>
   </nav>
 </header>
 
-<form>
-  <input type="text" placeholder="タイトル">
-  <textarea placeholder="コメント"></textarea>
-  <button type="submit">投稿</button>
-</form>
+<div class="container">
+  <div class="post-box">
+    <div class="post-form">
+      <textarea id="content" placeholder="この場所の記憶を書いてください"></textarea>
+      <button id="postBtn">投稿</button>
+    </div>
+  </div>
+</div>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="post.js"></script>
 </body>
 </html>
