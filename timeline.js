@@ -1,27 +1,13 @@
-async function loadTimeline() {
-  const { data } = await supabase
-    .from("posts")
-    .select("*")
-    .order("id", { ascending: false });
+const timeline = document.getElementById("timeline");
 
-  const tl = document.getElementById("timeline");
-  tl.innerHTML = "";
+const dummyPosts = [
+  "この場所、誰かの記憶になりました",
+  "初めて来た時の空気が忘れられない"
+];
 
-  data.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "post";
-
-    div.innerHTML = `
-      <div class="content">${p.content}</div>
-      <button class="like">❤️</button>
-    `;
-
-    div.querySelector(".like").onclick = e => {
-      e.target.classList.toggle("liked");
-    };
-
-    tl.appendChild(div);
-  });
-}
-
-loadTimeline();
+dummyPosts.forEach(text => {
+  const div = document.createElement("div");
+  div.className = "post-item";
+  div.innerHTML = `<p>${text}</p><div class="meta">記憶</div>`;
+  timeline.appendChild(div);
+});
