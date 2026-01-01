@@ -1,7 +1,8 @@
 {
   "name": "聖地マップ",
-  "short_name": "聖地",
-  "start_url": "index.html",
+  "short_name": "SeichiMap",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#e7f3ea"
+  "background_color": "#ffffff",
+  "theme_color": "#222222"
 }
