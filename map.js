@@ -15,9 +15,11 @@ async function loadPosts() {
   }
 
   data.forEach(post => {
+    if (!post.lat || !post.lng) return;
+
     L.marker([post.lat, post.lng])
       .addTo(map)
-      .bindPopup(`<b>${post.title}</b><br>${post.comment}`);
+      .bindPopup(post.content);
   });
 }
 
