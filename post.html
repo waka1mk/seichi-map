@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>投稿</title>
-  <link rel="stylesheet" href="スタイル.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-  <h2>投稿</h2>
+<header>
+  <h1>投稿</h1>
+  <nav>
+    <a href="index.html">マップ</a>
+    <a href="mypage.html">マイページ</a>
+  </nav>
+</header>
 
-  <div class="post-box">
-    <div class="post-form">
-      <textarea id="content" placeholder="この場所の記憶を書いてください"></textarea>
-      <button id="postBtn">投稿する</button>
-    </div>
-  </div>
-</div>
+<form>
+  <input type="text" placeholder="タイトル">
+  <textarea placeholder="コメント"></textarea>
+  <button type="submit">投稿</button>
+</form>
 
-<script src="post.js"></script>
 </body>
 </html>
