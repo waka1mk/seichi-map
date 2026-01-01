@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8">
   <title>聖地マップ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link rel="stylesheet" href="スタイル.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 
-  <div id="map"></div>
+<header>
+  <h1>聖地マップ</h1>
+  <nav>
+    <a href="投稿.html">投稿</a>
+    <a href="タイムライン.html">タイムライン</a>
+    <a href="マイページ.html">マイページ</a>
+  </nav>
+</header>
 
-  <div class="fab-container">
-    <button class="fab" onclick="location.href='post.html'">＋</button>
-    <button class="fab" onclick="location.href='timeline.html'">📰</button>
-  </div>
+<div id="map"></div>
 
-  <script src="supabase.js"></script>
-  <script src="map.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="マップ.js"></script>
 </body>
 </html>
