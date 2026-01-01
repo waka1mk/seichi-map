@@ -1,13 +1,22 @@
 const timeline = document.getElementById("timeline");
 
-const dummyPosts = [
-  "この場所、誰かの記憶になりました",
-  "初めて来た時の空気が忘れられない"
-];
+async function loadTimeline() {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-dummyPosts.forEach(text => {
-  const div = document.createElement("div");
-  div.className = "post-item";
-  div.innerHTML = `<p>${text}</p><div class="meta">記憶</div>`;
-  timeline.appendChild(div);
-});
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  data.forEach(post => {
+    const div = document.createElement("div");
+    div.className = "post-item";
+    div.innerHTML = `<p>${post.content}</p>`;
+    timeline.appendChild(div);
+  });
+}
+
+loadTimeline();
