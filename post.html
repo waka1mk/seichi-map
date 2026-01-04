@@ -2,24 +2,24 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>投稿</title>
+  <title>聖地を記録</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <h1>投稿</h1>
-  <nav>
-    <a href="index.html">マップ</a>
-    <a href="timeline.html">タイムライン</a>
-  </nav>
+  <h1>聖地を記録</h1>
 </header>
 
 <div class="container">
-  <div class="post-box">
-    <textarea id="content" placeholder="聖地の思い出を書く"></textarea>
-    <button id="postBtn">投稿</button>
-  </div>
+  <form id="post-form" class="post-form">
+    <p>📍 今いる場所を記録します</p>
+
+    <input name="title" placeholder="聖地の名前" required>
+    <textarea name="comment" placeholder="この場所で何があった？"></textarea>
+
+    <button type="submit">記録する</button>
+  </form>
 </div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
