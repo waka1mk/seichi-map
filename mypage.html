@@ -1,15 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>マイページ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>マイページ</h1>
+</header>
+
 <div class="container">
-  <h2>マイページ</h2>
+  <div class="profile">
+    <h2 id="username"></h2>
+  </div>
 
   <div class="tabs">
     <button class="tab active" data-tab="posts">投稿</button>
     <button class="tab" data-tab="likes">いいね</button>
   </div>
 
-  <div id="posts" class="tab-content active"></div>
-  <div id="likes" class="tab-content"></div>
+  <div id="posts" class="tab-content"></div>
+  <div id="likes" class="tab-content hidden"></div>
 </div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script src="mypage.js"></script>
+</body>
+</html>
