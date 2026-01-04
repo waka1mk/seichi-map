@@ -17,11 +17,16 @@ nav a {
 }
 
 #map {
-  height: 300px;
+  height: calc(100vh - 64px);
 }
 
-/* 投稿共通 */
-.post-item {
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.post-box, .post-item {
   background: #fff;
   border-radius: 12px;
   padding: 12px;
@@ -29,66 +34,11 @@ nav a {
   box-shadow: 0 1px 4px rgba(0,0,0,.1);
 }
 
-/* いいね */
-.like-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  transition: transform .15s, color .15s;
-}
-
-.like-btn:active {
-  transform: scale(1.2);
-}
-
-.like-btn.liked {
-  color: #e53935;
-}
-
-/* モーダル */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.4);
+.tabs {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  gap: 8px;
 }
 
-.modal.hidden {
-  display: none;
+.tab.active {
+  border-bottom: 2px solid #4caf50;
 }
-
-.modal-content {
-  background: #fff;
-  width: 90%;
-  max-width: 420px;
-  border-radius: 16px;
-  padding: 16px;
-  position: relative;
-}
-
-#modal-close {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* カテゴリ */
-.category-tag {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-}
-
-.category-anime { background:#e3f2fd; color:#1565c0; }
-.category-movie { background:#fce4ec; color:#ad1457; }
-.category-game  { background:#ede7f6; color:#4527a0; }
