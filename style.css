@@ -1,21 +1,166 @@
+/* ===== base ===== */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #e7f3ea;
+  color: #222;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ===== header ===== */
 header {
-  padding: 8px 12px;
+  background: #ffffff;
+  padding: 12px 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
+header h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+nav {
+  margin-top: 8px;
+}
+
+nav a {
+  margin-right: 14px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* ===== map ===== */
 #map {
-  height: calc(100vh - 60px);
+  height: 100vh;
+  width: 100%;
 }
 
+/* ===== container ===== */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ===== cards ===== */
+.card,
+.post-card,
 .post-item {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+  border-left: 6px solid #66bb6a;
 }
 
+.post-card h3,
+.post-item h3 {
+  margin: 0 0 6px;
+  color: #2e7d32;
+}
+
+/* ===== buttons ===== */
 button {
-  font-size: 16px;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #4caf50;
+  color: #fff;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+.like-btn {
+  background: #f1f8f3;
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+/* ===== timeline ===== */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* ===== post form ===== */
+.post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+textarea {
+  min-height: 100px;
+}
+
+/* ===== mypage ===== */
+.profile {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 12px;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px;
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #777;
+}
+
+.tab.active {
+  color: #2e7d32;
+  border-bottom: 3px solid #2e7d32;
+}
+
+.tab-content.hidden {
+  display: none;
+}
+
+/* ===== bottom card (map) ===== */
+#post-card {
+  position: fixed;
+  bottom: -100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 16px;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 16px rgba(0,0,0,.2);
+  transition: bottom .3s ease;
+}
+
+#post-card.show {
+  bottom: 0;
 }
