@@ -1,30 +1,38 @@
-// mypage.js
-const userName = localStorage.getItem("user_name");
-const myPostsEl = document.getElementById("my-posts");
+const name = localStorage.getItem("user_name");
+document.getElementById("username").innerText = name;
 
-if (!userName) {
-  myPostsEl.innerText = "ユーザー名が未設定です";
-} else {
-  loadMyPosts();
-}
+const postsEl = document.getElementById("posts");
 
 async function loadMyPosts() {
   const { data } = await supabase
     .from("posts")
     .select("*")
-    .eq("user_name", userName)
+    .eq("user_name", name)
     .order("created_at", { ascending: false });
 
-  myPostsEl.innerHTML = "";
+  postsEl.innerHTML = "";
 
   data.forEach(p => {
     const div = document.createElement("div");
-    div.className = "post-item";
+    div.className = "post-card";
     div.innerHTML = `
-      <strong>${p.title ?? "無題"}</strong>
-      <p>${p.comment ?? ""}</p>
+      <h3>${p.title}</h3>
+      <p>${p.comment}</p>
       ❤️ ${p.likes ?? 0}
     `;
-    myPostsEl.appendChild(div);
+    postsEl.appendChild(div);
   });
 }
+
+loadMyPosts();
+
+/* タブ切り替え */
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(c => c.classList.add("hidden"));
+
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.tab).classList.remove("hidden");
+  };
+});
