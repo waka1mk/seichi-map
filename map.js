@@ -1,4 +1,7 @@
-// map.js
+if (!localStorage.getItem("user_name")) {
+  location.href = "login.html";
+}
+
 const map = L.map("map").setView([35.681236, 139.767125], 6);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -6,30 +9,41 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 const markers = new Map();
+const card = document.getElementById("post-card");
 
 async function loadPostsOnMap() {
   const { data, error } = await supabase
     .from("posts")
-    .select("id, title, comment, lat, lng, likes");
+    .select("*");
 
   if (error) {
     console.error(error);
     return;
   }
 
-  console.log(data[0]); // ← 1回だけ確認
-
   data.forEach(post => {
     if (!post.lat || !post.lng) return;
-
     if (markers.has(post.id)) return;
 
     const marker = L.marker([post.lat, post.lng]).addTo(map);
-    marker.bindPopup(`
-      <strong>${post.title ?? "無題"}</strong><br>
-      ${post.comment ?? ""}<br>
-      ❤️ <span id="like-${post.id}">${post.likes ?? 0}</span>
-    `);
+
+    marker.on("click", () => {
+      card.innerHTML = `
+        <h3>${post.title ?? "無題"}</h3>
+        <p>${post.comment ?? ""}</p>
+        <button id="like-${post.id}" class="like-btn">
+          ❤️ <span>${post.likes ?? 0}</span>
+        </button>
+      `;
+      card.classList.add("show");
+
+      document.getElementById(`like-${post.id}`).onclick = async () => {
+        await supabase
+          .from("posts")
+          .update({ likes: (post.likes ?? 0) + 1 })
+          .eq("id", post.id);
+      };
+    });
 
     markers.set(post.id, marker);
   });
@@ -37,17 +51,12 @@ async function loadPostsOnMap() {
 
 loadPostsOnMap();
 
-/* Realtime：新規投稿・いいね反映 */
+/* Realtime */
 supabase
   .channel("posts-map")
   .on(
     "postgres_changes",
     { event: "*", schema: "public", table: "posts" },
-    payload => {
-      loadPostsOnMap();
-      const p = payload.new;
-      const el = document.getElementById(`like-${p.id}`);
-      if (el) el.innerText = p.likes ?? 0;
-    }
+    () => loadPostsOnMap()
   )
   .subscribe();
