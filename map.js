@@ -1,11 +1,10 @@
-const map = L.map("map").setView([35.681236, 139.767125], 5);
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "&copy; OpenStreetMap contributors",
-}).addTo(map);
+// ログインチェック
+if (!localStorage.getItem("user_name")) {
+  location.href = "login.html";
+}
 
 async function loadPostsOnMap() {
-  const { data, error } = await supabaseClient
+  const { data, error } = await window.supabaseClient
     .from("posts")
     .select("id, content, lat, lng, likes");
 
@@ -14,16 +13,16 @@ async function loadPostsOnMap() {
     return;
   }
 
+  console.log(data[0]); // ← 確認用（1回だけ）
+
   data.forEach(post => {
-    if (post.lat == null || post.lng == null) return;
+    if (!post.lat || !post.lng) return;
 
     const marker = L.marker([post.lat, post.lng]).addTo(map);
-    marker.bindPopup(`
-      <div>
-        <p>${post.content}</p>
-        <p>❤️ ${post.likes ?? 0}</p>
-      </div>
-    `);
+
+    marker.on("click", () => {
+      showPostCard(post); // ← 下からカード出す想定
+    });
   });
 }
 
