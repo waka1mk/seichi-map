@@ -1,30 +1,43 @@
-document.getElementById("postBtn").addEventListener("click", () => {
-  const content = document.getElementById("content").value;
-  const user_name = localStorage.getItem("user_name");
+const form = document.getElementById("post-form");
 
-  if (!content) {
-    alert("内容を書いてください");
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const userName = localStorage.getItem("user_name");
+  if (!userName) {
+    location.href = "login.html";
     return;
   }
 
+  const comment = document.getElementById("comment").value;
+
   navigator.geolocation.getCurrentPosition(async pos => {
-    const { latitude, longitude } = pos.coords;
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
 
-    const { error } = await supabaseClient.from("posts").insert([{
-      content,
-      lat: latitude,
-      lng: longitude,
-      user_name,
-      likes: 0
-    }]);
+    const { error } = await window.supabase
+      .from("posts")
+      .insert({
+        user_name: userName,
+        comment,
+        lat,
+        lng
+      });
 
-    if (error) {
-      console.error(error);
-      alert("投稿に失敗しました");
-      return;
+    if (!error) {
+      showToast("あなたの巡礼を記録しました");
+      setTimeout(() => {
+        location.href = "index.html";
+      }, 1200);
     }
-
-    alert("あなたの加入を歓迎します");
-    location.href = "index.html";
   });
 });
+
+function showToast(text) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerText = text;
+  document.body.appendChild(toast);
+
+  setTimeout(() => toast.remove(), 1500);
+}
