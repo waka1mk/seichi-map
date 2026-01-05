@@ -9,21 +9,12 @@
 
 <header>
   <h1>マイページ</h1>
+  <nav>
+    <a href="index.html">マップ</a>
+  </nav>
 </header>
 
-<div class="container">
-  <div class="profile">
-    <h2 id="username"></h2>
-  </div>
-
-  <div class="tabs">
-    <button class="tab active" data-tab="posts">投稿</button>
-    <button class="tab" data-tab="likes">いいね</button>
-  </div>
-
-  <div id="posts" class="tab-content"></div>
-  <div id="likes" class="tab-content hidden"></div>
-</div>
+<div class="container" id="mypage-content"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
