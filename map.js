@@ -1,64 +1,53 @@
-const map = L.map("map").setView([35.681236, 139.767125], 13);
+window.addEventListener("DOMContentLoaded", () => {
+  const postSheet = document.getElementById("post-sheet");
+  if (!postSheet) return;
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap"
-}).addTo(map);
+  const map = L.map("map").setView([35.68, 139.76], 13);
 
-const markers = [];
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap"
+  }).addTo(map);
 
-async function loadPostsOnMap() {
-  const { data, error } = await window.supabase
-    .from("posts")
-    .select("*");
+  async function loadPostsOnMap() {
+    const { data, error } = await window.supabase
+      .from("posts")
+      .select("*");
 
-  if (error) {
-    console.error(error);
-    return;
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    data.forEach(p => {
+      const marker = L.marker([p.lat, p.lng]).addTo(map);
+      marker.on("click", () => openPostSheet(p));
+    });
   }
 
-  markers.forEach(m => map.removeLayer(m));
-  markers.length = 0;
+  function openPostSheet(post) {
+    postSheet.innerHTML = `
+      <div class="sheet-inner post-card">
+        <p>${post.comment}</p>
+        <button class="like-btn" data-id="${post.id}">
+          ❤️ <span>${post.likes ?? 0}</span>
+        </button>
+      </div>
+    `;
+    postSheet.classList.add("open");
 
-  data.forEach(post => {
-    if (post.lat == null || post.lng == null) return;
+    const btn = postSheet.querySelector(".like-btn");
+    btn.addEventListener("click", async () => {
+      const span = btn.querySelector("span");
+      const next = Number(span.innerText) + 1;
+      span.innerText = next;
+      span.classList.add("jump");
 
-    const marker = L.marker([post.lat, post.lng]).addTo(map);
-    markers.push(marker);
-
-    marker.on("click", () => {
-      openPostSheet(post);
+      await window.supabase
+        .from("posts")
+        .update({ likes: next })
+        .eq("id", post.id);
     });
-  });
-}
+  }
 
-loadPostsOnMap();
-
-/* 下から出る投稿カード */
-function openPostSheet(post) {
-  const sheet = document.getElementById("post-sheet");
-  sheet.classList.add("open");
-
-  document.getElementById("sheet-title").innerText = post.title ?? "";
-  document.getElementById("sheet-comment").innerText = post.comment ?? "";
-  document.getElementById("sheet-likes").innerText = post.likes ?? 0;
-
-  const likeBtn = document.getElementById("like-btn");
-  likeBtn.onclick = async () => {
-    const newLikes = (post.likes ?? 0) + 1;
-
-    await window.supabase
-      .from("posts")
-      .update({ likes: newLikes })
-      .eq("id", post.id);
-
-    post.likes = newLikes;
-    animateLike();
-    document.getElementById("sheet-likes").innerText = newLikes;
-  };
-}
-
-function animateLike() {
-  const el = document.getElementById("sheet-likes");
-  el.classList.add("jump");
-  setTimeout(() => el.classList.remove("jump"), 300);
-}
+  loadPostsOnMap();
+});
