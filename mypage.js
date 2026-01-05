@@ -1,28 +1,21 @@
-const container = document.getElementById("mypage-content");
-const user_name = localStorage.getItem("user_name");
+const myPostsEl = document.getElementById("my-posts");
+if (!myPostsEl) return;
 
-if (!container) {
-  console.error("mypage-content が存在しません");
-}
+const userName = localStorage.getItem("user_name");
 
 async function loadMyPosts() {
-  const { data, error } = await supabaseClient
+  const { data } = await window.supabase
     .from("posts")
     .select("*")
-    .eq("user_name", user_name);
+    .eq("user_name", userName);
 
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  container.innerHTML = `<h2>${user_name} の投稿</h2>`;
+  myPostsEl.innerHTML = "";
 
   data.forEach(p => {
     const div = document.createElement("div");
-    div.className = "post-item";
-    div.innerHTML = `<p>${p.content}</p>`;
-    container.appendChild(div);
+    div.className = "post-card";
+    div.innerText = p.comment ?? "";
+    myPostsEl.appendChild(div);
   });
 }
 
