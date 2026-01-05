@@ -1,43 +1,30 @@
-const form = document.getElementById("post-form");
+window.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("post-form");
+  if (!form) return;
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  const btn = document.getElementById("submit-btn");
+  let isPosting = false;
 
-  const userName = localStorage.getItem("user_name");
-  if (!userName) {
-    location.href = "login.html";
-    return;
-  }
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if (isPosting) return;
 
-  const comment = document.getElementById("comment").value;
+    const comment = document.getElementById("comment").value.trim();
+    if (!comment) return;
 
-  navigator.geolocation.getCurrentPosition(async pos => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
+    isPosting = true;
+    btn.disabled = true;
+    btn.innerText = "記録中…";
 
-    const { error } = await window.supabase
-      .from("posts")
-      .insert({
-        user_name: userName,
+    navigator.geolocation.getCurrentPosition(async pos => {
+      await window.supabase.from("posts").insert({
         comment,
-        lat,
-        lng
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+        likes: 0
       });
 
-    if (!error) {
-      showToast("あなたの巡礼を記録しました");
-      setTimeout(() => {
-        location.href = "index.html";
-      }, 1200);
-    }
+      location.href = "index.html";
+    });
   });
 });
-
-function showToast(text) {
-  const toast = document.createElement("div");
-  toast.className = "toast";
-  toast.innerText = text;
-  document.body.appendChild(toast);
-
-  setTimeout(() => toast.remove(), 1500);
-}
