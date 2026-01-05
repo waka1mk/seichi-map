@@ -1,22 +1,30 @@
-if (!localStorage.getItem("user_name")) {
-  location.href = "login.html";
-}
+document.getElementById("postBtn").addEventListener("click", () => {
+  const content = document.getElementById("content").value;
+  const user_name = localStorage.getItem("user_name");
 
-const form = document.getElementById("post-form");
-
-form.onsubmit = e => {
-  e.preventDefault();
+  if (!content) {
+    alert("内容を書いてください");
+    return;
+  }
 
   navigator.geolocation.getCurrentPosition(async pos => {
-    await supabase.from("posts").insert({
-      title: form.title.value,
-      comment: form.comment.value,
-      user_name: localStorage.getItem("user_name"),
-      lat: pos.coords.latitude,
-      lng: pos.coords.longitude
-    });
+    const { latitude, longitude } = pos.coords;
 
-    alert("📍 新しい聖地を記録しました");
+    const { error } = await supabaseClient.from("posts").insert([{
+      content,
+      lat: latitude,
+      lng: longitude,
+      user_name,
+      likes: 0
+    }]);
+
+    if (error) {
+      console.error(error);
+      alert("投稿に失敗しました");
+      return;
+    }
+
+    alert("あなたの加入を歓迎します");
     location.href = "index.html";
   });
-};
+});
