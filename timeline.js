@@ -1,47 +1,38 @@
 const timeline = document.getElementById("timeline");
-let currentOrder = "created_at";
 
 async function loadTimeline() {
-  const { data } = await supabase
+  const { data, error } = await supabaseClient
     .from("posts")
     .select("*")
-    .order(currentOrder, { ascending: false });
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
 
   timeline.innerHTML = "";
 
   data.forEach(p => {
     const div = document.createElement("div");
-    div.className = "post-card";
+    div.className = "post-item";
+
     div.innerHTML = `
-      <h3>${p.title ?? "無題"}</h3>
-      <p>${p.comment ?? ""}</p>
-      <div class="actions">
-        <button class="like-btn" data-id="${p.id}">
-          ❤️ <span>${p.likes ?? 0}</span>
-        </button>
-        <button onclick="location.href='index.html?post=${p.id}'">🗺️ 地図</button>
-      </div>
+      <p>${p.content}</p>
+      <button>❤️ ${p.likes ?? 0}</button>
     `;
 
-    div.querySelector(".like-btn").onclick = async () => {
-      await supabase
+    div.querySelector("button").onclick = async () => {
+      await supabaseClient
         .from("posts")
         .update({ likes: (p.likes ?? 0) + 1 })
         .eq("id", p.id);
+
+      loadTimeline();
     };
 
     timeline.appendChild(div);
   });
 }
-
-document.getElementById("sort-latest").onclick = () => {
-  currentOrder = "created_at";
-  loadTimeline();
-};
-
-document.getElementById("sort-popular").onclick = () => {
-  currentOrder = "likes";
-  loadTimeline();
-};
 
 loadTimeline();
