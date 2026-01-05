@@ -1,29 +1,18 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>ログイン</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="login-page">
+<body>
 
-  <div class="login-box">
-    <h2>あなたの名前を入力してください</h2>
+<div class="container">
+  <h2>あなたの名前を入力してください</h2>
+  <input id="nameInput" placeholder="ユーザーネーム">
+  <button id="loginBtn">はじめる</button>
+</div>
 
-    <input
-      type="text"
-      id="usernameInput"
-      placeholder="ユーザーネーム"
-    />
-
-    <button id="loginBtn">はじめる</button>
-
-    <p id="welcomeText" class="hidden">
-      ✨ あなたの加入を歓迎します ✨
-    </p>
-  </div>
-
-  <script src="login.js"></script>
+<script src="login.js"></script>
 </body>
 </html>
