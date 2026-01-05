@@ -1,40 +1,44 @@
-const timeline = document.getElementById("timeline");
+window.addEventListener("DOMContentLoaded", () => {
+  const timeline = document.getElementById("timeline");
+  if (!timeline) return;
 
-async function loadTimeline() {
-  const { data } = await window.supabase
-    .from("posts")
-    .select("*")
-    .order("created_at", { ascending: false });
+  async function loadTimeline() {
+    const { data, error } = await window.supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-  timeline.innerHTML = "";
+    if (error) {
+      console.error(error);
+      return;
+    }
 
-  data.forEach(post => {
-    const card = document.createElement("div");
-    card.className = "post-card";
+    timeline.innerHTML = "";
+    data.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "post-card";
+      div.innerHTML = `
+        <p>${p.comment}</p>
+        <button class="like-btn" data-id="${p.id}">
+          ❤️ <span>${p.likes ?? 0}</span>
+        </button>
+      `;
+      timeline.appendChild(div);
 
-    card.innerHTML = `
-      <p>${post.comment ?? ""}</p>
-      <button class="like-btn">❤️ <span>${post.likes ?? 0}</span></button>
-    `;
+      const btn = div.querySelector(".like-btn");
+      btn.addEventListener("click", async () => {
+        const span = btn.querySelector("span");
+        const next = Number(span.innerText) + 1;
+        span.innerText = next;
+        span.classList.add("jump");
 
-    const btn = card.querySelector(".like-btn");
-    const span = btn.querySelector("span");
+        await window.supabase
+          .from("posts")
+          .update({ likes: next })
+          .eq("id", p.id);
+      });
+    });
+  }
 
-    btn.onclick = async () => {
-      const newLikes = (post.likes ?? 0) + 1;
-      await window.supabase
-        .from("posts")
-        .update({ likes: newLikes })
-        .eq("id", post.id);
-
-      post.likes = newLikes;
-      span.innerText = newLikes;
-      btn.classList.add("jump");
-      setTimeout(() => btn.classList.remove("jump"), 300);
-    };
-
-    timeline.appendChild(card);
-  });
-}
-
-loadTimeline();
+  loadTimeline();
+});
