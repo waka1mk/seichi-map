@@ -1,38 +1,29 @@
-const name = localStorage.getItem("user_name");
-document.getElementById("username").innerText = name;
+const container = document.getElementById("mypage-content");
+const user_name = localStorage.getItem("user_name");
 
-const postsEl = document.getElementById("posts");
+if (!container) {
+  console.error("mypage-content が存在しません");
+}
 
 async function loadMyPosts() {
-  const { data } = await supabase
+  const { data, error } = await supabaseClient
     .from("posts")
     .select("*")
-    .eq("user_name", name)
-    .order("created_at", { ascending: false });
+    .eq("user_name", user_name);
 
-  postsEl.innerHTML = "";
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  container.innerHTML = `<h2>${user_name} の投稿</h2>`;
 
   data.forEach(p => {
     const div = document.createElement("div");
-    div.className = "post-card";
-    div.innerHTML = `
-      <h3>${p.title}</h3>
-      <p>${p.comment}</p>
-      ❤️ ${p.likes ?? 0}
-    `;
-    postsEl.appendChild(div);
+    div.className = "post-item";
+    div.innerHTML = `<p>${p.content}</p>`;
+    container.appendChild(div);
   });
 }
 
 loadMyPosts();
-
-/* タブ切り替え */
-document.querySelectorAll(".tab").forEach(tab => {
-  tab.onclick = () => {
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".tab-content").forEach(c => c.classList.add("hidden"));
-
-    tab.classList.add("active");
-    document.getElementById(tab.dataset.tab).classList.remove("hidden");
-  };
-});
