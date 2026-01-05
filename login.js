@@ -1,18 +1,17 @@
-// ① すでにログイン済みならスキップ
-const savedName = localStorage.getItem("user_name");
-if (savedName) {
-  location.href = "index.html";
-}
+const form = document.getElementById("login-form");
 
-// ② 初回ログイン処理
-document.getElementById("loginBtn").onclick = () => {
-  const name = document.getElementById("nameInput").value.trim();
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("username").value.trim();
   if (!name) return;
 
   localStorage.setItem("user_name", name);
 
-  // 切り替え演出用（今は簡易）
-  alert("あなたの加入を歓迎します");
+  const msg = document.getElementById("welcome");
+  msg.innerText = "あなたの加入を歓迎します";
 
-  location.href = "index.html";
-};
+  setTimeout(() => {
+    location.href = "index.html";
+  }, 1000);
+});
