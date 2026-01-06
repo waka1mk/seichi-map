@@ -3,16 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <title>投稿</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="post.css" />
 </head>
 <body>
 
-<h2>巡礼の記録</h2>
-<textarea id="content"></textarea>
-<button id="postBtn">投稿する</button>
+  <h1>投稿</h1>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script src="post.js"></script>
+  <div class="post-box">
+    <textarea
+      id="content"
+      placeholder="聖地の思い出を書いてみよう"
+    ></textarea>
+
+    <button id="postBtn">投稿する</button>
+  </div>
+
+  <!-- 投稿完了演出 -->
+  <div id="toast" class="toast hidden">
+    あなたの巡礼が地図に刻まれました
+  </div>
+
+  <!-- Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    window.supabase = supabase.createClient(
+      "SUPABASE_URL",
+      "SUPABASE_ANON_KEY"
+    );
+  </script>
+
+  <script src="post.js"></script>
 </body>
 </html>
