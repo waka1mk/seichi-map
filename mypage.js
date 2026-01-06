@@ -1,46 +1,15 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const userName = localStorage.getItem("user_name");
-  const list = document.getElementById("my-posts");
-  const title = document.getElementById("mypage-username");
+const box = document.getElementById("myposts");
+if (!box) return;
 
-  if (!list || !title) {
-    console.warn("mypage DOM not found");
-    return;
-  }
-
-  if (!userName) {
-    title.innerText = "ログインしてください";
-    return;
-  }
-
-  title.innerText = userName;
-
-  window.supabase
+async function loadMyPosts() {
+  const { data } = await window.supabaseClient
     .from("posts")
-    .select("*")
-    .eq("user_name", userName)
-    .order("created_at", { ascending: false })
-    .then(({ data, error }) => {
-      if (error) {
-        list.innerHTML = "<p>読み込みエラー</p>";
-        return;
-      }
+    .select("*");
 
-      if (!data || data.length === 0) {
-        list.innerHTML = "<p>まだ巡礼記録がありません</p>";
-        return;
-      }
+  box.innerHTML = "";
+  data?.forEach(p => {
+    box.innerHTML += `<div class="card">${p.content}</div>`;
+  });
+}
 
-      list.innerHTML = "";
-
-      data.forEach(post => {
-        const div = document.createElement("div");
-        div.className = "post-card";
-        div.innerHTML = `
-          <p>${post.content}</p>
-          <small>${new Date(post.created_at).toLocaleString()}</small>
-        `;
-        list.appendChild(div);
-      });
-    });
-});
+loadMyPosts();
