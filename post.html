@@ -8,31 +8,24 @@
 </head>
 <body>
 
-  <h1>投稿</h1>
+<h1>投稿</h1>
 
-  <div class="post-box">
-    <textarea
-      id="content"
-      placeholder="聖地の思い出を書いてみよう"
-    ></textarea>
+<div class="post-box">
+  <textarea id="content" placeholder="聖地の思い出を書いてみよう"></textarea>
+  <button id="postBtn">投稿する</button>
+</div>
 
-    <button id="postBtn">投稿する</button>
-  </div>
+<div id="toast" class="toast hidden">
+  あなたの巡礼が地図に刻まれました
+</div>
 
-  <!-- 投稿完了演出 -->
-  <div id="toast" class="toast hidden">
-    あなたの巡礼が地図に刻まれました
-  </div>
+<!-- Supabase SDK -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-  <!-- Supabase -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script>
-    window.supabase = supabase.createClient(
-      "SUPABASE_URL",
-      "SUPABASE_ANON_KEY"
-    );
-  </script>
+<!-- ★ Supabase 初期化（必ず最初） -->
+<script src="js/supabase.js"></script>
 
-  <script src="post.js"></script>
+<!-- 機能 -->
+<script src="js/post.js"></script>
 </body>
 </html>
