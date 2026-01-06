@@ -3,17 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>巡礼マップ</title>
+
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-  <link rel="stylesheet" href="css/style.css">
+  <!-- 修正ポイント -->
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
 <div id="map"></div>
-<div id="post-sheet" class="hidden"></div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/@supabase/supabase-js"></script>
-<script src="js/supabase.js"></script>
-<script src="js/map.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<!-- 修正ポイント -->
+<script src="./supabase.js"></script>
+<script src="./map.js"></script>
+
 </body>
 </html>
