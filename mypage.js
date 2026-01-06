@@ -1,22 +1,25 @@
-const myPostsEl = document.getElementById("my-posts");
-if (!myPostsEl) return;
+const user = localStorage.getItem("user_name");
+if (!user) location.href = "login.html";
 
-const userName = localStorage.getItem("user_name");
+const box = document.getElementById("my-posts");
 
-async function loadMyPosts() {
+(async () => {
   const { data } = await window.supabase
     .from("posts")
     .select("*")
-    .eq("user_name", userName);
+    .eq("user_name", user)
+    .order("created_at", { ascending: false });
 
-  myPostsEl.innerHTML = "";
-
+  box.innerHTML = "";
   data.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "post-card";
-    div.innerText = p.comment ?? "";
-    myPostsEl.appendChild(div);
+    const d = document.createElement("div");
+    d.className = "card";
+    d.innerHTML = `
+      <p>${p.content}</p>
+      <button onclick="location.href='index.html?lat=${p.lat}&lng=${p.lng}'">
+        地図で見る
+      </button>
+    `;
+    box.appendChild(d);
   });
-}
-
-loadMyPosts();
+})();
