@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>マイページ</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <header>
-  <h1>マイページ</h1>
+  <h1 id="mypage-username">My Page</h1>
+  <p class="subtitle">あなたの巡礼の記録</p>
   <nav>
     <a href="index.html">マップ</a>
+    <a href="post.html">投稿</a>
+    <a href="timeline.html">タイムライン</a>
   </nav>
 </header>
 
-<div class="container" id="mypage-content"></div>
+<main class="container">
+  <!-- ★ これが無かったのが原因 -->
+  <div id="my-posts"></div>
+</main>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
