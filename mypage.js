@@ -1,25 +1,55 @@
-const user = localStorage.getItem("user_name");
-if (!user) location.href = "login.html";
+const userName = localStorage.getItem("user_name");
+const list = document.getElementById("my-posts");
+const title = document.getElementById("mypage-username");
 
-const box = document.getElementById("my-posts");
+/* 🛡 DOM保険：無かったら即終了 */
+if (!list || !title) {
+  console.warn("mypage DOM not ready");
+  return;
+}
 
-(async () => {
-  const { data } = await window.supabase
+/* ログインしてなかったら戻す */
+if (!userName) {
+  location.href = "login.html";
+}
+
+title.innerText = userName;
+
+async function loadMyPosts() {
+  const { data, error } = await window.supabase
     .from("posts")
     .select("*")
-    .eq("user_name", user)
+    .eq("user_name", userName)
     .order("created_at", { ascending: false });
 
-  box.innerHTML = "";
-  data.forEach(p => {
-    const d = document.createElement("div");
-    d.className = "card";
-    d.innerHTML = `
-      <p>${p.content}</p>
-      <button onclick="location.href='index.html?lat=${p.lat}&lng=${p.lng}'">
-        地図で見る
-      </button>
+  if (error) {
+    console.error(error);
+    list.innerHTML = "<p>読み込みに失敗しました</p>";
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    list.innerHTML = "<p>まだ巡礼の記録がありません</p>";
+    return;
+  }
+
+  list.innerHTML = "";
+
+  data.forEach(post => {
+    const div = document.createElement("div");
+    div.className = "post-card";
+    div.innerHTML = `
+      <div class="place">📍 聖地</div>
+      <div class="content">${post.content}</div>
+      <div class="meta">
+        <span>${new Date(post.created_at).toLocaleDateString()}</span>
+        <button onclick="location.href='index.html?lat=${post.lat}&lng=${post.lng}'">
+          地図で見る
+        </button>
+      </div>
     `;
-    box.appendChild(d);
+    list.appendChild(div);
   });
-})();
+}
+
+loadMyPosts();
