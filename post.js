@@ -1,30 +1,27 @@
-window.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("post-form");
-  if (!form) return;
+document.getElementById("postBtn").onclick = async () => {
+  const content = document.getElementById("content").value;
+  const lat = localStorage.getItem("post_lat");
+  const lng = localStorage.getItem("post_lng");
+  const user = localStorage.getItem("user_name");
 
-  const btn = document.getElementById("submit-btn");
-  let isPosting = false;
+  if (!content || !lat || !lng) {
+    alert("投稿情報が不足しています");
+    return;
+  }
 
-  form.addEventListener("submit", e => {
-    e.preventDefault();
-    if (isPosting) return;
-
-    const comment = document.getElementById("comment").value.trim();
-    if (!comment) return;
-
-    isPosting = true;
-    btn.disabled = true;
-    btn.innerText = "記録中…";
-
-    navigator.geolocation.getCurrentPosition(async pos => {
-      await window.supabase.from("posts").insert({
-        comment,
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-        likes: 0
-      });
-
-      location.href = "index.html";
-    });
+  const { error } = await window.supabase.from("posts").insert({
+    content,
+    lat,
+    lng,
+    user_name: user,
+    likes: 0
   });
-});
+
+  if (error) {
+    alert("投稿失敗");
+    return;
+  }
+
+  alert("あなたの巡礼が地図に刻まれました");
+  location.href = "index.html";
+};
