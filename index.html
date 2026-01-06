@@ -3,42 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>巡礼マップ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-
-  <!-- あなたのCSS（直下）-->
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header>
-  <h1>巡礼マップ</h1>
-  <nav>
-    <a href="index.html">マップ</a>
-    <a href="post.html">投稿</a>
-    <a href="timeline.html">タイムライン</a>
-    <a href="mypage.html">マイページ</a>
-  </nav>
-</header>
-
 <div id="map"></div>
+<div id="post-sheet" class="hidden"></div>
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<!-- Supabase client -->
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-<!-- あなたのSupabase初期化 -->
-<script src="./supabase.js"></script>
-
-<!-- あなたのマップ処理 -->
-<script src="./map.js"></script>
-
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/map.js"></script>
 </body>
 </html>
