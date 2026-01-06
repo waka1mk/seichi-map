@@ -1,27 +1,49 @@
-document.getElementById("postBtn").onclick = async () => {
-  const content = document.getElementById("content").value;
-  const lat = localStorage.getItem("post_lat");
-  const lng = localStorage.getItem("post_lng");
-  const user = localStorage.getItem("user_name");
+window.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("postBtn");
+  const contentEl = document.getElementById("content");
+  const toast = document.getElementById("toast");
 
-  if (!content || !lat || !lng) {
-    alert("投稿情報が不足しています");
-    return;
-  }
+  if (!btn || !contentEl) return;
 
-  const { error } = await window.supabase.from("posts").insert({
-    content,
-    lat,
-    lng,
-    user_name: user,
-    likes: 0
+  btn.addEventListener("click", () => {
+    const content = contentEl.value.trim();
+    if (!content) return;
+
+    btn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        const { error } = await window.supabase
+          .from("posts")
+          .insert({
+            content,
+            lat,
+            lng,
+            user_name: localStorage.getItem("user_name") || "guest"
+          });
+
+        if (error) {
+          console.error("❌ 投稿失敗", error);
+          btn.disabled = false;
+          return;
+        }
+
+        console.log("✅ 投稿成功");
+
+        toast.classList.remove("hidden");
+        toast.classList.add("show");
+
+        setTimeout(() => {
+          location.href = "map.html";
+        }, 1200);
+      },
+      () => {
+        alert("位置情報が取得できませんでした");
+        btn.disabled = false;
+      }
+    );
   });
-
-  if (error) {
-    alert("投稿失敗");
-    return;
-  }
-
-  alert("あなたの巡礼が地図に刻まれました");
-  location.href = "index.html";
-};
+});
