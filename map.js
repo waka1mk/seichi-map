@@ -18,7 +18,6 @@ function openPostSheet(post) {
 }
 
 async function loadPostsOnMap() {
-  console.log("📍 posts 読み込み開始");
   const { data, error } = await window.supabaseClient
     .from("posts")
     .select("*");
@@ -27,8 +26,6 @@ async function loadPostsOnMap() {
     console.error(error);
     return;
   }
-
-  console.log("✅ posts loaded:", data.length);
 
   data.forEach(post => {
     if (!post.lat || !post.lng) return;
