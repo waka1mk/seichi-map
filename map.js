@@ -1,53 +1,24 @@
-window.addEventListener("DOMContentLoaded", () => {
-  const postSheet = document.getElementById("post-sheet");
-  if (!postSheet) return;
+const user = localStorage.getItem("user_name");
+if (!user) location.href = "login.html";
 
-  const map = L.map("map").setView([35.68, 139.76], 13);
+const map = L.map("map").setView([35.681, 139.767], 13);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap"
-  }).addTo(map);
+async function loadPosts() {
+  const { data } = await window.supabase.from("posts").select("*");
 
-  async function loadPostsOnMap() {
-    const { data, error } = await window.supabase
-      .from("posts")
-      .select("*");
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    data.forEach(p => {
-      const marker = L.marker([p.lat, p.lng]).addTo(map);
-      marker.on("click", () => openPostSheet(p));
+  data.forEach(p => {
+    const m = L.marker([p.lat, p.lng]).addTo(map);
+    m.on("click", () => {
+      alert(p.content + "\n❤️ " + (p.likes ?? 0));
     });
-  }
+  });
+}
 
-  function openPostSheet(post) {
-    postSheet.innerHTML = `
-      <div class="sheet-inner post-card">
-        <p>${post.comment}</p>
-        <button class="like-btn" data-id="${post.id}">
-          ❤️ <span>${post.likes ?? 0}</span>
-        </button>
-      </div>
-    `;
-    postSheet.classList.add("open");
-
-    const btn = postSheet.querySelector(".like-btn");
-    btn.addEventListener("click", async () => {
-      const span = btn.querySelector("span");
-      const next = Number(span.innerText) + 1;
-      span.innerText = next;
-      span.classList.add("jump");
-
-      await window.supabase
-        .from("posts")
-        .update({ likes: next })
-        .eq("id", post.id);
-    });
-  }
-
-  loadPostsOnMap();
+map.on("click", e => {
+  localStorage.setItem("post_lat", e.latlng.lat);
+  localStorage.setItem("post_lng", e.latlng.lng);
+  location.href = "post.html";
 });
+
+loadPosts();
