@@ -1,17 +1,12 @@
-const form = document.getElementById("login-form");
-
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const name = document.getElementById("username").value.trim();
-  if (!name) return;
+document.getElementById("loginBtn").onclick = () => {
+  const name = document.getElementById("name").value.trim();
+  if (!name) return alert("名前を入力してください");
 
   localStorage.setItem("user_name", name);
 
-  const msg = document.getElementById("welcome");
-  msg.innerText = "あなたの加入を歓迎します";
+  document.getElementById("welcome").classList.remove("hidden");
 
   setTimeout(() => {
     location.href = "index.html";
-  }, 1000);
-});
+  }, 1200);
+};
