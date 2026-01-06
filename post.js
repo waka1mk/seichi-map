@@ -1,49 +1,30 @@
-window.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("postBtn");
-  const contentEl = document.getElementById("content");
-  const toast = document.getElementById("toast");
+const form = document.getElementById("post-form");
+if (!form) return;
 
-  if (!btn || !contentEl) return;
+const lat = sessionStorage.getItem("postLat");
+const lng = sessionStorage.getItem("postLng");
 
-  btn.addEventListener("click", () => {
-    const content = contentEl.value.trim();
-    if (!content) return;
+form.addEventListener("submit", async e => {
+  e.preventDefault();
 
-    btn.disabled = true;
+  console.log("📤 投稿開始");
 
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
+  const content = document.getElementById("content").value;
 
-        const { error } = await window.supabase
-          .from("posts")
-          .insert({
-            content,
-            lat,
-            lng,
-            user_name: localStorage.getItem("user_name") || "guest"
-          });
+  const { data, error } = await window.supabaseClient
+    .from("posts")
+    .insert([{ content, lat, lng, likes: 0 }]);
 
-        if (error) {
-          console.error("❌ 投稿失敗", error);
-          btn.disabled = false;
-          return;
-        }
+  if (error) {
+    console.error(error);
+    return;
+  }
 
-        console.log("✅ 投稿成功");
+  console.log("✅ 投稿成功", data);
 
-        toast.classList.remove("hidden");
-        toast.classList.add("show");
+  document.getElementById("success").classList.remove("hidden");
 
-        setTimeout(() => {
-          location.href = "map.html";
-        }, 1200);
-      },
-      () => {
-        alert("位置情報が取得できませんでした");
-        btn.disabled = false;
-      }
-    );
-  });
+  setTimeout(() => {
+    location.href = "index.html";
+  }, 1500);
 });
