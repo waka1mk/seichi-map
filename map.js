@@ -11,8 +11,8 @@ function openPostSheet(post) {
   sheet.classList.remove("hidden");
   sheet.innerHTML = `
     <div class="card">
-      <p>${post.content}</p>
-      <span>❤️ ${post.likes}</span>
+      <p>${post.content || "内容なし"}</p>
+      <span>❤️ ${post.likes ?? 0}</span>
     </div>
   `;
 }
