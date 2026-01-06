@@ -7,7 +7,10 @@ const lng = sessionStorage.getItem("postLng");
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
-  console.log("📤 投稿開始");
+  if (!lat || !lng) {
+    alert("マップで位置を選択してから投稿してください");
+    return;
+  }
 
   const content = document.getElementById("content").value;
 
@@ -17,14 +20,13 @@ form.addEventListener("submit", async e => {
 
   if (error) {
     console.error(error);
+    alert("投稿に失敗しました");
     return;
   }
-
-  console.log("✅ 投稿成功", data);
 
   document.getElementById("success").classList.remove("hidden");
 
   setTimeout(() => {
     location.href = "index.html";
-  }, 1500);
+  }, 1000);
 });
