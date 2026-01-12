@@ -4,25 +4,18 @@
   <meta charset="UTF-8">
   <title>マイページ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-<header>
-  <h1>マイページ</h1>
-  <nav>
-    <a href="index.html">マップ</a>
-    <a href="post.html">投稿</a>
-    <a href="timeline.html">タイムライン</a>
-    <a href="mypage.html">マイページ</a>
-  </nav>
-</header>
-
-<main id="myposts"></main>
+<h1>マイページ</h1>
+<div id="mypage-posts"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js"></script>
-<script src="supabase.js"></script>
-<script src="mypage.js"></script>
+<script src="./supabase.js"></script>
+<script src="./like.js"></script>
+<script src="./mypage.js"></script>
 
 </body>
 </html>
