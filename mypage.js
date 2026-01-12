@@ -1,26 +1,26 @@
-const box = document.getElementById("myposts");
-if (!box) return;
+const myposts = document.getElementById("myposts");
 
 async function loadMyPosts() {
   const { data, error } = await window.supabaseClient
     .from("posts")
-    .select("*");
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error);
-    box.innerHTML = "<p>読み込みに失敗しました</p>";
+    myposts.innerHTML = "読み込み失敗";
     return;
   }
 
-  box.innerHTML = "";
-
-  data?.forEach(p => {
-    box.innerHTML += `
-      <div class="card">
-        <p>${p.content || "内容なし"}</p>
-        <span>❤️ ${p.likes ?? 0}</span>
-      </div>
+  myposts.innerHTML = "";
+  data.forEach(post => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <p>${post.content || "内容なし"}</p>
+      <small>❤️ ${post.likes ?? 0}</small>
     `;
+    myposts.appendChild(div);
   });
 }
 
