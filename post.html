@@ -1,20 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>投稿</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<h1>新規投稿</h1>
+
 <form id="post-form">
-  <input
-    type="text"
-    id="title"
-    placeholder="場所名（例：○○神社）"
-    required
-  />
-
-  <textarea
-    id="content"
-    placeholder="巡礼の記録を書く"
-    required
-  ></textarea>
-
+  <input type="text" id="title" placeholder="場所名" required>
+  <textarea id="content" placeholder="内容" required></textarea>
   <button type="submit">投稿</button>
 </form>
 
-<div id="success" class="hidden">
-  投稿しました
-</div>
+<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script src="./supabase.js"></script>
+<script src="./post.js"></script>
+
+</body>
+</html>
