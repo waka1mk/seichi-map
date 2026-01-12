@@ -26,25 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const div = document.createElement("div");
       div.className = "card";
+
       div.innerHTML = `
         <p>${content}</p>
-        <button>❤️ ${post.likes ?? 0}</button>
+        <span class="like-readonly">❤️ ${post.likes ?? 0}</span>
       `;
-
-      div.querySelector("button").addEventListener("click", () => {
-        likePost(post.id, post.likes ?? 0);
-      });
 
       box.appendChild(div);
     });
-  }
-
-  async function likePost(id, likes) {
-    const { error } = await window.supabaseClient
-      .from("posts")
-      .update({ likes: likes + 1 })
-      .eq("id", id);
-
-    if (!error) loadMyPosts();
   }
 });
