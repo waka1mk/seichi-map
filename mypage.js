@@ -5,37 +5,46 @@ document.addEventListener("DOMContentLoaded", () => {
   loadMyPosts();
 
   async function loadMyPosts() {
-    const { data } = await window.supabaseClient
+    const { data, error } = await window.supabaseClient
       .from("posts")
       .select("*")
       .order("created_at", { ascending: false });
 
+    if (error) {
+      console.error(error);
+      box.innerHTML = "読み込み失敗";
+      return;
+    }
+
     box.innerHTML = "";
 
     data.forEach(post => {
+      const content =
+        post.comment ||
+        post.content ||
+        "（内容なし）";
+
       const div = document.createElement("div");
       div.className = "card";
-
       div.innerHTML = `
-        <p>${post.content || "（内容なし）"}</p>
-        <button data-id="${post.id}">
-          ❤️ ${post.likes ?? 0}
-        </button>
+        <p>${content}</p>
+        <button>❤️ ${post.likes ?? 0}</button>
       `;
 
-      div.querySelector("button").onclick = () =>
+      div.querySelector("button").addEventListener("click", () => {
         likePost(post.id, post.likes ?? 0);
+      });
 
       box.appendChild(div);
     });
   }
 
   async function likePost(id, likes) {
-    await window.supabaseClient
+    const { error } = await window.supabaseClient
       .from("posts")
       .update({ likes: likes + 1 })
       .eq("id", id);
 
-    loadMyPosts();
+    if (!error) loadMyPosts();
   }
 });
