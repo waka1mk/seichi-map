@@ -1,30 +1,34 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("post-form");
-  if (!form) return;
+const form = document.getElementById("post-form");
 
+if (form) {
   const lat = sessionStorage.getItem("postLat");
   const lng = sessionStorage.getItem("postLng");
 
   form.addEventListener("submit", async e => {
     e.preventDefault();
 
+    const title = document.getElementById("title").value;
     const content = document.getElementById("content").value;
 
     const { error } = await window.supabaseClient
       .from("posts")
       .insert([{
+        title,
         content,
-        lat: lat ? Number(lat) : null,
-        lng: lng ? Number(lng) : null,
+        lat,
+        lng,
         likes: 0
       }]);
 
     if (error) {
       console.error(error);
-      alert("投稿失敗");
       return;
     }
 
-    location.href = "index.html";
+    document.getElementById("success").classList.remove("hidden");
+
+    setTimeout(() => {
+      location.href = "index.html";
+    }, 1200);
   });
-});
+}
