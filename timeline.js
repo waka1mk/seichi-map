@@ -1,27 +1,53 @@
-const timeline = document.getElementById("timeline");
+document.addEventListener("DOMContentLoaded", () => {
+  const timeline = document.getElementById("timeline");
+  if (!timeline) return;
 
-async function loadTimeline() {
-  const { data, error } = await window.supabaseClient
-    .from("posts")
-    .select("*")
-    .order("created_at", { ascending: false });
+  loadTimeline();
 
-  if (error) {
-    console.error(error);
-    timeline.innerHTML = "読み込み失敗";
-    return;
+  async function loadTimeline() {
+    const { data, error } = await window.supabaseClient
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    timeline.innerHTML = "";
+
+    data.forEach(post => {
+      const div = document.createElement("div");
+      div.className = "card";
+
+      const content =
+        post.content ||
+        post.text ||
+        post.body ||
+        "（内容なし）";
+
+      div.innerHTML = `
+        <p>${content}</p>
+        <button data-id="${post.id}">
+          ❤️ ${post.likes ?? 0}
+        </button>
+      `;
+
+      div.querySelector("button").addEventListener("click", () => {
+        likePost(post.id, post.likes ?? 0);
+      });
+
+      timeline.appendChild(div);
+    });
   }
 
-  timeline.innerHTML = "";
-  data.forEach(post => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <p>${post.content || "内容なし"}</p>
-      <small>❤️ ${post.likes ?? 0}</small>
-    `;
-    timeline.appendChild(div);
-  });
-}
+  async function likePost(id, currentLikes) {
+    const { error } = await window.supabaseClient
+      .from("posts")
+      .update({ likes: currentLikes + 1 })
+      .eq("id", id);
 
-loadTimeline();
+    if (!error) loadTimeline();
+  }
+});
