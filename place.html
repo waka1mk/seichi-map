@@ -1,23 +1,19 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>場所詳細</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="./style.css">
+  <!-- ✅ 正解：同じ階層 -->
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
 
-<h1 id="place-title"></h1>
-<div id="map" style="height:300px;"></div>
-<div id="place-posts"></div>
+  <h1 id="place-title">場所名</h1>
+  <div id="place-posts"></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/@supabase/supabase-js"></script>
-<script src="./supabase.js"></script>
-<script src="./like.js"></script>
-<script src="./place.js"></script>
-
+  <!-- ✅ 正解：同じ階層 -->
+  <script src="./supabase.js"></script>
+  <script src="./place.js"></script>
 </body>
 </html>
