@@ -12,26 +12,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (error) {
       console.error(error);
+      timeline.innerHTML = "読み込み失敗";
       return;
     }
 
     timeline.innerHTML = "";
 
     data.forEach(post => {
-      const div = document.createElement("div");
-      div.className = "card";
-
       const content =
+        post.comment ||
         post.content ||
-        post.text ||
-        post.body ||
         "（内容なし）";
 
+      const div = document.createElement("div");
+      div.className = "card";
       div.innerHTML = `
         <p>${content}</p>
-        <button data-id="${post.id}">
-          ❤️ ${post.likes ?? 0}
-        </button>
+        <button>❤️ ${post.likes ?? 0}</button>
       `;
 
       div.querySelector("button").addEventListener("click", () => {
@@ -42,10 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  async function likePost(id, currentLikes) {
+  async function likePost(id, likes) {
     const { error } = await window.supabaseClient
       .from("posts")
-      .update({ likes: currentLikes + 1 })
+      .update({ likes: likes + 1 })
       .eq("id", id);
 
     if (!error) loadTimeline();
