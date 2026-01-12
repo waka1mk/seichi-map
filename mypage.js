@@ -1,38 +1,25 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const box = document.getElementById("myposts");
-  if (!box) return;
+const box = document.getElementById("myposts");
 
-  loadMyPosts();
-
+if (box) {
   async function loadMyPosts() {
-    const { data, error } = await window.supabaseClient
+    const { data } = await window.supabaseClient
       .from("posts")
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error) {
-      console.error(error);
-      box.innerHTML = "読み込み失敗";
-      return;
-    }
-
     box.innerHTML = "";
 
-    data.forEach(post => {
-      const content =
-        post.comment ||
-        post.content ||
-        "（内容なし）";
-
+    data?.forEach(p => {
       const div = document.createElement("div");
       div.className = "card";
-
       div.innerHTML = `
-        <p>${content}</p>
-        <span class="like-readonly">❤️ ${post.likes ?? 0}</span>
+        <h3>${p.title || "場所名なし"}</h3>
+        <p>${p.content || "内容なし"}</p>
+        <span>❤️ ${p.likes ?? 0}</span>
       `;
-
       box.appendChild(div);
     });
   }
-});
+
+  loadMyPosts();
+}
