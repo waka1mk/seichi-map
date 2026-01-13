@@ -1,45 +1,36 @@
-const mapEl = document.getElementById("map");
+console.log("map.js loaded");
 
-if (mapEl) {
+const mapEl = document.getElementById("map");
+if (!mapEl) {
+  console.warn("map element not found");
+} else {
   const map = L.map("map").setView([35.681236, 139.767125], 13);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "© OpenStreetMap"
   }).addTo(map);
 
-  const sheet = document.getElementById("post-sheet");
-
-  function openPostSheet(post) {
-    if (!sheet) return;
-
-    const title = post.title || "場所名なし";
-    const content = post.comment || "内容なし";
-
-    sheet.classList.remove("hidden");
-    sheet.innerHTML = `
-      <div class="card">
-        <h3>${title}</h3>
-        <p>${content}</p>
-        <button class="like-btn">❤️ ${post.likes ?? 0}</button>
-        <br>
-        <a href="./place.html?title=${encodeURIComponent(title)}">
-          この場所を見る →
-        </a>
-      </div>
-    `;
-  }
-
   async function loadPosts() {
     const { data, error } = await window.supabaseClient
       .from("posts")
       .select("*");
 
-    if (error || !data) return;
+    if (error) {
+      console.error(error);
+      return;
+    }
 
     data.forEach(post => {
-      if (!post.lat || !post.lng) return;
-      const marker = L.marker([post.lat, post.lng]).addTo(map);
-      marker.on("click", () => openPostSheet(post));
+      if (post.lat == null || post.lng == null) return;
+
+      const marker = L.marker([
+        Number(post.lat),
+        Number(post.lng)
+      ]).addTo(map);
+
+      marker.on("click", () => {
+        alert(post.content || "内容なし");
+      });
     });
   }
 
