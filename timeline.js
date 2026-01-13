@@ -1,34 +1,31 @@
-const form = document.getElementById("post-form");
+const timeline = document.getElementById("timeline");
 
-if (form) {
-  const lat = sessionStorage.getItem("postLat");
-  const lng = sessionStorage.getItem("postLng");
+async function loadTimeline() {
+  const { data } = await window.supabaseClient
+    .from("posts")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-  form.addEventListener("submit", async e => {
-    e.preventDefault();
+  const groups = {};
 
-    const title = document.getElementById("title").value;
-    const content = document.getElementById("content").value;
+  data.forEach(p => {
+    if (!groups[p.title]) groups[p.title] = [];
+    groups[p.title].push(p);
+  });
 
-    const { error } = await window.supabaseClient
-      .from("posts")
-      .insert([{
-        title,
-        content,
-        lat,
-        lng,
-        likes: 0
-      }]);
+  timeline.innerHTML = "";
 
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    document.getElementById("success").classList.remove("hidden");
-
-    setTimeout(() => {
-      location.href = "index.html";
-    }, 1200);
+  Object.keys(groups).forEach(title => {
+    timeline.innerHTML += `
+      <section class="card">
+        <h2>${title}</h2>
+        ${groups[title].map(p => `<p>${p.content}</p>`).join("")}
+        <a href="./place.html?title=${encodeURIComponent(title)}">
+          この場所を見る →
+        </a>
+      </section>
+    `;
   });
 }
+
+loadTimeline();
