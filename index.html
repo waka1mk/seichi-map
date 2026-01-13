@@ -5,27 +5,13 @@
   <title>巡礼マップ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- favicon 404 回避 -->
-  <link rel="icon" href="data:,">
-
-  <!-- Leaflet CSS -->
-  <link<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>巡礼マップ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- favicon 404 回避 -->
-  <link rel="icon" href="data:,">
-
   <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <!-- CSS（直下） -->
+  <!-- ★ 直下の CSS -->
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -40,53 +26,17 @@
   </nav>
 </header>
 
-<div id="map"></div>
-<div id="post-sheet" class="hidden"></div>
+<div id="map" style="width:100%; height: calc(100vh - 80px);"></div>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <!-- Supabase -->
-<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-<!-- 自作JS（直下） -->
+<!-- ★ 直下の JS -->
 <script src="./supabase.js"></script>
 <script src="./map.js"></script>
-
-</body>
-</html>
-
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-
-  <!-- 自作 CSS（相対パス・正解） -->
-  <link rel="stylesheet" href="./css/style.css" />
-</head>
-<body>
-
-  <header>
-    <h1>巡礼マップ</h1>
-    <nav>
-      <a href="./index.html">マップ</a>
-      <a href="./post.html">投稿</a>
-      <a href="./timeline.html">タイムライン</a>
-      <a href="./mypage.html">マイページ</a>
-    </nav>
-  </header>
-
-  <div id="map"></div>
-  <div id="post-sheet" class="hidden"></div>
-
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Supabase SDK -->
-  <script src="https://unpkg.com/@supabase/supabase-js"></script>
-
-  <!-- 自作 JS（相対パス・正解） -->
-  <script src="./js/supabase.js"></script>
-  <script src="./js/map.js"></script>
 
 </body>
 </html>
