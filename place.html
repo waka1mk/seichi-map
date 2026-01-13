@@ -3,21 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <title>場所詳細</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- 既存UIを崩さない -->
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
 
 <header>
-  <h1 id="place-title"></h1>
+  <nav>
+    <a href="./index.html">← マップに戻る</a>
+  </nav>
 </header>
 
-<div id="place-map"></div>
-<div id="place-posts"></div>
+<h2 id="place-title"></h2>
 
+<div id="place-map" style="height: 240px;"></div>
+
+<main id="place-posts"></main>
+
+<!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="./supabase.js"></script>
-<script src="./place.js"></script>
 
+<!-- Supabase -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="./supabase.js" defer></script>
+
+<!-- place -->
+<script src="./place.js" defer></script>
 </body>
 </html>
