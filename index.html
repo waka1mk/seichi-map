@@ -5,13 +5,7 @@
   <title>巡礼マップ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-
-  <!-- ★ 直下の CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -26,15 +20,10 @@
   </nav>
 </header>
 
-<div id="map" style="width:100%; height: calc(100vh - 80px);"></div>
+<div id="map"></div>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<!-- Supabase -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-<!-- ★ 直下の JS -->
 <script src="./supabase.js"></script>
 <script src="./map.js"></script>
 
