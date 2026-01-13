@@ -1,6 +1,9 @@
-(function () {
+(() => {
   const timeline = document.getElementById("timeline");
-  if (!timeline) return;
+  if (!timeline) {
+    console.warn("timeline element not found");
+    return;
+  }
 
   async function loadTimeline() {
     const { data, error } = await window.supabaseClient
@@ -22,11 +25,10 @@
       card.innerHTML = `
         <h3>${post.title ?? "（無題）"}</h3>
         <p>${post.comment ?? ""}</p>
-        <button>❤️ ${post.likes}</button>
+        <button class="like-btn">❤️ ${post.likes}</button>
       `;
 
-      const btn = card.querySelector("button");
-      btn.onclick = async () => {
+      card.querySelector(".like-btn").onclick = async () => {
         await window.supabaseClient
           .from("posts")
           .update({ likes: post.likes + 1 })
