@@ -1,4 +1,4 @@
-const map = L.map("map").setView([35.681236, 139.767125], 13);
+const map = L.map("map").setView([33.5, 133.5], 7);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "© OpenStreetMap"
@@ -9,23 +9,20 @@ async function loadPosts() {
     .from("posts")
     .select("*");
 
-  if (error || !data) return;
+  if (error) {
+    console.error(error);
+    return;
+  }
 
   data.forEach(post => {
-    if (post.lat == null || post.lng == null) return;
+    if (!post.lat || !post.lng || !post.title) return;
 
-    const title = post.title || "不明な場所";
-    const content = post.content || "内容なし";
-
-    const marker = L.marker([
-      Number(post.lat),
-      Number(post.lng)
-    ]).addTo(map);
-
+    const marker = L.marker([post.lat, post.lng]).addTo(map);
     marker.bindPopup(`
-      <strong>${title}</strong><br>
-      ${content}<br>
-      <a href="./place.html?title=${encodeURIComponent(title)}">
+      <strong>${post.title}</strong><br>
+      ${post.comment ?? ""}
+      <br>
+      <a href="./place.html?title=${encodeURIComponent(post.title)}">
         この場所を見る →
       </a>
     `);
