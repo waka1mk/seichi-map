@@ -1,44 +1,43 @@
-console.log("map.js loaded");
+console.log("map.js alive");
 
-const mapEl = document.getElementById("map");
-if (!mapEl) {
-  console.warn("map element not found");
-} else {
-  const map = L.map("map").setView([35.681236, 139.767125], 13);
+const map = L.map("map").setView([35.681236, 139.767125], 13);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap"
-  }).addTo(map);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: "© OpenStreetMap"
+}).addTo(map);
 
-  async function loadPosts() {
-    const { data, error } = await window.supabaseClient
-      .from("posts")
-      .select("*");
+async function loadPosts() {
+  const { data, error } = await window.supabaseClient
+    .from("posts")
+    .select("*"); // ★ title で絞らない
 
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    data.forEach(post => {
-      if (post.lat == null || post.lng == null) return;
-
-      const marker = L.marker([
-        Number(post.lat),
-        Number(post.lng)
-      ]).addTo(map);
-
-      marker.on("click", () => {
-        alert(post.content || "内容なし");
-      });
-    });
+  if (error || !data) {
+    console.error(error);
+    return;
   }
 
-  loadPosts();
+  data.forEach(post => {
+    if (post.lat == null || post.lng == null) return;
 
-  map.on("click", e => {
-    sessionStorage.setItem("postLat", e.latlng.lat);
-    sessionStorage.setItem("postLng", e.latlng.lng);
-    location.href = "./post.html";
+    const title = post.title || "（場所名なし）";
+    const content = post.content || "内容なし";
+
+    const marker = L.marker([
+      Number(post.lat),
+      Number(post.lng)
+    ]).addTo(map);
+
+    marker.bindPopup(`
+      <strong>${title}</strong><br>
+      ${content}
+    `);
   });
 }
+
+loadPosts();
+
+map.on("click", e => {
+  sessionStorage.setItem("postLat", e.latlng.lat);
+  sessionStorage.setItem("postLng", e.latlng.lng);
+  location.href = "./post.html";
+});
