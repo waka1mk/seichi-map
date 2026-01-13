@@ -1,25 +1,21 @@
-const box = document.getElementById("myposts");
+const box = document.getElementById("mypage");
 
-if (box) {
-  async function loadMyPosts() {
-    const { data } = await window.supabaseClient
-      .from("posts")
-      .select("*")
-      .order("created_at", { ascending: false });
+async function loadMyPage() {
+  const { data } = await window.supabaseClient
+    .from("posts")
+    .select("*");
 
-    box.innerHTML = "";
+  box.innerHTML = "";
 
-    data?.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "card";
-      div.innerHTML = `
-        <h3>${p.title || "場所名なし"}</h3>
-        <p>${p.content || "内容なし"}</p>
-        <span>❤️ ${p.likes ?? 0}</span>
-      `;
-      box.appendChild(div);
-    });
-  }
-
-  loadMyPosts();
+  data.forEach(p => {
+    box.innerHTML += `
+      <div class="card">
+        <strong>${p.title}</strong>
+        <p>${p.content}</p>
+        <span>❤️ ${p.likes}</span>
+      </div>
+    `;
+  });
 }
+
+loadMyPage();
