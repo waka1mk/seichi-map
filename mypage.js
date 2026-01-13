@@ -1,9 +1,6 @@
 (() => {
   const mypage = document.getElementById("mypage");
-  if (!mypage) {
-    console.warn("mypage element not found");
-    return;
-  }
+  if (!mypage) return;
 
   async function loadMyPage() {
     const { data, error } = await window.supabaseClient
@@ -19,11 +16,17 @@
     mypage.innerHTML = "";
 
     data.forEach(post => {
+      const title = post.title || "（場所名未設定）";
+      const comment =
+        post.comment && post.comment.trim() !== ""
+          ? post.comment
+          : "（コメントはまだありません）";
+
       mypage.innerHTML += `
         <div class="card">
-          <h3>${post.title ?? "（無題）"}</h3>
-          <p>${post.comment ?? ""}</p>
-          <span>❤️ ${post.likes}</span>
+          <h3>${title}</h3>
+          <p>${comment}</p>
+          <span>❤️ ${post.likes ?? 0}</span>
         </div>
       `;
     });
