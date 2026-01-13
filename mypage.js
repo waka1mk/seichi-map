@@ -1,18 +1,22 @@
-const box = document.getElementById("mypage");
+const mypage = document.getElementById("mypage");
+if (!mypage) return;
 
 async function loadMyPage() {
-  const { data } = await window.supabaseClient
+  const { data, error } = await window.supabaseClient
     .from("posts")
-    .select("*");
+    .select("*")
+    .order("created_at", { ascending: false });
 
-  box.innerHTML = "";
+  if (error) return;
 
-  data.forEach(p => {
-    box.innerHTML += `
+  mypage.innerHTML = "";
+
+  data.forEach(post => {
+    mypage.innerHTML += `
       <div class="card">
-        <strong>${p.title}</strong>
-        <p>${p.content}</p>
-        <span>❤️ ${p.likes}</span>
+        <h3>${post.title}</h3>
+        <p>${post.comment ?? ""}</p>
+        <span>❤️ ${post.likes}</span>
       </div>
     `;
   });
