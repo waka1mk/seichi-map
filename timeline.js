@@ -1,30 +1,39 @@
 const timeline = document.getElementById("timeline");
+if (!timeline) return;
 
 async function loadTimeline() {
-  const { data } = await window.supabaseClient
+  const { data, error } = await window.supabaseClient
     .from("posts")
     .select("*")
     .order("created_at", { ascending: false });
 
-  const groups = {};
-
-  data.forEach(p => {
-    if (!groups[p.title]) groups[p.title] = [];
-    groups[p.title].push(p);
-  });
+  if (error) {
+    console.error(error);
+    return;
+  }
 
   timeline.innerHTML = "";
 
-  Object.keys(groups).forEach(title => {
-    timeline.innerHTML += `
-      <section class="card">
-        <h2>${title}</h2>
-        ${groups[title].map(p => `<p>${p.content}</p>`).join("")}
-        <a href="./place.html?title=${encodeURIComponent(title)}">
-          この場所を見る →
-        </a>
-      </section>
+  data.forEach(post => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h3>${post.title}</h3>
+      <p>${post.comment ?? ""}</p>
+      <button>❤️ ${post.likes}</button>
     `;
+
+    const btn = card.querySelector("button");
+    btn.onclick = async () => {
+      await window.supabaseClient
+        .from("posts")
+        .update({ likes: post.likes + 1 })
+        .eq("id", post.id);
+      loadTimeline();
+    };
+
+    timeline.appendChild(card);
   });
 }
 
