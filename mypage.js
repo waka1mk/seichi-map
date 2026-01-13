@@ -1,6 +1,9 @@
-(function () {
+(() => {
   const mypage = document.getElementById("mypage");
-  if (!mypage) return;
+  if (!mypage) {
+    console.warn("mypage element not found");
+    return;
+  }
 
   async function loadMyPage() {
     const { data, error } = await window.supabaseClient
