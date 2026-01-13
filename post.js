@@ -1,30 +1,41 @@
-const form = document.getElementById("post-form");
-if (!form) return;
+(function () {
+  const form = document.getElementById("post-form");
+  if (!form) return;
 
-const lat = sessionStorage.getItem("postLat");
-const lng = sessionStorage.getItem("postLng");
+  const lat = sessionStorage.getItem("postLat");
+  const lng = sessionStorage.getItem("postLng");
 
-form.addEventListener("submit", async e => {
-  e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const title = document.getElementById("title").value;
-  const content = document.getElementById("content").value;
+    const title = document.getElementById("title")?.value;
+    const comment = document.getElementById("comment")?.value;
 
-  const { error } = await window.supabaseClient
-    .from("posts")
-    .insert([{
-      title,
-      content,
-      lat,
-      lng,
-      likes: 0
-    }]);
+    if (!title || !lat || !lng) {
+      alert("場所名と位置情報は必須です");
+      return;
+    }
 
-  if (error) return;
+    const { error } = await window.supabaseClient
+      .from("posts")
+      .insert([{
+        title,
+        comment,
+        lat: Number(lat),
+        lng: Number(lng),
+        likes: 0
+      }]);
 
-  document.getElementById("success").classList.remove("hidden");
+    if (error) {
+      console.error(error);
+      alert("投稿に失敗しました");
+      return;
+    }
 
-  setTimeout(() => {
-    location.href = "./index.html";
-  }, 1200);
-});
+    document.getElementById("success")?.classList.remove("hidden");
+
+    setTimeout(() => {
+      location.href = "./index.html";
+    }, 1200);
+  });
+})();
